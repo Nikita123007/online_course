@@ -8,6 +8,14 @@
     background: #6c757d;
     color: white;
 }
+.inputSeccuss{
+    border: lawngreen 2px solid;
+    border-radius: 6px;
+}
+.inputError{
+    border: red 2px solid;
+    border-radius: 6px;
+}
 
 .main {
     margin-bottom: 80px;
