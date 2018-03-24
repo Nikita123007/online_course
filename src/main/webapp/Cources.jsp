@@ -10,24 +10,38 @@
         margin: auto;
         align-content: center;
     }
+    .price{
+        float: right;
+        margin-right: 10%;
+    }
+    .form-group{
+        font-size: 24px;
+    }
+    .nameCource{
+        font-size: 32px;
+        display: block;
+        text-align: center;
+    }
 </style>
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <div class="cources">
-        <table border="solid 1px black">
-            <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Author</th>
-            </tr>
-            <c:forEach var="cource" items="${cources}">
-                <tr>
-                    <td><a href="Cource.jsp">${cource.name}</a></td>
-                    <td>${cource.price}</td>
-                    <td><a href="Author.jsp">${cource.author}</a></td>
-                </tr>
-            </c:forEach>
-        </table>
+        <c:forEach var="cource" items="${courcesSelf}">
+            <div class="form-group">
+                <a href="Cource?id=${cource.id}" class="nameCource">${cource.name}</a>
+                <h6>${cource.description}</h6>
+                <h4>${cource.author}</h4>
+                <button id="editCource" type="button" value="${cource.id}">Edit</button><text class="price" id="price">${cource.price}</text>
+            </div>
+        </c:forEach>
+        <c:forEach var="cource" items="${courcesSelf}">
+            <div class="form-group">
+                <p><h2><a href="Cource?id=${cource.id}">${cource.name}</a></h2></p>
+                <h6>${cource.description}</h6>
+                <h4>${cource.author}</h4>
+                <button id="subscribeCource" type="button" value="${cource.id}">Subscribe</button><text class="price" id="price">${cource.price}</text>
+            </div>
+        </c:forEach>
     </div>
 </div>
 <%@ include file="resources/templates/footer.html" %>

@@ -1,6 +1,5 @@
 package Servlets;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,23 +16,32 @@ public class Cources extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<TestModel> listUsers = new ArrayList<TestModel>();
-        listUsers.add(new TestModel("Name1", "Zabeyda", 20));
-        listUsers.add(new TestModel("Имя2", "Автор2", 22));
+        List<TestModel> listCources = new ArrayList<TestModel>();
+        listCources.add(new TestModel(3, "Name1", "Zabeyda", 20, "decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription "));
+        listCources.add(new TestModel(4, "Имя2", "Автор2", 22, "decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription "));
 
-        request.setAttribute("cources", listUsers);
+        List<TestModel> listSelfCources = new ArrayList<TestModel>();
+        listSelfCources.add(new TestModel(1, "Name2", "Zabeyda123", 202, "decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription "));
+        listSelfCources.add(new TestModel(2, "Имя3", "Автор233", 222, "decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription decription "));
+
+        request.setAttribute("cources", listCources);
+        request.setAttribute("courcesSelf", listSelfCources);
         request.getRequestDispatcher("Cources.jsp").forward(request, response);
     }
 
     public class TestModel{
+        private Integer id;
         private String name;
         private String author;
         private Integer price;
+        private String description;
 
-        public TestModel(String name, String author, Integer price){
+        public TestModel(Integer id, String name, String author, Integer price, String description){
+            this.id = id;
             this.name = name;
             this.author = author;
             this.price = price;
+            this.description = description;
         }
 
         public String getName() {
@@ -58,6 +66,22 @@ public class Cources extends HttpServlet {
 
         public void setPrice(Integer price){
             this.price = price;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
         }
     }
 }
