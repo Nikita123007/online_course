@@ -48,15 +48,31 @@
 </body>
 </html>
 <script>
+    function SuccessReguest(data) {
+        var parseData = JSON.parse(data);
+        if (parseData.error == ""){
+            document.location.href = document.location.protocol + "//" + document.location.host + parseData.nextPage;
+        }else{
+            parseData.nameErrors.forEach(function(item) {
+                var formGroup = $('input[name="'+item+'"]').parents('.input-group');
+                formGroup.addClass('inputError').removeClass('inputSeccuss');
+            });
+            confirm(parseData.error);
+        }
+    }
+    function ErrorReguest(data) {
+        console.log("error");
+        console.log(data);
+    }
     function CheckValidFormData( id, value) {
-        var validForm = true;
+        var errors = "";
         switch (id){
             case "login":
                 break;
             case "password":
                 break;
         }
-        return validForm;
+        return errors;
     }
     $(function() {
         //при нажатии на кнопку с id="save"
@@ -66,16 +82,30 @@
             $('input').each(function() {
                 var id = $(this).attr('id');
                 var value = $(this).val();
-                var formGroup = $(this).parents('.input-group');
-                if (this.checkValidity() && CheckValidFormData(id, value)) {
-                    formGroup.addClass('inputSeccuss').removeClass('inputError');
+                var inputGroup = $(this).parents('.input-group');
+                var errors = CheckValidFormData(id, value);
+                if (this.checkValidity() && (errors == "") {
+                    inputGroup.addClass('inputSeccuss').removeClass('inputError');
                 } else {
-                    formGroup.addClass('inputError').removeClass('inputSeccuss');
+                    inputGroup.addClass('inputError').removeClass('inputSeccuss');
+                    if (errors != "") {
+                        confirm(errors);
+                    }
                     validForm = false;
                 }
             });
             if (validForm){
-                //request on server
+                var loginVal = $('#login').val();
+                var passwordVal = $('#password').val();
+                var locationURL = document.location.protocol + "//" + document.location.host + "/Login";
+                console.log(locationURL);
+                $.ajax({
+                    url: locationURL,
+                    type: "POST",
+                    data:({login: loginVal, password: passwordVal}),
+                    success: SuccessReguest,
+                    error: ErrorReguest
+                });
             }
         });
     });

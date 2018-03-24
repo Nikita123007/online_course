@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import Constants.Pages;
+import Response.ResponseData;
 
 @WebServlet("/Registration")
 public class Registration extends HttpServlet {
@@ -20,7 +22,7 @@ public class Registration extends HttpServlet {
         String gender = request.getParameter("genderRadios");
         String password = request.getParameter("password");
         String license = request.getParameter("license");
-        wr.write(
+        /*wr.write(
                 "Second name: " + secondName +
                 "</br>Name: " + name +
                 "</br>ExtensionName: " + extensionName +
@@ -29,7 +31,16 @@ public class Registration extends HttpServlet {
                 "</br>Gender: " + gender +
                 "</br>Password: " + password +
                 "</br>License: " + license
-        );
+        );*/
+        ResponseData responseData = new ResponseData("Second name: " + secondName +
+                "</br>Name: " + name +
+                "</br>ExtensionName: " + extensionName +
+                "</br>Email: " + email +
+                "</br>Phone: " + phone +
+                "</br>Gender: " + gender +
+                "</br>Password: " + password +
+                "</br>License: " + license, null, new String[]{});
+        wr.write(responseData.ToJson());
         wr.close();
     }
 

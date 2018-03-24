@@ -62,12 +62,12 @@
                     <div class="input-group">
                         <div class="col-sm-10">
                             <label class="radio-inline">
-                                <input type="radio" name="genderRadios" value="male" checked> Man
+                                <input type="radio" name="gender" id="genderMan" value="male"> Man
                             </label>
                         </div>
                         <div class="col-sm-10">
                             <label class="radio-inline">
-                                <input type="radio" name="genderRadios" value="female"> Woman
+                                <input type="radio" name="gender" id="genderWoman" value="female"> Woman
                             </label>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                     <div class="col-sm-10">
                         <div class="input-group">
                             <label class="checkbox-inline">
-                                <input type="checkbox" name="license" value="agree">  I agree with <a href="#">conditions</a>.
+                                <input type="checkbox" id="license" name="license" value="agree">  I agree with <a href="#">conditions</a>.
                             </label>
                         </div>
                     </div>
@@ -110,6 +110,22 @@
 </body>
 </html>
 <script>
+    function SuccessReguest(data) {
+        var parseData = JSON.parse(data);
+        if (parseData.error == ""){
+            document.location.href = document.location.protocol + "//" + document.location.host + parseData.nextPage;
+        }else{
+            parseData.nameErrors.forEach(function(item) {
+                var formGroup = $('input[name="'+item+'"]').parents('.input-group');
+                formGroup.addClass('inputError').removeClass('inputSeccuss');
+            });
+            confirm(parseData.error);
+        }
+    }
+    function ErrorReguest(data) {
+        console.log("error");
+        console.log(data);
+    }
     function CheckValidFormData( id, value) {
         var errors = "";
         switch (id){
@@ -117,6 +133,20 @@
                 var passwordVal = $('#password').val();
                 if (value != passwordVal){
                     errors += "Confirm password and password do not match. ";
+                }
+                break;
+            case "genderWoman":
+                if(!$('#'+id).prop('checked')) {
+                    if(!$('#genderMan').prop('checked')){
+                        errors += "You shoud choose one gender.";
+                    }
+                }
+                break;
+            case "license":
+                if(!$("#"+id).parents('.form-group').prop('hidden')) {
+                    if(!$('#'+id).prop('checked')){
+                        errors += "You should adree with lecense.";
+                    }
                 }
                 break;
         }
@@ -130,17 +160,36 @@
             $('input').each(function() {
                 var id = $(this).attr('id');
                 var value = $(this).val();
-                var formGroup = $(this).parents('.input-group');
+                var inputGroup = $(this).parents('.input-group');
                 var errors = CheckValidFormData(id, value);
                 if (this.checkValidity() && (errors == "")) {
-                    formGroup.addClass('inputSeccuss').removeClass('inputError');
+                    inputGroup.addClass('inputSeccuss').removeClass('inputError');
                 } else {
-                    formGroup.addClass('inputError').removeClass('inputSeccuss');
+                    inputGroup.addClass('inputError').removeClass('inputSeccuss');
+                    if (errors != ""){
+                        confirm(errors);
+                    }
                     validForm = false;
                 }
             });
             if (validForm){
-                //request on server
+                var nameVal = $('#name').val();
+                var secondNameVal = $('#secondName').val();
+                var emailVal = $('#email').val();
+                var phoneVal = $('#phone').val();
+                var genderVal = $('input[name="gender"]').val();
+                var passwordVal = $('#password').val();
+                var confirmPasswordVal = $('#passwordConfirm').val();
+                var licenseVal = $('#license').prop('checked') ? "true" : "false";
+                var locationURL = document.location.protocol + "//" + document.location.host + "/Registration";
+                console.log(locationURL);
+                $.ajax({
+                    url: locationURL,
+                    type: "POST",
+                    data:({name: nameVal, secondName: secondNameVal, email: emailVal, phone: phoneVal, gender: genderVal, password: passwordVal, confirmPassword: confirmPasswordVal, license: licenseVal}),
+                    success: SuccessReguest,
+                    error: ErrorReguest
+                });
             }
         });
     });

@@ -7,6 +7,7 @@
           <element id="module-output" name="Web" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.2.2" />
           <element id="library" level="project" name="Maven: org.glassfish.web:javax.servlet.jsp.jstl:1.2.1" />
           <element id="library" level="project" name="Maven: javax.servlet.jsp.jstl:jstl-api:1.2-rev-1" />
           <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
