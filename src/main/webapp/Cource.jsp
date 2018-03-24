@@ -18,7 +18,7 @@
         </tr>
         <c:forEach var="lection" items="${cource.lections}">
             <tr>
-                <td><a href="Lection.jsp">${lection.name}</a></td>
+                <td><a href="Lection">${lection.name}</a></td>
                 <td>${lection.hours}</td>
                 <td>${lection.description}</td>
             </tr>
@@ -32,8 +32,8 @@
         </tr>
         <c:forEach var="test" items="${cource.tests}">
             <tr>
-                <td><a href="Test.jsp">${test.name}</a></td>
-                <td><a href="TestStatus.jsp">${test.status}</a></td>
+                <td><a href="Test">${test.name}</a></td>
+                <td><a href="TestStatus">${test.status}</a></td>
             </tr>
         </c:forEach>
     </table>

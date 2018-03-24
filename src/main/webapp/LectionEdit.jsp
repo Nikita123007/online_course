@@ -9,7 +9,7 @@
 <div class="container main">
     <p><h1><input type="text" name="lectionName" id="lectionName" value="${lection.name}"></h1></p>
     <h3><input type="text" name="lectionDescription" id="lectionDescription" value="${lection.description}"></h3>
-    <h6><textarea cols="100" rows="25" name="lectionText" id="lectionText">${lection.text}</textarea></h6>
+    <h6><textarea cols="100" rows="20" name="lectionText" id="lectionText">${lection.text}</textarea></h6>
     <input type="button" name="editLection" id="editLection" value="Edit">
 </div>
 <%@ include file="resources/templates/footer.html" %>
