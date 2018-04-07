@@ -84,7 +84,7 @@
                 var value = $(this).val();
                 var inputGroup = $(this).parents('.input-group');
                 var errors = CheckValidFormData(id, value);
-                if (this.checkValidity() && (errors == "") {
+                if (this.checkValidity() && (errors == "")) {
                     inputGroup.addClass('inputSeccuss').removeClass('inputError');
                 } else {
                     inputGroup.addClass('inputError').removeClass('inputSeccuss');

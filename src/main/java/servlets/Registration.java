@@ -8,38 +8,25 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 
+import dao.DAOFactory;
+import hibernate.UserEntity;
 import response.ResponseData;
 
 @WebServlet("/Registration")
 public class Registration extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Writer wr = response.getWriter();
-        String secondName = request.getParameter("secondName");
-        String name = request.getParameter("name");
-        String extensionName = request.getParameter("extensionName");
+        String login = request.getParameter("login");
         String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String gender = request.getParameter("genderRadios");
         String password = request.getParameter("password");
-        String license = request.getParameter("license");
-        /*wr.write(
-                "Second name: " + secondName +
-                "</br>Name: " + name +
-                "</br>ExtensionName: " + extensionName +
-                "</br>Email: " + email +
-                "</br>Phone: " + phone +
-                "</br>Gender: " + gender +
-                "</br>Password: " + password +
-                "</br>License: " + license
-        );*/
-        ResponseData responseData = new ResponseData("Second name: " + secondName +
-                "</br>Name: " + name +
-                "</br>ExtensionName: " + extensionName +
-                "</br>Email: " + email +
-                "</br>Phone: " + phone +
-                "</br>Gender: " + gender +
-                "</br>Password: " + password +
-                "</br>License: " + license, null, new String[]{});
+
+        UserEntity user = new UserEntity();
+        user.setName(login);
+        user.setPasswordHash(password);
+        user.setEmail(email);
+        DAOFactory.getInstance().getUserDAO().addUser(user);
+
+        ResponseData responseData = new ResponseData("Success", null, new String[]{});
+        Writer wr = response.getWriter();
         wr.write(responseData.ToJson());
         wr.close();
     }

@@ -1,13 +1,13 @@
 package dao;
 
-import dao.exception.DAOException;
-import domain.Course;
+import hibernate.CourseEntity;
+
+import java.util.Collection;
 import java.util.List;
 
 public interface CourseDAO {
-    void addCourse(Course entity) throws DAOException;
-    //Course findCourse(int id) throws DAOException;
-    //List<Course> getCourses() throws  DAOException;
-    //void editCourse(int id, Course entity) throws  DAOException;
+    void addCourse(CourseEntity entity);
+    void mergeCourse(CourseEntity entity);
+    Collection<CourseEntity> getAll();
+    CourseEntity getCourse(int id);
 }
-

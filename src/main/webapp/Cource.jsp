@@ -8,7 +8,7 @@
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <p><h2>${cource.name}</h2></p>
-    <p>${cource.description}</p>
+    <p>No description</p>
     <p><h2>Lections</h2></p>
     <table border="solid 1px black">
         <tr>
@@ -16,7 +16,7 @@
             <th>Hours</th>
             <th>Descroption</th>
         </tr>
-        <c:forEach var="lection" items="${cource.lections}">
+        <c:forEach var="lection" items="${cource.getLectionsByIdCourse()}">
             <tr>
                 <td><a href="Lection">${lection.name}</a></td>
                 <td>${lection.hours}</td>
@@ -30,7 +30,7 @@
             <th>Name</th>
             <th>Status</th>
         </tr>
-        <c:forEach var="test" items="${cource.tests}">
+        <c:forEach var="test" items="${cource.getTestsByIdCourse()}">
             <tr>
                 <td><a href="Test">${test.name}</a></td>
                 <td><a href="TestStatus">${test.status}</a></td>

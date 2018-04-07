@@ -5,9 +5,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Writer;
 
+import dao.DAOFactory;
+import hibernate.UserEntity;
 import response.ResponseData;
 import constants.Pages.Page;
 
@@ -17,12 +20,16 @@ public class Login extends HttpServlet {
         Writer wr = response.getWriter();
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-        String loginAndPasswordErrors = CheckLoginErrors(login) + CheckPasswordErrors(password);
-        if (loginAndPasswordErrors.replace(" ", "").length() == 0){
+
+        UserEntity user = DAOFactory.getInstance().getUserDAO().findUser(login);
+        if (user != null && user.getPasswordHash().equals(password)){
+            HttpSession session=request.getSession();
+            session.setAttribute("UserId", user.getIdUser());
+
             ResponseData responseData = new ResponseData("", Page.Cources, null);
             wr.write(responseData.ToJson());
         }else {
-            ResponseData responseData = new ResponseData(loginAndPasswordErrors, null, new String[]{"login","password"});
+            ResponseData responseData = new ResponseData("Неправильный логин или пароль", null, new String[]{"login","password"});
             wr.write(responseData.ToJson());
         }
         wr.close();
@@ -30,18 +37,5 @@ public class Login extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("Login.jsp").forward(request, response);
-    }
-
-    private String CheckLoginErrors(String login){
-        //check correct and exist login
-        if (login.equals("Nekit")){
-            return  "Fuck you, it's mine login.";
-        }
-        return "";
-    }
-
-    private String CheckPasswordErrors(String password){
-        //check correct password
-        return "";
     }
 }

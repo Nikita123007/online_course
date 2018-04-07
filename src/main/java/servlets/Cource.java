@@ -1,5 +1,7 @@
 package servlets;
 
+import dao.DAOFactory;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +18,8 @@ public class Cource extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+
         List<TestLection> lections = new ArrayList<TestLection>();
         lections.add(new TestLection("Lection1", "Description1", 2));
         lections.add(new TestLection("Lection2", "Description2", 3));
@@ -26,7 +30,7 @@ public class Cource extends HttpServlet {
         tests.add(new TestTest("Test3", "Access", 3, null));
         TestCource cource = new TestCource(lections, tests, "NameCource1", "DescriptionCource1");
 
-        request.setAttribute("cource", cource);
+        request.setAttribute("cource", DAOFactory.getInstance().getCourseDAO().getCourse(id));
         request.setAttribute("courceCompleted", false);
         request.getRequestDispatcher("Cource.jsp").forward(request, response);
     }

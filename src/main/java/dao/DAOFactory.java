@@ -1,12 +1,15 @@
 package dao;
 
-import dao.impl.MySqlCourseDAO;
+import dao.impl.MysqlCourseDAO;
+import dao.impl.MysqlUserDAO;
 
 public class DAOFactory {
 
     private static final DAOFactory factory = new DAOFactory();
 
-    private final CourseDAO courseDAO = new MySqlCourseDAO();
+    private final CourseDAO courseDAO = new MysqlCourseDAO();
+    private final UserDAO userDAO = new MysqlUserDAO();
+
     private DAOFactory() {
     }
 
@@ -18,4 +21,7 @@ public class DAOFactory {
         return courseDAO;
     }
 
+    public UserDAO getUserDAO() {
+        return userDAO;
+    }
 }

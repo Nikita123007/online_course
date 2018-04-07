@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.url">jdbc:mysql://localhost:3306/online_course</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password"></property>
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <mapping class="hibernate.CategoryEntity"/>
+        <mapping class="hibernate.CommentEntity"/>
+        <mapping class="hibernate.CompletedTestEntity"/>
+        <mapping class="hibernate.CourseEntity"/>
+        <mapping class="hibernate.DiplomaEntity"/>
+        <mapping class="hibernate.LectionEntity"/>
+        <mapping class="hibernate.ReadedLectionEntity"/>
+        <mapping class="hibernate.SubscriptionEntity"/>
+        <mapping class="hibernate.TestEntity"/>
+        <mapping class="hibernate.TestAnswerEntity"/>
+        <mapping class="hibernate.TestQuestionEntity"/>
+        <mapping class="hibernate.UserEntity"/>
+        <mapping class="hibernate.VideoLinkEntity"/>
+
+        <!-- DB schema will be updated if needed -->
+        <!-- <property name="hbm2ddl.auto">update</property> -->
+    </session-factory>
+</hibernate-configuration>
