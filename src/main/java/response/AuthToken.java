@@ -3,7 +3,7 @@ package response;
 import java.security.SecureRandom;
 
 public class AuthToken {
-    private final static int tokenLenght = 20;
+    private final static int tokenLenght = 30;
 
     public static String GetToken(){
         SecureRandom random = new SecureRandom();

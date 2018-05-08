@@ -27,7 +27,7 @@ public class Login extends HttpServlet {
         UserEntity user = DAOFactory.getInstance().getUserDAO().findUser(login);
         String passwordHashInString = DatatypeConverter.printHexBinary(AlgorithmsHelper.GetHash(password));
         if (user != null && user.getPasswordHash().equals(passwordHashInString)) {
-            if (user.getAuthToken() == null) {
+            if (user.getAuthToken() == null || user.getAuthToken().equals("")) {
                 user.setAuthToken(AuthToken.GetToken());
                 DAOFactory.getInstance().getUserDAO().mergeUser(user);
             }
@@ -45,8 +45,14 @@ public class Login extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String logout = request.getParameter("logout");
+        UserEntity user = AuthHelper.GetAuthUser(request);
+
         if (logout != null && logout.equals("1")){
             response.addCookie(new Cookie(CookieAuthToken, ""));
+            if (user != null) {
+                user.setAuthToken("");
+                DAOFactory.getInstance().getUserDAO().mergeUser(user);
+            }
         }else {
             if (AuthHelper.GetAuthUser(request) != null) {
                 response.sendRedirect("Courses");
