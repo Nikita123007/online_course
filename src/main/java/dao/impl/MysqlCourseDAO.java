@@ -36,6 +36,16 @@ public class MysqlCourseDAO implements CourseDAO {
         }
     }
 
+    public void removeCourse(CourseEntity entity){
+        entityManager.getTransaction().begin();
+        try{
+            entityManager.remove(entity);
+        }
+        finally {
+            entityManager.getTransaction().commit();
+        }
+    }
+
     public void mergeCourse(CourseEntity entity){
         entityManager.getTransaction().begin();
         try{

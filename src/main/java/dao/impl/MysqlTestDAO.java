@@ -29,6 +29,16 @@ public class MysqlTestDAO implements TestDAO {
         }
     }
 
+    public void removeTest(TestEntity entity){
+        entityManager.getTransaction().begin();
+        try{
+            entityManager.remove(entity);
+        }
+        finally {
+            entityManager.getTransaction().commit();
+        }
+    }
+
     public void mergeTest(TestEntity entity){
         entityManager.getTransaction().begin();
         try{

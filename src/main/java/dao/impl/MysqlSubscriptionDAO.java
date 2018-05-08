@@ -28,6 +28,16 @@ public class MysqlSubscriptionDAO implements SubscriptionDAO {
         }
     }
 
+    public void removeSubscription(SubscriptionEntity entity){
+        entityManager.getTransaction().begin();
+        try{
+            entityManager.remove(entity);
+        }
+        finally {
+            entityManager.getTransaction().commit();
+        }
+    }
+
     public void mergeSubscription(SubscriptionEntity entity){
         entityManager.getTransaction().begin();
         try{
