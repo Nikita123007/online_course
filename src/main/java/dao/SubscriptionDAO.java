@@ -8,6 +8,7 @@ import java.util.Collection;
 public interface SubscriptionDAO {
     void addSubscription(SubscriptionEntity entity);
     void mergeSubscription(SubscriptionEntity entity);
+    void removeSubscription(SubscriptionEntity entity);
     Collection<SubscriptionEntity> getAll();
     SubscriptionEntity getSubscription(int id);
     Collection<SubscriptionEntity> getAllSubscriptionByUser(int userId);

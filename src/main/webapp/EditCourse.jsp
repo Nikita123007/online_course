@@ -21,7 +21,7 @@
             <c:forEach var="lection" items="${course.lectionsByIdCourse}">
                 <tr>
                     <td><a href="/LectionEdit">${lection.name}</a></td>
-                    <td onclick="">Delete</td>
+                    <td onclick="DeleteLection(${lection.idLection})">Delete</td>
                 </tr>
             </c:forEach>
         </table>
@@ -30,10 +30,12 @@
         <table border="solid 1px black" id="tests">
             <tr>
                 <th>Name</th>
+                <th></th>
             </tr>
             <c:forEach var="test" items="${course.testsByIdCourse}">
                 <tr>
                     <td><a href="/TestEdit">${test.name}</a></td>
+                    <td>Delete</td>
                 </tr>
             </c:forEach>
         </table>
@@ -47,7 +49,7 @@
 
 <script>
 
-    function SuccessDeleteLection(data) {
+    function SuccessDelete(data) {
         var parseData = JSON.parse(data);
         if (parseData.error == ""){
             location.reload();
@@ -55,7 +57,7 @@
             confirm(parseData.error);
         }
     }
-    function ErrorDeleteLection(data) {
+    function ErrorDelete(data) {
         console.log("error");
         console.log(data);
     }
@@ -65,8 +67,18 @@
             url: locationURL,
             type: "DELETE",
             data:({id: idLection}),
-            success: SuccessDeleteLection,
-            error: ErrorDeleteLection
+            success: SuccessDelete,
+            error: ErrorDelete
+        });
+    }
+    function DeleteTest(idTest) {
+        var locationURL = document.location.protocol + "//" + document.location.host + "/EditTest";
+        $.ajax({
+            url: locationURL,
+            type: "DELETE",
+            data:({id: idTest}),
+            success: SuccessDelete,
+            error: ErrorDelete
         });
     }
     function SuccessReguest(data) {

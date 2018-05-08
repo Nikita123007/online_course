@@ -30,7 +30,7 @@ public class MysqlLectionDAO implements LectionDAO {
         }
     }
 
-    public void reomveLection(LectionEntity entity){
+    public void removeLection(LectionEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.remove(entity);
@@ -44,16 +44,6 @@ public class MysqlLectionDAO implements LectionDAO {
         entityManager.getTransaction().begin();
         try{
             entityManager.merge(entity);
-        }
-        finally {
-            entityManager.getTransaction().commit();
-        }
-    }
-
-    public void removeLection(LectionEntity entity){
-        entityManager.getTransaction().begin();
-        try{
-            entityManager.remove(entity);
         }
         finally {
             entityManager.getTransaction().commit();

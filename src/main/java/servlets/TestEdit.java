@@ -1,11 +1,20 @@
 package servlets;
 
+import constants.Roles;
+import dao.DAOFactory;
+import hibernate.LectionEntity;
+import hibernate.TestEntity;
+import hibernate.UserEntity;
+import request.AuthHelper;
+import response.ResponseData;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +25,7 @@ public class TestEdit extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Question> questions = new ArrayList<Question>();
+        /*List<Question> questions = new ArrayList<Question>();
         List<Answer> answers1 = new ArrayList<Answer>();
         answers1.add(new Answer("Answer1", false));
         answers1.add(new Answer("Answer2", false));
@@ -35,104 +44,27 @@ public class TestEdit extends HttpServlet {
         TestTest test = new TestTest("NameTest1", "Access", -1, questions);
 
         request.setAttribute("test", test);
-        request.getRequestDispatcher("TestEdit.jsp").forward(request, response);
+        request.getRequestDispatcher("TestEdit.jsp").forward(request, response);*/
     }
 
-    public class TestTest {
-        private String name;
-        private String status;
-        private Integer mark;
-        private List<Question> questions;
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Writer wr = response.getWriter();
+        UserEntity user = AuthHelper.GetAuthUser(request);
+        String id = request.getParameter("id");
 
-        public TestTest(String name, String status, Integer mark, List<Question> questions){
-            this.name = name;
-            this.status = status;
-            this.mark = mark;
-            this.questions = questions;
+        if (user != null && id != null && !id.equals("")){
+            TestEntity test = DAOFactory.getInstance().getTestDAO().getTest(Integer.parseInt(id));
+            if (test != null && (user.getRole() == Roles.Role.Admin || test.getCourseByCourse().getAuthor() == user.getIdUser())) {
+                DAOFactory.getInstance().getTestDAO().removeTest(test);
+                ResponseData responseData = new ResponseData("", null, null);
+                wr.write(responseData.ToJson());
+                wr.close();
+                return;
+            }
         }
 
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
-
-        public List<Question> getQuestions() {
-            return questions;
-        }
-
-        public void setQuestions(List<Question> questions) {
-            this.questions = questions;
-        }
-
-        public Integer getMark() {
-            return mark;
-        }
-
-        public void setMark(Integer mark) {
-            this.mark = mark;
-        }
-    }
-
-    public class Answer{
-        private String description;
-        private Boolean isTrue;
-
-        public Answer(String description, Boolean isTrue){
-            this.description = description;
-            this.isTrue = isTrue;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public Boolean getIsTrue() {
-            return isTrue;
-        }
-
-        public void setIsTrue(Boolean isTrue) {
-            this.isTrue = isTrue;
-        }
-    }
-
-    public class Question{
-        private String name;
-        private List<Answer> answers;
-
-        public Question(String name, List<Answer> answers){
-            this.name = name;
-            this.answers = answers;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public List<Answer> getAnswers() {
-            return answers;
-        }
-
-        public void setAnswers(List<Answer> answers) {
-            this.answers = answers;
-        }
+        ResponseData responseData = new ResponseData("Error.", null, null);
+        wr.write(responseData.ToJson());
+        wr.close();
     }
 }

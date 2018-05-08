@@ -73,9 +73,8 @@ public class CourseEntity {
         this.level = level;
     }
 
-
     @Basic
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "mediumtext")
     public String getDescription() {
         return description;
     }
