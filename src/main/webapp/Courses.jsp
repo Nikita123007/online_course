@@ -46,7 +46,7 @@
     <div class="courses">
         <c:forEach var="course" items="${coursesSelf}">
             <div class="form-group">
-                <p><h2><a href="/" class="nameCourse">${course.name}</a></h2></p>
+                <p><h2><a class="nameCourse">${course.name}</a></h2></p>
                 <h6>Price: ${course.price}</h6>
                 <h4>Level: ${course.level}</h4>
                 <h4>Description: ${course.description}</h4>
@@ -64,7 +64,7 @@
         </c:forEach>
         <c:forEach var="course" items="${courses}">
             <div class="form-group">
-                <p><h2><a href="/" class="nameCourse">${course.name}</a></h2></p>
+                <p><h2><a class="nameCourse">${course.name}</a></h2></p>
                 <h4>Level: ${course.level}</h4>
                 <h4>Description: ${course.description}</h4>
                 <a href="Course?id=${course.idCourse}" class="design">Subscribe</a><text class="price" id="price">${course.price}</text>

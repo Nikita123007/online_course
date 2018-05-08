@@ -9,21 +9,17 @@
 <div class="container main">
     <form class="form-horizontal" onsubmit="return false;">
         <div class="input-group">
-            <p><h2><input type="text" name="courseName" id="courceName" placeholder="Cource name" pattern=".{5,}" value="${cource.name}"></h2></p>
+            <p><h2><input type="text" name="courseName" id="courseName" placeholder="Course name" pattern=".{5,}" value="${course.name}"></h2></p>
         </div>
-        <p><textarea cols="100" rows="20" name="courceDesccription" id="courceDesccription" placeholder="Cource decription" pattern=".{15,}" >${cource.description}</textarea></p>
+        <p><textarea cols="100" rows="20" name="courseDesccription" id="courseDesccription" placeholder="Course decription" pattern=".{15,}" >${course.description}</textarea></p>
         <p><h2>Lections</h2></p>
         <table border="solid 1px black" id="lections">
             <tr>
                 <th>Name</th>
-                <th>Hours</th>
-                <th>Descroption</th>
             </tr>
-            <c:forEach var="lection" items="${cource.lections}">
+            <c:forEach var="lection" items="${course.lectionsByIdCourse}">
                 <tr>
                     <td><a href="LectionEdit">${lection.name}</a></td>
-                    <td>${lection.hours}</td>
-                    <td>${lection.description}</td>
                 </tr>
             </c:forEach>
         </table>
@@ -33,14 +29,14 @@
             <tr>
                 <th>Name</th>
             </tr>
-            <c:forEach var="test" items="${cource.tests}">
+            <c:forEach var="test" items="${course.testsByIdCourse}">
                 <tr>
                     <td><a href="TestEdit">${test.name}</a></td>
                 </tr>
             </c:forEach>
         </table>
         <button type="button" id="addNewTest" name="addNewTest">Add new</button></br></br>
-        <h2><button type="button" id="save" name="save">Save</button></h2>>
+        <h2><button type="button" id="save" name="save">Save</button></h2>
     </form>
 </div>
 <%@ include file="resources/templates/footer.html" %>
@@ -93,14 +89,14 @@
                 }
             });
             if (validForm){
-                var courceNameVal = $('#courceName').val();
-                var courceDescriptionVal = $('#courceDesccription').val();
-                var locationURL = document.location.protocol + "//" + document.location.host + "/EditCource";
+                var courseNameVal = $('#courseName').val();
+                var courseDescriptionVal = $('#courseDesccription').val();
+                var locationURL = document.location.protocol + "//" + document.location.host + "/EditCourse";
                 console.log(locationURL);
                 $.ajax({
                     url: locationURL,
                     type: "POST",
-                    data:({courceName: courceNameVal, courceDescription: courceDescriptionVal}),
+                    data:({courseName: courseNameVal, courseDescription: courseDescriptionVal, idCourse: ${course.idCourse}}),
                     success: SuccessReguest,
                     error: ErrorReguest
                 });

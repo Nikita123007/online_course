@@ -34,7 +34,7 @@ public class Registration extends HttpServlet {
         String password = request.getParameter("password");
 
         if (ErrorsLogin(login) != null || ErrorsEmail(email) != null || ErrorsPassword(password) != null) {
-            ResponseData responseData = new ResponseData("Invalid data", Page.Cources, new ArrayList<String>());
+            ResponseData responseData = new ResponseData("Invalid data", Page.Courses, new ArrayList<String>());
             String errors = ErrorsLogin(login);
             if (errors != null) {
                 responseData.setError(responseData.getError() + errors + " ");
@@ -67,7 +67,7 @@ public class Registration extends HttpServlet {
             }
         }
 
-        ResponseData responseData = new ResponseData("", Page.Cources, new ArrayList<String>());
+        ResponseData responseData = new ResponseData("", Page.Courses, new ArrayList<String>());
         if (userByName != null || userByEmail != null) {
             if (userByName != null) {
                 responseData.setError(responseData.getError() + "This login already exist." + " ");
@@ -86,7 +86,7 @@ public class Registration extends HttpServlet {
             response.addCookie(new Cookie(CookieAuthToken, user.getAuthToken()));
             user.setRole(Role.User);
             DAOFactory.getInstance().getUserDAO().addUser(user);
-            responseData = new ResponseData("", Page.Cources, null);
+            responseData = new ResponseData("", Page.Courses, null);
         }
 
         wr.write(responseData.ToJson());

@@ -23,24 +23,27 @@ public class Login extends HttpServlet {
         Writer wr = response.getWriter();
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-
-        UserEntity user = DAOFactory.getInstance().getUserDAO().findUser(login);
-        String passwordHashInString = DatatypeConverter.printHexBinary(AlgorithmsHelper.GetHash(password));
-        if (user != null && user.getPasswordHash().equals(passwordHashInString)) {
-            if (user.getAuthToken() == null || user.getAuthToken().equals("")) {
-                user.setAuthToken(AuthToken.GetToken());
-                DAOFactory.getInstance().getUserDAO().mergeUser(user);
+        try {
+            UserEntity user = DAOFactory.getInstance().getUserDAO().findUser(login);
+            String passwordHashInString = DatatypeConverter.printHexBinary(AlgorithmsHelper.GetHash(password));
+            if (user != null && user.getPasswordHash().equals(passwordHashInString)) {
+                if (user.getAuthToken() == null || user.getAuthToken().equals("")) {
+                    user.setAuthToken(AuthToken.GetToken());
+                    DAOFactory.getInstance().getUserDAO().mergeUser(user);
+                }
+                response.addCookie(new Cookie(CookieAuthToken, user.getAuthToken()));
+                ResponseData responseData = new ResponseData("", Page.Courses, null);
+                wr.write(responseData.ToJson());
+            } else {
+                ResponseData responseData = new ResponseData("Incorrect login or password.", null, new ArrayList<String>());
+                responseData.getNameErrors().add("login");
+                responseData.getNameErrors().add("password");
+                wr.write(responseData.ToJson());
             }
-            response.addCookie(new Cookie(CookieAuthToken, user.getAuthToken()));
-            ResponseData responseData = new ResponseData("", Page.Cources, null);
-            wr.write(responseData.ToJson());
-        } else {
-            ResponseData responseData = new ResponseData("Incorrect login or password.", null, new ArrayList<String>());
-            responseData.getNameErrors().add("login");
-            responseData.getNameErrors().add("password");
-            wr.write(responseData.ToJson());
+            wr.close();
+        }catch (Exception ex){
+            wr.close();
         }
-        wr.close();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -2,8 +2,8 @@ package constants;
 
 public class Pages {
     public static class Page {
-        public static final String Cources = "/Courses";
-        public static final String Cource = "/Course";
+        public static final String Courses = "/Courses";
+        public static final String Course = "/Course";
         public static final String Diploma = "/Diploma";
         public static final String Lection = "/Lection";
         public static final String LectionEdit = "/LectionEdit";
