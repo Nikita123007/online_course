@@ -74,7 +74,7 @@ public class CourseEntity {
     }
 
     @Basic
-    @Column(name = "description", columnDefinition = "mediumtext")
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }
