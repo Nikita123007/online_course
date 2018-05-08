@@ -40,6 +40,16 @@ public class MysqlLectionDAO implements LectionDAO {
         }
     }
 
+    public void removeLection(LectionEntity entity){
+        entityManager.getTransaction().begin();
+        try{
+            entityManager.remove(entity);
+        }
+        finally {
+            entityManager.getTransaction().commit();
+        }
+    }
+
     public Collection<LectionEntity> getAll(){
         Query query = entityManager.createQuery("FROM LectionEntity");
         return (Collection<LectionEntity>) query.getResultList();

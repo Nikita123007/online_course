@@ -70,7 +70,7 @@ public class EditCourse extends HttpServlet {
 
         if (user != null && id != null && !id.equals("")){
             CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(id));
-            if (user.getRole() == Roles.Role.Admin || course.getAuthor() == user.getIdUser()) {
+            if (course != null && (user.getRole() == Roles.Role.Admin || course.getAuthor() == user.getIdUser())) {
                 request.setAttribute("course", course);
                 request.getRequestDispatcher("EditCourse.jsp").forward(request, response);
                 return;

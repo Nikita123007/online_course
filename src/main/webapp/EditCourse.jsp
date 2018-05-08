@@ -16,10 +16,12 @@
         <table border="solid 1px black" id="lections">
             <tr>
                 <th>Name</th>
+                <th></th>
             </tr>
             <c:forEach var="lection" items="${course.lectionsByIdCourse}">
                 <tr>
-                    <td><a href="LectionEdit">${lection.name}</a></td>
+                    <td><a href="/LectionEdit">${lection.name}</a></td>
+                    <td onclick="">Delete</td>
                 </tr>
             </c:forEach>
         </table>
@@ -31,7 +33,7 @@
             </tr>
             <c:forEach var="test" items="${course.testsByIdCourse}">
                 <tr>
-                    <td><a href="TestEdit">${test.name}</a></td>
+                    <td><a href="/TestEdit">${test.name}</a></td>
                 </tr>
             </c:forEach>
         </table>
@@ -44,6 +46,29 @@
 </html>
 
 <script>
+
+    function SuccessDeleteLection(data) {
+        var parseData = JSON.parse(data);
+        if (parseData.error == ""){
+            location.reload();
+        }else{
+            confirm(parseData.error);
+        }
+    }
+    function ErrorDeleteLection(data) {
+        console.log("error");
+        console.log(data);
+    }
+    function DeleteLection(idLection) {
+        var locationURL = document.location.protocol + "//" + document.location.host + "/EditLection";
+        $.ajax({
+            url: locationURL,
+            type: "DELETE",
+            data:({id: idLection}),
+            success: SuccessDeleteLection,
+            error: ErrorDeleteLection
+        });
+    }
     function SuccessReguest(data) {
         var parseData = JSON.parse(data);
         if (parseData.error == ""){
@@ -92,7 +117,6 @@
                 var courseNameVal = $('#courseName').val();
                 var courseDescriptionVal = $('#courseDesccription').val();
                 var locationURL = document.location.protocol + "//" + document.location.host + "/EditCourse";
-                console.log(locationURL);
                 $.ajax({
                     url: locationURL,
                     type: "POST",
