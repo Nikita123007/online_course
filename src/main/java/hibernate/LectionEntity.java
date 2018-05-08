@@ -9,7 +9,7 @@ public class LectionEntity {
     private int idLection;
     private int course;
     private String name;
-    private String textLink;
+    private String text;
     private CourseEntity courseByCourse;
     private Collection<ReadedLectionEntity> readedLectionsByIdLection;
     private Collection<VideoLinkEntity> videoLinksByIdLection;
@@ -45,13 +45,13 @@ public class LectionEntity {
     }
 
     @Basic
-    @Column(name = "text_link")
-    public String getTextLink() {
-        return textLink;
+    @Column(name = "text")
+    public String getText() {
+        return text;
     }
 
-    public void setTextLink(String textLink) {
-        this.textLink = textLink;
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class LectionEntity {
         if (idLection != that.idLection) return false;
         if (course != that.course) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (textLink != null ? !textLink.equals(that.textLink) : that.textLink != null) return false;
+        if (text != null ? !text.equals(that.text) : that.text != null) return false;
 
         return true;
     }
@@ -74,7 +74,7 @@ public class LectionEntity {
         int result = idLection;
         result = 31 * result + course;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (textLink != null ? textLink.hashCode() : 0);
+        result = 31 * result + (text != null ? text.hashCode() : 0);
         return result;
     }
 

@@ -10,4 +10,5 @@ public interface UserDAO {
     Collection<UserEntity> getAll();
     UserEntity getUser(int id);
     UserEntity findUser(String login);
+    UserEntity findUserByAuthToken(String authToken);
 }

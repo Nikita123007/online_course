@@ -12,6 +12,7 @@ public class CourseEntity {
     private String name;
     private BigDecimal price;
     private String level;
+    private String description;
     private Integer duration;
     private int category;
     private Collection<CommentEntity> commentsByIdCourse;
@@ -70,6 +71,17 @@ public class CourseEntity {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+
+    @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Basic

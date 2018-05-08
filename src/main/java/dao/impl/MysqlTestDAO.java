@@ -1,5 +1,6 @@
 package dao.impl;
 
+import dao.TestDAO;
 import hibernate.TestEntity;
 
 import javax.persistence.EntityManager;
@@ -10,7 +11,7 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 
 @Transactional
-public class MysqlTestDAO {
+public class MysqlTestDAO implements TestDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -43,7 +44,11 @@ public class MysqlTestDAO {
         return (Collection<TestEntity>) query.getResultList();
     }
 
-    public TestEntity getTest(int id){
-        return entityManager.find(TestEntity.class, id);
+    public TestEntity getTest(int id) {
+        try {
+            return entityManager.find(TestEntity.class, id);
+        } catch (Exception ex) {
+            return null;
+        }
     }
 }

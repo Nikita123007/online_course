@@ -41,12 +41,29 @@ public class MysqlUserDAO implements UserDAO {
         return (Collection<UserEntity>) query.getResultList();
     }
 
-    public UserEntity getUser(int id){
-        return entityManager.find(UserEntity.class, id);
+    public UserEntity getUser(int id) {
+        try {
+            return entityManager.find(UserEntity.class, id);
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     public UserEntity findUser(String login){
-        TypedQuery<UserEntity> tq = entityManager.createQuery("from UserEntity WHERE name=?", UserEntity.class);
-        return tq.setParameter(0, login).getSingleResult();
+        try {
+            TypedQuery<UserEntity> tq = entityManager.createQuery("FROM UserEntity WHERE name=?", UserEntity.class);
+            return tq.setParameter(0, login).getSingleResult();
+        }catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public UserEntity findUserByAuthToken(String authToken) {
+        try {
+            TypedQuery<UserEntity> tq = entityManager.createQuery("FROM UserEntity WHERE authToken=?", UserEntity.class);
+            return tq.setParameter(0, authToken).getSingleResult();
+        } catch (Exception ex) {
+            return null;
+        }
     }
 }

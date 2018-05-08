@@ -10,4 +10,5 @@ public interface CourseDAO {
     void mergeCourse(CourseEntity entity);
     Collection<CourseEntity> getAll();
     CourseEntity getCourse(int id);
+    Collection<CourseEntity> getAllByUser(int id);
 }

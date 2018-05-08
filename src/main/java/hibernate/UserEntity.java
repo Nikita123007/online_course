@@ -10,6 +10,9 @@ public class UserEntity {
     private String name;
     private String email;
     private String passwordHash;
+    private String authToken;
+    private int role;
+    private RoleEntity roleByRole;
     private Collection<CommentEntity> commentsByIdUser;
     private Collection<CompletedTestEntity> completedTestsByIdUser;
     private Collection<CourseEntity> coursesByIdUser;
@@ -55,6 +58,26 @@ public class UserEntity {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    @Basic
+    @Column(name = "auth_token")
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
+
+    @Basic
+    @Column(name = "role")
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 
     @Override
@@ -133,5 +156,15 @@ public class UserEntity {
 
     public void setSubscriptionsByIdUser(Collection<SubscriptionEntity> subscriptionsByIdUser) {
         this.subscriptionsByIdUser = subscriptionsByIdUser;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "role", referencedColumnName = "id_role", nullable = false, insertable = false, updatable = false)
+    public RoleEntity getRoleByRole() {
+        return roleByRole;
+    }
+
+    public void setRoleByRole(RoleEntity roleByRole) {
+        this.roleByRole = roleByRole;
     }
 }
