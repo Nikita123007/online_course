@@ -26,6 +26,16 @@ public class MysqlUserDAO implements UserDAO {
         }
     }
 
+    public void removeUser(UserEntity entity){
+        entityManager.getTransaction().begin();
+        try{
+            entityManager.remove(entity);
+        }
+        finally {
+            entityManager.getTransaction().commit();
+        }
+    }
+
     public void mergeUser(UserEntity entity){
         entityManager.getTransaction().begin();
         try{

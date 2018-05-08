@@ -30,6 +30,16 @@ public class MysqlDiplomaDAO implements DiplomaDAO {
         }
     }
 
+    public void removeDiploma(DiplomaEntity entity){
+        entityManager.getTransaction().begin();
+        try{
+            entityManager.remove(entity);
+        }
+        finally {
+            entityManager.getTransaction().commit();
+        }
+    }
+
     public void mergeDiploma(DiplomaEntity entity){
         entityManager.getTransaction().begin();
         try{
