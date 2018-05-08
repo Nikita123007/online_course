@@ -1,5 +1,7 @@
 package servlets;
 
+import constants.Pages;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.*;
@@ -15,6 +17,7 @@ public class User extends HttpServlet {
 
         request.setAttribute("user", user);
         request.getRequestDispatcher("User.jsp").forward(request, response);
+        String temp = Pages.Page.Cource;
     }
 
     public class TestUser {

@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
-<% String title = "Cources"; %>
+<% String title = "Courses"; %>
 <%@ include file="resources/templates/headers.html" %>
 <body>
 <%@ include file="resources/templates/header.html" %>

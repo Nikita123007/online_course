@@ -2,14 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
-<% String title = "Cources"; %>
+<% String title = "Edit course"; %>
 <%@ include file="resources/templates/headers.html" %>
 <body>
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <form class="form-horizontal" onsubmit="return false;">
         <div class="input-group">
-            <p><h2><input type="text" name="courceName" id="courceName" placeholder="Cource name" pattern=".{5,}" value="${cource.name}"></h2></p>
+            <p><h2><input type="text" name="courseName" id="courceName" placeholder="Cource name" pattern=".{5,}" value="${cource.name}"></h2></p>
         </div>
         <p><textarea cols="100" rows="20" name="courceDesccription" id="courceDesccription" placeholder="Cource decription" pattern=".{15,}" >${cource.description}</textarea></p>
         <p><h2>Lections</h2></p>

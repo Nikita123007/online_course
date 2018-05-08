@@ -1,5 +1,7 @@
 package servlets;
 
+import dao.DAOFactory;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,53 +16,9 @@ public class Lection extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        TestLection lection = new TestLection("NameLection", "This lection is very cool", "lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection lection ", 10);
+        int id = Integer.parseInt(request.getParameter("id"));
 
-        request.setAttribute("lection", lection);
+        request.setAttribute("lection", DAOFactory.getInstance().getLectionDAO().getLection(id));
         request.getRequestDispatcher("Lection.jsp").forward(request, response);
-    }
-
-    public class TestLection {
-        private String name;
-        private String description;
-        private String text;
-        private Integer hours;
-
-        public TestLection(String name, String description, String text, Integer hours){
-            this.name = name;
-            this.description = description;
-            this.text = text;
-            this.hours = hours;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public Integer getHours(){
-            return hours;
-        }
-
-        public void setHours(Integer hours){ this.hours = hours; }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
     }
 }

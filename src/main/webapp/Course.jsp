@@ -2,25 +2,23 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
-<% String title = "Cources"; %>
+<% String title = "Course"; %>
 <%@ include file="resources/templates/headers.html" %>
 <body>
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
-    <p><h2>${cource.name}</h2></p>
-    <p>No description</p>
+    <p><h2>${course.name}</h2></p>
+    <p>Duration: ${course.duration}</p>
+    <p>Price: ${course.price}</p>
+    <p>Level: ${course.level}</p>
     <p><h2>Lections</h2></p>
     <table border="solid 1px black">
         <tr>
             <th>Name</th>
-            <th>Hours</th>
-            <th>Descroption</th>
         </tr>
-        <c:forEach var="lection" items="${cource.getLectionsByIdCourse()}">
+        <c:forEach var="lection" items="${course.lectionsByIdCourse()}">
             <tr>
-                <td><a href="Lection">${lection.name}</a></td>
-                <td>${lection.hours}</td>
-                <td>${lection.description}</td>
+                <td><a href="Lection?id=${lection.idLection}">${lection.name}</a></td>
             </tr>
         </c:forEach>
     </table>
@@ -28,16 +26,14 @@
     <table border="solid 1px black">
         <tr>
             <th>Name</th>
-            <th>Status</th>
         </tr>
-        <c:forEach var="test" items="${cource.getTestsByIdCourse()}">
+        <c:forEach var="test" items="${course.testsByIdCourse()}">
             <tr>
-                <td><a href="Test">${test.name}</a></td>
-                <td><a href="TestStatus">${test.status}</a></td>
+                <td><a href="Test?id=${test.idTest}">${test.name}</a></td>
             </tr>
         </c:forEach>
     </table>
-    <c:if test="${courceCompleted==true}">
+    <c:if test="${courseCompleted==true}">
         <input type="button" id="diploma" name="diploma" value="diploma">
     </c:if>
 </div>

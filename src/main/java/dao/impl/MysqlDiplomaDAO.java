@@ -1,5 +1,6 @@
 package dao.impl;
 
+import dao.DiplomaDAO;
 import hibernate.DiplomaEntity;
 
 import javax.persistence.EntityManager;
@@ -10,7 +11,7 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 
 @Transactional
-public class MysqlDiplomaDAO {
+public class MysqlDiplomaDAO implements DiplomaDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -44,7 +45,11 @@ public class MysqlDiplomaDAO {
         return (Collection<DiplomaEntity>) query.getResultList();
     }
 
-    public DiplomaEntity getDiploma(int id){
-        return entityManager.find(DiplomaEntity.class, id);
+    public DiplomaEntity getDiploma(int id) {
+        try {
+            return entityManager.find(DiplomaEntity.class, id);
+        } catch (Exception ex) {
+            return null;
+        }
     }
 }

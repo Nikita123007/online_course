@@ -15,11 +15,11 @@ public class TestStatus extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        TestTest test = new TestTest("NameTest1", "Completed", 10, null);
+        //TestTest test = new TestTest("NameTest1", "Completed", 10, null);
 
-        request.setAttribute("test", test);
+        //request.setAttribute("test", test);
         request.getRequestDispatcher("TestStatus.jsp").forward(request, response);
-    }
+    }/*
 
     public class TestTest {
         private String name;
@@ -117,5 +117,5 @@ public class TestStatus extends HttpServlet {
         public void setAnswers(List<Cource.Answer> answers) {
             this.answers = answers;
         }
-    }
+    }*/
 }

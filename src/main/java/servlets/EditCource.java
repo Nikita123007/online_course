@@ -11,13 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import response.ResponseData;
 
-@WebServlet("/EditCource")
+@WebServlet("/EditCourse")
 public class EditCource extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Writer wr = response.getWriter();
         String courceName = request.getParameter("courceName");
         String courceDescription = request.getParameter("courceDescription");
-        ResponseData responseData = new ResponseData("Cource name: " + courceName + "</br>Cource description: " + courceDescription, null, new String[]{"courceName"});
+        ResponseData responseData = new ResponseData("Cource name: " + courceName + "</br>Cource description: " + courceDescription, null, new ArrayList<String>());
+        responseData.getNameErrors().add("courseName");
         wr.write(responseData.ToJson());
         wr.close();
     }
@@ -34,7 +35,7 @@ public class EditCource extends HttpServlet {
         TestCource cource = new TestCource(lections, tests, "NameCource1", "DescriptionCource1");
 
         request.setAttribute("cource", cource);
-        request.getRequestDispatcher("EditCource.jsp").forward(request, response);
+        request.getRequestDispatcher("EditCourse.jsp").forward(request, response);
     }
 
     public class TestCource{
