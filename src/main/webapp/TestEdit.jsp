@@ -8,13 +8,14 @@
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <h2><input type="text" name="nameTest" id="nameTest" value="${test.name}"></h2>
-    <c:forEach var="question" items="${test.questions}">
-        <h4><input type="text" name="nameQuestion" id="nameQuestion" value="${question.name}"></h4>
-        <c:forEach var="answer" items="${question.answers}">
-            <h6><input name="${question.name}" type="radio" value="id"><input type="text" name="${question.name}" id="${question.name}" value="${answer.description}"></h6>
+    <c:forEach var="question" items="${test.testQuestionsByIdTest}">
+        <h4><input type="text" name="nameQuestion" id="nameQuestion" value="${question.question}"></h4>
+        <c:forEach var="answer" items="${question.testAnswersByIdTestQuestion}">
+            <h6><input name="${question.question}" type="radio" value="${question.idTestQuestion}" <c:if test="${answer.isCorrect == 1}">checked</c:if>><input type="text" name="answer${answer.idTestAnswer}" id="answer${answer.idTestAnswer}" value="${answer.text}"></h6>
         </c:forEach>
+        <input type="button" name="editTest" id="editTest" value="Edit">
     </c:forEach>
-    <input type="button" name="editTest" id="editTest" value="Edit">
+    <input type="button" name="editTest" id="editTest" value="Edit">not work!!!
 </div>
 <%@ include file="resources/templates/footer.html" %>
 </body>

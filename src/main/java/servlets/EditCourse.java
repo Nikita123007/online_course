@@ -16,6 +16,7 @@ import constants.Roles;
 import dao.DAOFactory;
 import hibernate.CourseEntity;
 import hibernate.SubscriptionEntity;
+import hibernate.TestEntity;
 import hibernate.UserEntity;
 import request.AuthHelper;
 import response.ResponseData;
@@ -24,6 +25,10 @@ import constants.Roles.*;
 @WebServlet("/EditCourse")
 public class EditCourse extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
+
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UserEntity user = AuthHelper.GetAuthUser(request);
         Writer wr = response.getWriter();
         String courseName = request.getParameter("courseName");
@@ -72,12 +77,34 @@ public class EditCourse extends HttpServlet {
             CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(id));
             if (course != null && (user.getRole() == Roles.Role.Admin || course.getAuthor() == user.getIdUser())) {
                 request.setAttribute("course", course);
+                request.setAttribute("userName", user.getName());
                 request.getRequestDispatcher("EditCourse.jsp").forward(request, response);
                 return;
             }
         }
 
         response.sendRedirect("Login");
+    }
+
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Writer wr = response.getWriter();
+        UserEntity user = AuthHelper.GetAuthUser(request);
+        String id = request.getParameter("id");
+
+        if (user != null && id != null && !id.equals("")){
+            CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(id));
+            if (course != null && (user.getRole() == Roles.Role.Admin || course.getAuthor() == user.getIdUser())) {
+                DAOFactory.getInstance().getCourseDAO().removeCourse(course);
+                ResponseData responseData = new ResponseData("", null, null);
+                wr.write(responseData.ToJson());
+                wr.close();
+                return;
+            }
+        }
+
+        ResponseData responseData = new ResponseData("Error.", null, null);
+        wr.write(responseData.ToJson());
+        wr.close();
     }
 
     private String ErrorsCourseName(String courseName) {

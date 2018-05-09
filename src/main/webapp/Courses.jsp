@@ -50,7 +50,7 @@
                 <h6>Price: ${course.price}</h6>
                 <h4>Level: ${course.level}</h4>
                 <h4>Description: ${course.description}</h4>
-                <a href="EditCourse?id=${course.idCourse}" class="design">Edit</a>
+                <h3><a href="EditCourse?id=${course.idCourse}" class="design">Edit</a></h3>
             </div>
             <hr>
         </c:forEach>
@@ -67,7 +67,7 @@
                 <p><h2><a class="nameCourse">${course.name}</a></h2></p>
                 <h4>Level: ${course.level}</h4>
                 <h4>Description: ${course.description}</h4>
-                <a href="Course?id=${course.idCourse}" class="design">Subscribe</a><text class="price" id="price">${course.price}</text>
+                <h3><button type="button" id="subscribe" name="subscribe" onclick="SubscribeOnCourse(${course.idCourse})">Subscribe</button></h3><text class="price" id="price">${course.price}</text>
             </div>
             <hr>
         </c:forEach>
@@ -76,3 +76,27 @@
 <%@ include file="resources/templates/footer.html" %>
 </body>
 </html>
+<script>
+    function SuccessChange(data) {
+        var parseData = JSON.parse(data);
+        if (parseData.error == ""){
+            document.location.reload();
+        }else{
+            confirm(parseData.error);
+        }
+    }
+    function ErrorChange(data) {
+        console.log("error");
+        console.log(data);
+    }
+    function SubscribeOnCourse(idCourse) {
+        var locationURL = document.location.protocol + "//" + document.location.host + "/Courses";
+        $.ajax({
+            url: locationURL,
+            type: "POST",
+            data:({idCourse: idCourse}),
+            success: SuccessChange,
+            error: ErrorChange
+        });
+    }
+</script>

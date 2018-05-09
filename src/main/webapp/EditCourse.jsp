@@ -16,31 +16,28 @@
         <table border="solid 1px black" id="lections">
             <tr>
                 <th>Name</th>
-                <th></th>
             </tr>
             <c:forEach var="lection" items="${course.lectionsByIdCourse}">
                 <tr>
-                    <td><a href="/LectionEdit">${lection.name}</a></td>
-                    <td onclick="DeleteLection(${lection.idLection})">Delete</td>
+                    <td><a href="/LectionEdit?id=${lection.idLection}">${lection.name}</a></td>
                 </tr>
             </c:forEach>
         </table>
-        <button type="button" id="addNewLection" name="addNewLection">Add new</button>
+        <h4><a id="addNewLection" name="addNewLection" href="/LectionEdit?id=-1&idCourse=${course.idCourse}">Add new lection</a></h4><br>
         <p><h2>Tests</h2></p>
         <table border="solid 1px black" id="tests">
             <tr>
                 <th>Name</th>
-                <th></th>
             </tr>
             <c:forEach var="test" items="${course.testsByIdCourse}">
                 <tr>
-                    <td><a href="/TestEdit">${test.name}</a></td>
-                    <td>Delete</td>
+                    <td><a href="/TestEdit?id=${test.idTest}">${test.name}</a></td>
                 </tr>
             </c:forEach>
         </table>
-        <button type="button" id="addNewTest" name="addNewTest">Add new</button></br></br>
+        <h4><a id="addNewTest" name="addNewTest" href="/TestEdit?id=-1&idCourse=${course.idCourse}">Add new test</a></h4><br></br></br>
         <h2><button type="button" id="save" name="save">Save</button></h2>
+        <h2><button type="button" id="delete" name="delete" onclick="DeleteCourse()">Delete</button></h2>
     </form>
 </div>
 <%@ include file="resources/templates/footer.html" %>
@@ -48,11 +45,10 @@
 </html>
 
 <script>
-
     function SuccessDelete(data) {
         var parseData = JSON.parse(data);
         if (parseData.error == ""){
-            location.reload();
+            document.location.href = document.location.protocol + "//" + document.location.host + "/Courses"
         }else{
             confirm(parseData.error);
         }
@@ -61,22 +57,11 @@
         console.log("error");
         console.log(data);
     }
-    function DeleteLection(idLection) {
-        var locationURL = document.location.protocol + "//" + document.location.host + "/EditLection";
+    function DeleteCourse() {
+        var locationURL = document.location.protocol + "//" + document.location.host + "/EditCourse?id=${course.idCourse}";
         $.ajax({
             url: locationURL,
             type: "DELETE",
-            data:({id: idLection}),
-            success: SuccessDelete,
-            error: ErrorDelete
-        });
-    }
-    function DeleteTest(idTest) {
-        var locationURL = document.location.protocol + "//" + document.location.host + "/EditTest";
-        $.ajax({
-            url: locationURL,
-            type: "DELETE",
-            data:({id: idTest}),
             success: SuccessDelete,
             error: ErrorDelete
         });
@@ -128,11 +113,12 @@
             if (validForm){
                 var courseNameVal = $('#courseName').val();
                 var courseDescriptionVal = $('#courseDesccription').val();
-                var locationURL = document.location.protocol + "//" + document.location.host + "/EditCourse";
+                var locationURL = document.location.protocol + "//" + document.location.host + "/EditCourse?idCourse=${course.idCourse}";
+                locationURL = locationURL + "&courseName="+courseNameVal;
+                locationURL = locationURL + "&courseDescription="+courseDescriptionVal;
                 $.ajax({
                     url: locationURL,
-                    type: "POST",
-                    data:({courseName: courseNameVal, courseDescription: courseDescriptionVal, idCourse: ${course.idCourse}}),
+                    type: "PUT",
                     success: SuccessReguest,
                     error: ErrorReguest
                 });

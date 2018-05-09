@@ -1,8 +1,10 @@
 package servlets;
 
+import constants.Pages;
 import constants.Roles.*;
 import dao.DAOFactory;
 import hibernate.CourseEntity;
+import hibernate.LectionEntity;
 import hibernate.SubscriptionEntity;
 import hibernate.UserEntity;
 import org.hibernate.HibernateException;
@@ -13,6 +15,7 @@ import org.hibernate.cfg.Configuration;
 import javax.persistence.criteria.CriteriaQuery;
 import org.hibernate.query.Query;
 import request.AuthHelper;
+import response.ResponseData;
 
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
@@ -22,17 +25,46 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Writer;
 import java.math.BigDecimal;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.sql.Timestamp;
 import java.util.List;
 
 @WebServlet("/Courses")
 public class Courses extends HttpServlet {
-
-    private static final long serialVersionUID = 1L;
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UserEntity user = AuthHelper.GetAuthUser(request);
+        Writer wr = response.getWriter();
+        String idCourse = request.getParameter("idCourse");
 
+        if (user == null || idCourse == null || idCourse.equals("")){
+            ResponseData responseData = new ResponseData("", Pages.Page.Courses, null);
+            wr.write(responseData.ToJson());
+            wr.close();
+            return;
+        }
+
+        SubscriptionEntity subscription = DAOFactory.getInstance().getSubscriptionDAO().getAllSubscriptionByUserAndCourse(user.getIdUser(), Integer.parseInt(idCourse));
+
+        if (subscription != null) {
+            ResponseData responseData = new ResponseData("", Pages.Page.Courses, null);
+            wr.write(responseData.ToJson());
+            wr.close();
+            return;
+        }
+
+        subscription = new SubscriptionEntity();
+        subscription.setCourse(Integer.parseInt(idCourse));
+        subscription.setUser(user.getIdUser());
+        subscription.setDate(new Timestamp(new Date().getTime()));
+        DAOFactory.getInstance().getSubscriptionDAO().addSubscription(subscription);
+
+        ResponseData responseData = new ResponseData("", Pages.Page.Courses, null);
+        wr.write(responseData.ToJson());
+        wr.close();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

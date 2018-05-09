@@ -8,15 +8,15 @@
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <p><h2>${course.name}</h2></p>
-    <p>Duration: ${course.duration}</p>
-    <p>Price: ${course.price}</p>
-    <p>Level: ${course.level}</p>
+    <p style="margin-bottom: 0px">Duration: ${course.duration}</p>
+    <p style="margin-bottom: 0px">Level: ${course.level}</p>
+    <p>Category: ${course.categoryByCategory.name}</p>
     <p><h2>Lections</h2></p>
     <table border="solid 1px black">
         <tr>
             <th>Name</th>
         </tr>
-        <c:forEach var="lection" items="${course.lectionsByIdCourse()}">
+        <c:forEach var="lection" items="${course.lectionsByIdCourse}">
             <tr>
                 <td><a href="Lection?id=${lection.idLection}">${lection.name}</a></td>
             </tr>
@@ -26,10 +26,12 @@
     <table border="solid 1px black">
         <tr>
             <th>Name</th>
+            <th>Status</th>
         </tr>
-        <c:forEach var="test" items="${course.testsByIdCourse()}">
+        <c:forEach var="test" items="${tests}">
             <tr>
                 <td><a href="Test?id=${test.idTest}">${test.name}</a></td>
+                <td><c:if test="${test.completed == 1}">Completed</c:if><c:if test="${test.completed == 0}">Available</c:if></td>
             </tr>
         </c:forEach>
     </table>

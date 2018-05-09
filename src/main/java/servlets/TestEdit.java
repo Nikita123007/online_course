@@ -1,10 +1,9 @@
 package servlets;
 
+import constants.Pages;
 import constants.Roles;
 import dao.DAOFactory;
-import hibernate.LectionEntity;
-import hibernate.TestEntity;
-import hibernate.UserEntity;
+import hibernate.*;
 import request.AuthHelper;
 import response.ResponseData;
 
@@ -16,35 +15,119 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @WebServlet("/TestEdit")
 public class TestEdit extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UserEntity user = AuthHelper.GetAuthUser(request);
+        Writer wr = response.getWriter();
+        String lectionName = request.getParameter("lectionName");
+        String lectionText = request.getParameter("lectionText");
+        String idCourse = request.getParameter("idCourse");
 
+        if (ErrorsLectionName(lectionName) != null || ErrorsLectionText(lectionText) != null) {
+            ResponseData responseData = new ResponseData("Invalid data. ", Pages.Page.Courses, new ArrayList<String>());
+            String errors = ErrorsLectionName(lectionName);
+            if (errors != null) {
+                responseData.setError(responseData.getError() + errors + " ");
+                responseData.getNameErrors().add("login");
+            }
+            errors = ErrorsLectionText(lectionText);
+            if (errors != null) {
+                responseData.setError(responseData.getError() + errors + " ");
+                responseData.getNameErrors().add("email");
+            }
+            wr.write(responseData.ToJson());
+            wr.close();
+            return;
+        }
+
+        LectionEntity lection = new LectionEntity();
+        lection.setName(lectionName);
+        lection.setText(lectionText);
+        lection.setCourse(Integer.parseInt(idCourse));
+        DAOFactory.getInstance().getLectionDAO().addLection(lection);
+
+        ResponseData responseData = new ResponseData("", Pages.Page.Courses, null);
+        wr.write(responseData.ToJson());
+        wr.close();
+    }
+
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UserEntity user = AuthHelper.GetAuthUser(request);
+        Writer wr = response.getWriter();
+        String lectionName = request.getParameter("lectionName");
+        String lectionText = request.getParameter("lectionText");
+        String idLection = request.getParameter("idLection");
+        LectionEntity lection = DAOFactory.getInstance().getLectionDAO().getLection(Integer.parseInt(idLection));
+
+        if (lection == null || user == null || (user.getRole() != Roles.Role.Admin && lection.getCourseByCourse().getAuthor() != user.getIdUser())){
+            ResponseData responseData = new ResponseData("", Pages.Page.Login, null);
+            wr.write(responseData.ToJson());
+            wr.close();
+            return;
+        }
+
+        if (ErrorsLectionName(lectionName) != null || ErrorsLectionText(lectionText) != null) {
+            ResponseData responseData = new ResponseData("Invalid data. ", Pages.Page.Courses, new ArrayList<String>());
+            String errors = ErrorsLectionName(lectionName);
+            if (errors != null) {
+                responseData.setError(responseData.getError() + errors + " ");
+                responseData.getNameErrors().add("login");
+            }
+            errors = ErrorsLectionText(lectionText);
+            if (errors != null) {
+                responseData.setError(responseData.getError() + errors + " ");
+                responseData.getNameErrors().add("email");
+            }
+            wr.write(responseData.ToJson());
+            wr.close();
+            return;
+        }
+
+        lection.setName(lectionName);
+        lection.setText(lectionText);
+        DAOFactory.getInstance().getLectionDAO().mergeLection(lection);
+
+        ResponseData responseData = new ResponseData("", Pages.Page.Courses, null);
+        wr.write(responseData.ToJson());
+        wr.close();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        /*List<Question> questions = new ArrayList<Question>();
-        List<Answer> answers1 = new ArrayList<Answer>();
-        answers1.add(new Answer("Answer1", false));
-        answers1.add(new Answer("Answer2", false));
-        answers1.add(new Answer("Answer3", false));
-        List<Answer> answers2 = new ArrayList<Answer>();
-        answers2.add(new Answer("Answer4", false));
-        answers2.add(new Answer("Answer5", false));
-        answers2.add(new Answer("Answer6", false));
-        questions.add(new Question("Qustion1", answers1));
-        questions.add(new Question("Qustion2", answers2));
-        questions.add(new Question("Qustion2", answers2));
-        questions.add(new Question("Qustion2", answers2));
-        questions.add(new Question("Qustion2", answers2));
-        questions.add(new Question("Qustion2", answers2));
-        questions.add(new Question("Qustion2", answers2));
-        TestTest test = new TestTest("NameTest1", "Access", -1, questions);
+        UserEntity user = AuthHelper.GetAuthUser(request);
+        String id = request.getParameter("id");
+        String idCourse = request.getParameter("idCourse");
 
-        request.setAttribute("test", test);
-        request.getRequestDispatcher("TestEdit.jsp").forward(request, response);*/
+        if (user != null && id != null && !id.equals("")){
+            if (Integer.parseInt(id) != -1) {
+                TestEntity test = DAOFactory.getInstance().getTestDAO().getTest(Integer.parseInt(id));
+                if (test != null && (user.getRole() == Roles.Role.Admin || test.getCourseByCourse().getAuthor() == user.getIdUser())) {
+                    request.setAttribute("test", test);
+                    request.setAttribute("userName", user.getName());
+                    request.getRequestDispatcher("TestEdit.jsp").forward(request, response);
+                    return;
+                }
+            }else{
+                CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(idCourse));
+                if (course != null && (user.getRole() == Roles.Role.Admin || course.getAuthor() == user.getIdUser())) {
+                    TestEntity test = new TestEntity();
+                    Collection<TestQuestionEntity> questions = new ArrayList<TestQuestionEntity>();
+                    test.setName("");
+                    test.setTestQuestionsByIdTest(questions);
+                    test.setIdTest(-1);
+                    test.setCourse(course.getIdCourse());
+                    request.setAttribute("test", test);
+                    request.setAttribute("userName", user.getName());
+                    request.getRequestDispatcher("TestEdit.jsp").forward(request, response);
+                    return;
+                }
+            }
+        }
+
+        response.sendRedirect("Login");
     }
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -66,5 +149,19 @@ public class TestEdit extends HttpServlet {
         ResponseData responseData = new ResponseData("Error.", null, null);
         wr.write(responseData.ToJson());
         wr.close();
+    }
+
+    private String ErrorsLectionName(String lectionName) {
+        if (lectionName.length() == 0){
+            return "Input lection name.";
+        }
+        return null;
+    }
+
+    private String ErrorsLectionText(String lectionText) {
+        if (lectionText.length() == 0){
+            return "Input lection text.";
+        }
+        return null;
     }
 }
