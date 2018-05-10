@@ -51,12 +51,14 @@ public class MysqlDiplomaDAO implements DiplomaDAO {
     }
 
     public Collection<DiplomaEntity> getAll(){
+        entityManager.clear();
         Query query = entityManager.createQuery("FROM DiplomaEntity");
         return (Collection<DiplomaEntity>) query.getResultList();
     }
 
     public DiplomaEntity getDiploma(int id) {
         try {
+            entityManager.clear();
             return entityManager.find(DiplomaEntity.class, id);
         } catch (Exception ex) {
             return null;

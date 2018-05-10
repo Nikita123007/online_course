@@ -49,12 +49,14 @@ public class MysqlSubscriptionDAO implements SubscriptionDAO {
     }
 
     public Collection<SubscriptionEntity> getAll(){
+        entityManager.clear();
         Query query = entityManager.createQuery("FROM SubscriptionEntity");
         return (Collection<SubscriptionEntity>) query.getResultList();
     }
 
     public SubscriptionEntity getSubscription(int id) {
         try {
+            entityManager.clear();
             return entityManager.find(SubscriptionEntity.class, id);
         } catch (Exception ex) {
             return null;
@@ -63,6 +65,7 @@ public class MysqlSubscriptionDAO implements SubscriptionDAO {
 
     public Collection<SubscriptionEntity> getAllSubscriptionByUser(int userId) {
         try {
+            entityManager.clear();
             TypedQuery<SubscriptionEntity> query = entityManager.createQuery("FROM SubscriptionEntity WHERE user=?", SubscriptionEntity.class);
             query.setParameter(0, userId);
             return (Collection<SubscriptionEntity>) query.getResultList();
@@ -73,6 +76,7 @@ public class MysqlSubscriptionDAO implements SubscriptionDAO {
 
     public SubscriptionEntity getAllSubscriptionByUserAndCourse(int userId, int courseId) {
         try {
+            entityManager.clear();
             TypedQuery<SubscriptionEntity> tq = entityManager.createQuery("FROM SubscriptionEntity WHERE user=? AND course=?", SubscriptionEntity.class);
             tq.setParameter(0, userId);
             return tq.setParameter(1, courseId).getSingleResult();

@@ -57,12 +57,14 @@ public class MysqlCourseDAO implements CourseDAO {
     }
 
     public Collection<CourseEntity> getAll(){
+        entityManager.clear();
         Query query = entityManager.createQuery("FROM CourseEntity");
         return (Collection<CourseEntity>) query.getResultList();
     }
 
     public CourseEntity getCourse(int id) {
         try {
+            entityManager.clear();
             return entityManager.find(CourseEntity.class, id);
         } catch (Exception ex) {
             return null;
@@ -71,6 +73,7 @@ public class MysqlCourseDAO implements CourseDAO {
 
     public Collection<CourseEntity> getAllByUser(int userId){
         try {
+            entityManager.clear();
             Query query = entityManager.createQuery("FROM CourseEntity WHERE author=?");
             query.setParameter(0, userId);
             return (Collection<CourseEntity>) query.getResultList();

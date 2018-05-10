@@ -50,12 +50,14 @@ public class MysqlTestDAO implements TestDAO {
     }
 
     public Collection<TestEntity> getAll(){
+        entityManager.clear();
         Query query = entityManager.createQuery("FROM TestEntity");
         return (Collection<TestEntity>) query.getResultList();
     }
 
     public TestEntity getTest(int id) {
         try {
+            entityManager.clear();
             return entityManager.find(TestEntity.class, id);
         } catch (Exception ex) {
             return null;

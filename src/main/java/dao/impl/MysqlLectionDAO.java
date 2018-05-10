@@ -51,12 +51,14 @@ public class MysqlLectionDAO implements LectionDAO {
     }
 
     public Collection<LectionEntity> getAll(){
+        entityManager.clear();
         Query query = entityManager.createQuery("FROM LectionEntity");
         return (Collection<LectionEntity>) query.getResultList();
     }
 
     public LectionEntity getLection(int id) {
         try {
+            entityManager.clear();
             return entityManager.find(LectionEntity.class, id);
         } catch (Exception ex) {
             return null;
