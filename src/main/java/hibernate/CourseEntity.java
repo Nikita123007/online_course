@@ -3,6 +3,7 @@ package hibernate;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "course", schema = "online_course", catalog = "")
@@ -196,5 +197,9 @@ public class CourseEntity {
 
     public void setTestsByIdCourse(Collection<TestEntity> testsByIdCourse) {
         this.testsByIdCourse = testsByIdCourse;
+    }
+
+    public boolean isSubscribed(int user){
+        return getSubscriptionsByIdCourse().stream().filter(c -> c.getUser() == user).collect(Collectors.toList()).size() == 1;
     }
 }

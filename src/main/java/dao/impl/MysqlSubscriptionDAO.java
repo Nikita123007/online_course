@@ -73,15 +73,4 @@ public class MysqlSubscriptionDAO implements SubscriptionDAO {
             return null;
         }
     }
-
-    public SubscriptionEntity getAllSubscriptionByUserAndCourse(int userId, int courseId) {
-        try {
-            entityManager.clear();
-            TypedQuery<SubscriptionEntity> tq = entityManager.createQuery("FROM SubscriptionEntity WHERE user=? AND course=?", SubscriptionEntity.class);
-            tq.setParameter(0, userId);
-            return tq.setParameter(1, courseId).getSingleResult();
-        } catch (Exception ex) {
-            return null;
-        }
-    }
 }

@@ -19,7 +19,7 @@ import request.*;
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Writer wr = response.getWriter();
         String login = request.getParameter("login");
         String password = request.getParameter("password");
@@ -34,7 +34,7 @@ public class Login extends HttpServlet {
             ResponseData responseData = new ResponseData("", Page.Courses, null);
             wr.write(responseData.ToJson());
         } else {
-            ResponseData responseData = new ResponseData("Incorrect login or password.", null, new ArrayList<String>());
+            ResponseData responseData = new ResponseData("Incorrect login or password.", null, new ArrayList<>());
             responseData.getNameErrors().add("login");
             responseData.getNameErrors().add("password");
             wr.write(responseData.ToJson());
@@ -44,7 +44,7 @@ public class Login extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String logout = request.getParameter("logout");
-        UserEntity user = AuthHelper.GetAuthUser(request);
+        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
 
         if (logout != null && logout.equals("1")){
             response.addCookie(new Cookie(CookieAuthToken, ""));
@@ -53,7 +53,7 @@ public class Login extends HttpServlet {
                 DAOFactory.getInstance().getUserDAO().mergeUser(user);
             }
         }else {
-            if (AuthHelper.GetAuthUser(request) != null) {
+            if (AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken)) != null) {
                 response.sendRedirect("Courses");
                 return;
             }

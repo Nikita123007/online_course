@@ -8,28 +8,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import constants.Pages;
 import constants.Roles;
 import dao.DAOFactory;
 import hibernate.CourseEntity;
-import hibernate.SubscriptionEntity;
-import hibernate.TestEntity;
 import hibernate.UserEntity;
 import request.AuthHelper;
+import request.CookieHelper;
 import response.ResponseData;
 import constants.Roles.*;
 
+import static constants.Constants.Constant.CookieAuthToken;
+
 @WebServlet("/EditCourse")
 public class EditCourse extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    }
-
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserEntity user = AuthHelper.GetAuthUser(request);
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
         Writer wr = response.getWriter();
         String courseName = request.getParameter("courseName");
         String courseDescription = request.getParameter("courseDescription");
@@ -44,7 +40,7 @@ public class EditCourse extends HttpServlet {
         }
 
         if (ErrorsCourseName(courseName) != null || ErrorsCourseDescription(courseDescription) != null) {
-            ResponseData responseData = new ResponseData("Invalid data. ", Pages.Page.Courses, new ArrayList<String>());
+            ResponseData responseData = new ResponseData("Invalid data. ", Pages.Page.Courses, new ArrayList<>());
             String errors = ErrorsCourseName(courseName);
             if (errors != null) {
                 responseData.setError(responseData.getError() + errors + " ");
@@ -70,25 +66,28 @@ public class EditCourse extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserEntity user = AuthHelper.GetAuthUser(request);
+        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
         String id = request.getParameter("id");
 
-        if (user != null && id != null && !id.equals("")){
-            CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(id));
-            if (course != null && (user.getRole() == Roles.Role.Admin || course.getAuthor() == user.getIdUser())) {
-                request.setAttribute("course", course);
-                request.setAttribute("userName", user.getName());
-                request.getRequestDispatcher("EditCourse.jsp").forward(request, response);
-                return;
-            }
+        if (user == null || id == null || id.equals("")) {
+            response.sendRedirect("Login");
+            return;
         }
 
-        response.sendRedirect("Login");
+        CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(id));
+        if (course == null || (user.getRole() != Roles.Role.Admin && course.getAuthor() != user.getIdUser())) {
+            response.sendRedirect("Login");
+            return;
+        }
+
+        request.setAttribute("course", course);
+        request.setAttribute("userName", user.getName());
+        request.getRequestDispatcher("EditCourse.jsp").forward(request, response);
     }
 
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Writer wr = response.getWriter();
-        UserEntity user = AuthHelper.GetAuthUser(request);
+        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
         String id = request.getParameter("id");
 
         if (user != null && id != null && !id.equals("")){

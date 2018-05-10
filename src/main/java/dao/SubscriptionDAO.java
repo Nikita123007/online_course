@@ -12,5 +12,4 @@ public interface SubscriptionDAO {
     Collection<SubscriptionEntity> getAll();
     SubscriptionEntity getSubscription(int id);
     Collection<SubscriptionEntity> getAllSubscriptionByUser(int userId);
-    SubscriptionEntity getAllSubscriptionByUserAndCourse(int userId, int courseId);
 }

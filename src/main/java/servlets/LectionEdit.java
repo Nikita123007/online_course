@@ -8,6 +8,7 @@ import hibernate.LectionEntity;
 import hibernate.SubscriptionEntity;
 import hibernate.UserEntity;
 import request.AuthHelper;
+import request.CookieHelper;
 import response.ResponseData;
 
 import javax.servlet.ServletException;
@@ -22,10 +23,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static constants.Constants.Constant.CookieAuthToken;
+
 @WebServlet("/LectionEdit")
 public class LectionEdit extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserEntity user = AuthHelper.GetAuthUser(request);
+        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
         Writer wr = response.getWriter();
         String lectionName = request.getParameter("lectionName");
         String lectionText = request.getParameter("lectionText");
@@ -60,7 +63,7 @@ public class LectionEdit extends HttpServlet {
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserEntity user = AuthHelper.GetAuthUser(request);
+        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
         Writer wr = response.getWriter();
         String lectionName = request.getParameter("lectionName");
         String lectionText = request.getParameter("lectionText");
@@ -101,41 +104,46 @@ public class LectionEdit extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserEntity user = AuthHelper.GetAuthUser(request);
+        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
         String id = request.getParameter("id");
         String idCourse = request.getParameter("idCourse");
 
-        if (user != null && id != null && !id.equals("")){
-            if (Integer.parseInt(id) != -1) {
-                LectionEntity lection = DAOFactory.getInstance().getLectionDAO().getLection(Integer.parseInt(id));
-                if (lection != null && (user.getRole() == Roles.Role.Admin || lection.getCourseByCourse().getAuthor() == user.getIdUser())) {
-                    request.setAttribute("lection", lection);
-                    request.setAttribute("userName", user.getName());
-                    request.getRequestDispatcher("LectionEdit.jsp").forward(request, response);
-                    return;
-                }
-            }else{
-                CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(idCourse));
-                if (course != null && (user.getRole() == Roles.Role.Admin || course.getAuthor() == user.getIdUser())) {
-                    LectionEntity lection = new LectionEntity();
-                    lection.setText("");
-                    lection.setName("");
-                    lection.setIdLection(-1);
-                    lection.setCourse(course.getIdCourse());
-                    request.setAttribute("lection", lection);
-                    request.setAttribute("userName", user.getName());
-                    request.getRequestDispatcher("LectionEdit.jsp").forward(request, response);
-                    return;
-                }
-            }
+        if (user == null || id == null || id.equals("")) {
+            response.sendRedirect("Login");
+            return;
         }
 
-        response.sendRedirect("Login");
+        if (Integer.parseInt(id) != -1) {
+            LectionEntity lection = DAOFactory.getInstance().getLectionDAO().getLection(Integer.parseInt(id));
+            if (lection == null || (user.getRole() != Roles.Role.Admin && lection.getCourseByCourse().getAuthor() != user.getIdUser())) {
+                response.sendRedirect("Login");
+                return;
+            }
+
+            request.setAttribute("lection", lection);
+            request.setAttribute("userName", user.getName());
+            request.getRequestDispatcher("LectionEdit.jsp").forward(request, response);
+        }else{
+            //TODO move to AddLection servlet
+            CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(idCourse));
+            if (course == null || (user.getRole() != Roles.Role.Admin && course.getAuthor() != user.getIdUser())) {
+                response.sendRedirect("Login");
+                return;
+            }
+            LectionEntity lection = new LectionEntity();
+            lection.setText("");
+            lection.setName("");
+            lection.setIdLection(-1);
+            lection.setCourse(course.getIdCourse());
+            request.setAttribute("lection", lection);
+            request.setAttribute("userName", user.getName());
+            request.getRequestDispatcher("LectionEdit.jsp").forward(request, response);
+        }
     }
 
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Writer wr = response.getWriter();
-        UserEntity user = AuthHelper.GetAuthUser(request);
+        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
         String id = request.getParameter("id");
 
         if (user != null && id != null && !id.equals("")){

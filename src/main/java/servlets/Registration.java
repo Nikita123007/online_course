@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import constants.Pages.Page;
 import constants.Roles.*;
@@ -27,14 +26,14 @@ import static constants.Constants.Constant.CookieAuthToken;
 
 @WebServlet("/Registration")
 public class Registration extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Writer wr = response.getWriter();
         final String login = request.getParameter("login");
         final String email = request.getParameter("email");
         String password = request.getParameter("password");
 
         if (ErrorsLogin(login) != null || ErrorsEmail(email) != null || ErrorsPassword(password) != null) {
-            ResponseData responseData = new ResponseData("Invalid data", Page.Courses, new ArrayList<String>());
+            ResponseData responseData = new ResponseData("Invalid data", Page.Courses, new ArrayList<>());
             String errors = ErrorsLogin(login);
             if (errors != null) {
                 responseData.setError(responseData.getError() + errors + " ");
@@ -67,7 +66,7 @@ public class Registration extends HttpServlet {
             }
         }
 
-        ResponseData responseData = new ResponseData("", Page.Courses, new ArrayList<String>());
+        ResponseData responseData = new ResponseData("", Page.Courses, new ArrayList<>());
         if (userByName != null || userByEmail != null) {
             if (userByName != null) {
                 responseData.setError(responseData.getError() + "This login already exist." + " ");
@@ -115,7 +114,7 @@ public class Registration extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (AuthHelper.GetAuthUser(request) != null) {
+        if (AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken)) != null) {
             response.sendRedirect("Courses");
             return;
         }
