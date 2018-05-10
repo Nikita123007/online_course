@@ -12,7 +12,7 @@
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://167.99.204.89:3306/online_course?useSSL=false" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://167.99.204.89:3306/online_course?useSSL=false&amp;max_allowed_packet=1000000" />
             <property name="javax.persistence.jdbc.user" value="admin" />
             <property name="javax.persistence.jdbc.password" value="admin" />
 
