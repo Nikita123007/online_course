@@ -7,14 +7,14 @@
 <body>
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
-    <p><h1><input type="text" name="lectionName" id="lectionName" value="${lection.name}"></h1></p>
-    <h6><textarea cols="100" rows="20" name="lectionText" id="lectionText">${lection.text}</textarea></h6>
-    <c:if test="${lection.idLection != -1}">
+    <p><h1><input type="text" name="lectionName" id="lectionName" value="${entity.name}"></h1></p>
+    <h6><textarea cols="100" rows="20" name="lectionText" id="lectionText">${entity.text}</textarea></h6>
+    <c:if test="${!add}">
         <h2><button type="button" id="save" name="save">Save</button></h2>
         <h2><button type="button" id="delete" name="delete" onclick="DeleteLection()">Delete</button></h2>
     </c:if>
-    <c:if test="${lection.idLection == -1}">
-        <h2><button type="button" id="create" name="create" onclick="CreateLection(${lection.course})">Create</button></h2>
+    <c:if test="${add}">
+        <h2><button type="button" id="create" name="create" onclick="CreateLection(${entity.course})">Create</button></h2>
     </c:if>
 </div>
 <%@ include file="resources/templates/footer.html" %>
@@ -24,7 +24,7 @@
     function SuccessChange(data) {
         var parseData = JSON.parse(data);
         if (parseData.error == ""){
-            document.location.href = document.location.protocol + "//" + document.location.host + "/EditCourse?id=${lection.course}"
+            document.location.href = document.location.protocol + "//" + document.location.host + "/EditCourse?id=${entity.course}"
         }else{
             confirm(parseData.error);
         }
@@ -34,7 +34,7 @@
         console.log(data);
     }
     function DeleteLection() {
-        var locationURL = document.location.protocol + "//" + document.location.host + "/LectionEdit?id=${lection.idLection}";
+        var locationURL = document.location.protocol + "//" + document.location.host + "/LectionEdit?id=${entity.idLection}";
         $.ajax({
             url: locationURL,
             type: "DELETE",
@@ -45,11 +45,16 @@
     function CreateLection(idCourse) {
         var lectionNameVal = $('#lectionName').val();
         var lectionTextVal = $('#lectionText').val();
-        var locationURL = document.location.protocol + "//" + document.location.host + "/LectionEdit";
+        var locationURL = document.location.protocol + "//" + document.location.host + "/LectionEdit?parentId=${parentId}&add=true";
+        var data = {
+            name: lectionNameVal,
+            text: lectionTextVal,
+        };
         $.ajax({
             url: locationURL,
             type: "POST",
-            data:({lectionName: lectionNameVal, lectionText: lectionTextVal, idCourse: idCourse}),
+            contentType: "application/json",
+            data: JSON.stringify(data),
             success: SuccessChange,
             error: ErrorChange
         });
@@ -57,7 +62,7 @@
     function SuccessReguest(data) {
         var parseData = JSON.parse(data);
         if (parseData.error == ""){
-            document.location.href = document.location.protocol + "//" + document.location.host + "/EditCourse?id=${lection.course}";
+            document.location.href = document.location.protocol + "//" + document.location.host + "/EditCourse?id=${entity.course}";
         }else{
             parseData.nameErrors.forEach(function(item) {
                 var formGroup = $('input[name="'+item+'"]').parents('.input-group');
@@ -101,12 +106,16 @@
             if (validForm){
                 var lectionNameVal = $('#lectionName').val();
                 var lectionTextVal = $('#lectionText').val();
-                var locationURL = document.location.protocol + "//" + document.location.host + "/LectionEdit?idLection=${lection.idLection}";
-                locationURL = locationURL + "&lectionName="+lectionNameVal;
-                locationURL = locationURL + "&lectionText="+lectionTextVal;
+                var locationURL = document.location.protocol + "//" + document.location.host + "/LectionEdit?id=${entity.idLection}";
+                var data = {
+                    name: lectionNameVal,
+                    text: lectionTextVal,
+                };
                 $.ajax({
                     url: locationURL,
                     type: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
                     success: SuccessReguest,
                     error: ErrorReguest
                 });

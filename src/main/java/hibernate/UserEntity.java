@@ -1,11 +1,14 @@
 package hibernate;
 
+import common.ActionType;
+import constants.Roles;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
 @Table(name = "user", schema = "online_course", catalog = "")
-public class UserEntity {
+public class UserEntity implements AbstractEntity {
     private int idUser;
     private String name;
     private String email;
@@ -166,5 +169,13 @@ public class UserEntity {
 
     public void setRoleByRole(RoleEntity roleByRole) {
         this.roleByRole = roleByRole;
+    }
+
+    public boolean admin(){
+        return getRole() == Roles.Role.Admin;
+    }
+
+    public boolean checkRights(UserEntity user, ActionType action){
+        return action == ActionType.Read && user != null;
     }
 }

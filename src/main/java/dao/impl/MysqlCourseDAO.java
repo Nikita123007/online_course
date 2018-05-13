@@ -1,7 +1,9 @@
 package dao.impl;
 
 import dao.CourseDAO;
+import dao.DAOFactory;
 import hibernate.CourseEntity;
+import hibernate.UserEntity;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import sessionFactorySingletone.SessionFactorySingletone;
@@ -26,33 +28,36 @@ public class MysqlCourseDAO implements CourseDAO {
         entityManager = Persistence.createEntityManagerFactory("EntityManager").createEntityManager();
     }
 
-    public void addCourse(CourseEntity entity){
+    public void add(CourseEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.persist(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
-    public void removeCourse(CourseEntity entity){
+    public void remove(CourseEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.remove(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
-    public void mergeCourse(CourseEntity entity){
+    public void merge(CourseEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.merge(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
@@ -62,23 +67,12 @@ public class MysqlCourseDAO implements CourseDAO {
         return (Collection<CourseEntity>) query.getResultList();
     }
 
-    public CourseEntity getCourse(int id) {
+    public CourseEntity get(int id) {
         try {
             entityManager.clear();
             return entityManager.find(CourseEntity.class, id);
         } catch (Exception ex) {
             return null;
-        }
-    }
-
-    public Collection<CourseEntity> getAllByUser(int userId){
-        try {
-            entityManager.clear();
-            Query query = entityManager.createQuery("FROM CourseEntity WHERE author=?");
-            query.setParameter(0, userId);
-            return (Collection<CourseEntity>) query.getResultList();
-        }catch (Exception ex){
-            return new ArrayList<CourseEntity>();
         }
     }
 }

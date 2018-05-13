@@ -1,7 +1,9 @@
 package dao.impl;
 
+import dao.DAOFactory;
 import dao.DiplomaDAO;
 import hibernate.DiplomaEntity;
+import hibernate.UserEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -20,33 +22,36 @@ public class MysqlDiplomaDAO implements DiplomaDAO {
         entityManager = Persistence.createEntityManagerFactory("EntityManager").createEntityManager();
     }
 
-    public void addDiploma(DiplomaEntity entity){
+    public void add(DiplomaEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.persist(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
-    public void removeDiploma(DiplomaEntity entity){
+    public void remove(DiplomaEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.remove(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
-    public void mergeDiploma(DiplomaEntity entity){
+    public void merge(DiplomaEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.merge(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
@@ -56,7 +61,7 @@ public class MysqlDiplomaDAO implements DiplomaDAO {
         return (Collection<DiplomaEntity>) query.getResultList();
     }
 
-    public DiplomaEntity getDiploma(int id) {
+    public DiplomaEntity get(int id) {
         try {
             entityManager.clear();
             return entityManager.find(DiplomaEntity.class, id);

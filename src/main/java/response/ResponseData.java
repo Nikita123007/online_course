@@ -3,13 +3,14 @@ package response;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ResponseData {
     private String error;
     private String nextPage;
-    private ArrayList<String> nameErrors;
+    private List<String> nameErrors;
 
-    public ResponseData(String error, String nextPage, ArrayList<String> nameErrors){
+    public ResponseData(String error, String nextPage, List<String> nameErrors){
         this.error = error;
         this.nextPage = nextPage;
         this.nameErrors = nameErrors;
@@ -31,15 +32,19 @@ public class ResponseData {
         this.nextPage = nextPage;
     }
 
-    public ArrayList<String> getNameErrors() {
+    public List<String> getNameErrors() {
         return nameErrors;
     }
 
-    public void setNameErrors(ArrayList<String> nameErrors) {
+    public void setNameErrors(List<String> nameErrors) {
         this.nameErrors = nameErrors;
     }
 
-    public String ToJson(){
+    public boolean isError(){
+        return nameErrors != null && !nameErrors.isEmpty();
+    }
+
+    public String toJson(){
         Gson gson = new Gson();
         return gson.toJson(this);
     }

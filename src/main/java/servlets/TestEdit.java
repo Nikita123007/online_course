@@ -1,175 +1,107 @@
 package servlets;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import constants.Pages;
-import constants.Roles;
 import dao.DAOFactory;
+import dao.TestDAO;
 import hibernate.*;
-import request.AuthHelper;
-import request.CookieHelper;
 import response.ResponseData;
-
-import javax.servlet.ServletException;
+import servlets.Utils.ServletHelper;
+import servlets.core.AbstractEditServlet;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import static constants.Constants.Constant.CookieAuthToken;
-
 @WebServlet("/TestEdit")
-public class TestEdit extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
-        Writer wr = response.getWriter();
-        String lectionName = request.getParameter("lectionName");
-        String lectionText = request.getParameter("lectionText");
-        String idCourse = request.getParameter("idCourse");
+public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
 
-        if (ErrorsLectionName(lectionName) != null || ErrorsLectionText(lectionText) != null) {
-            ResponseData responseData = new ResponseData("Invalid data. ", Pages.Page.Courses, new ArrayList<String>());
-            String errors = ErrorsLectionName(lectionName);
-            if (errors != null) {
-                responseData.setError(responseData.getError() + errors + " ");
-                responseData.getNameErrors().add("login");
-            }
-            errors = ErrorsLectionText(lectionText);
-            if (errors != null) {
-                responseData.setError(responseData.getError() + errors + " ");
-                responseData.getNameErrors().add("email");
-            }
-            wr.write(responseData.ToJson());
-            wr.close();
-            return;
-        }
-
-        LectionEntity lection = new LectionEntity();
-        lection.setName(lectionName);
-        lection.setText(lectionText);
-        lection.setCourse(Integer.parseInt(idCourse));
-        DAOFactory.getInstance().getLectionDAO().addLection(lection);
-
-        ResponseData responseData = new ResponseData("", Pages.Page.Courses, null);
-        wr.write(responseData.ToJson());
-        wr.close();
+    protected TestDAO getDao(){
+        return DAOFactory.getInstance().getTestDAO();
     }
 
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
-        Writer wr = response.getWriter();
-        String lectionName = request.getParameter("lectionName");
-        String lectionText = request.getParameter("lectionText");
-        String idLection = request.getParameter("idLection");
-        LectionEntity lection = DAOFactory.getInstance().getLectionDAO().getLection(Integer.parseInt(idLection));
-
-        if (lection == null || user == null || (user.getRole() != Roles.Role.Admin && lection.getCourseByCourse().getAuthor() != user.getIdUser())){
-            ResponseData responseData = new ResponseData("", Pages.Page.Login, null);
-            wr.write(responseData.ToJson());
-            wr.close();
-            return;
-        }
-
-        if (ErrorsLectionName(lectionName) != null || ErrorsLectionText(lectionText) != null) {
-            ResponseData responseData = new ResponseData("Invalid data. ", Pages.Page.Courses, new ArrayList<String>());
-            String errors = ErrorsLectionName(lectionName);
-            if (errors != null) {
-                responseData.setError(responseData.getError() + errors + " ");
-                responseData.getNameErrors().add("login");
-            }
-            errors = ErrorsLectionText(lectionText);
-            if (errors != null) {
-                responseData.setError(responseData.getError() + errors + " ");
-                responseData.getNameErrors().add("email");
-            }
-            wr.write(responseData.ToJson());
-            wr.close();
-            return;
-        }
-
-        lection.setName(lectionName);
-        lection.setText(lectionText);
-        DAOFactory.getInstance().getLectionDAO().mergeLection(lection);
-
-        ResponseData responseData = new ResponseData("", Pages.Page.Courses, null);
-        wr.write(responseData.ToJson());
-        wr.close();
+    @Override
+    protected TestEntity createEntity(ServletHelper<TestEntity> helper){
+        TestEntity result = new TestEntity();
+        result.setCourse(helper.getParentId());
+        return result;
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
-        String id = request.getParameter("id");
-        String idCourse = request.getParameter("idCourse");
+    @Override
+    protected void parseEntity(TestEntity entity, JsonObject json){
+        entity.setName(json.get("name").getAsString());
+        JsonArray questions = json.get("questions").getAsJsonArray();
+        for(JsonElement questionElement : questions){
+            TestQuestionEntity questionEntity = new TestQuestionEntity();
+            JsonObject questionObject = questionElement.getAsJsonObject();
 
-        if(user == null || id == null || id.equals("")){
-            response.sendRedirect("Login");
-            return;
-        }
+            questionEntity.setQuestion(questionObject.get("question").getAsString());
 
-        if (Integer.parseInt(id) != -1) {
-            TestEntity test = DAOFactory.getInstance().getTestDAO().getTest(Integer.parseInt(id));
-            if (test != null && (user.getRole() == Roles.Role.Admin || test.getCourseByCourse().getAuthor() == user.getIdUser())) {
-                response.sendRedirect("Login");
-                return;
-            }
-            request.setAttribute("test", test);
-            request.setAttribute("userName", user.getName());
-            request.getRequestDispatcher("TestEdit.jsp").forward(request, response);
-        }else{
-            CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(idCourse));
-            if (course != null && (user.getRole() == Roles.Role.Admin || course.getAuthor() == user.getIdUser())) {
-                response.sendRedirect("Login");
-                return;
+            for(JsonElement answerElement : questionObject.getAsJsonArray()){
+                TestAnswerEntity answerEntity = new TestAnswerEntity();
+                JsonObject answerObject = answerElement.getAsJsonObject();
+
+                questionEntity.setQuestion(answerObject.get("text").getAsString());
+
+                questionEntity.getTestAnswersByIdTestQuestion().add(answerEntity);
             }
 
-            TestEntity test = new TestEntity();
-            Collection<TestQuestionEntity> questions = new ArrayList<>();
-            test.setName("");
-            test.setTestQuestionsByIdTest(questions);
-            test.setIdTest(-1);
-            test.setCourse(course.getIdCourse());
-            request.setAttribute("test", test);
-            request.setAttribute("userName", user.getName());
-            request.getRequestDispatcher("TestEdit.jsp").forward(request, response);
+            entity.getTestQuestionsByIdTest().add(questionEntity);
         }
-
     }
 
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Writer wr = response.getWriter();
-        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
-        String id = request.getParameter("id");
+    @Override
+    protected ResponseData getResponseData(TestEntity entity){
+        String errorString = "";
+        List<String> nameErrors = new ArrayList<>();
 
-        if (user != null && id != null && !id.equals("")){
-            TestEntity test = DAOFactory.getInstance().getTestDAO().getTest(Integer.parseInt(id));
-            if (test != null && (user.getRole() == Roles.Role.Admin || test.getCourseByCourse().getAuthor() == user.getIdUser())) {
-                DAOFactory.getInstance().getTestDAO().removeTest(test);
-                ResponseData responseData = new ResponseData("", null, null);
-                wr.write(responseData.ToJson());
-                wr.close();
-                return;
+        if (entity.getName().length() == 0){
+            errorString = errorString + "Input test name.\n";
+            nameErrors.add("name");
+        }
+
+        if (entity.getTestQuestionsByIdTest().size() == 0){
+            errorString = errorString + "Add test question.\n";
+            nameErrors.add("question");
+        }
+
+        for (TestQuestionEntity question : entity.getTestQuestionsByIdTest()) {
+            if(question.getQuestion().isEmpty()){
+                errorString = errorString + "Input question.\n";
+                nameErrors.add("question name");
+                break;
+            }
+
+            if(question.getTestAnswersByIdTestQuestion().isEmpty()){
+                errorString = errorString + "Add answers.\n";
+                nameErrors.add("question answers");
+                break;
+            }
+
+            for(TestAnswerEntity answer : question.getTestAnswersByIdTestQuestion()){
+                errorString = errorString + "Input answer.\n";
+                nameErrors.add("answer");
+                break;
             }
         }
 
-        ResponseData responseData = new ResponseData("Error.", null, null);
-        wr.write(responseData.ToJson());
-        wr.close();
+        if(nameErrors.isEmpty()){
+            return new ResponseData("", Pages.Page.Courses, null);
+        }
+        else{
+            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.Courses, nameErrors);
+        }
     }
 
-    private String ErrorsLectionName(String lectionName) {
-        if (lectionName.length() == 0){
-            return "Input lection name.";
-        }
-        return null;
+    @Override
+    protected void setUpdateAttributes(HttpServletRequest request, ServletHelper<TestEntity> helper){
+        request.setAttribute("userName", helper.getUser().getName());
     }
 
-    private String ErrorsLectionText(String lectionText) {
-        if (lectionText.length() == 0){
-            return "Input lection text.";
-        }
-        return null;
+    @Override
+    protected String getJspName(){
+        return "TestEdit.jsp";
     }
 }

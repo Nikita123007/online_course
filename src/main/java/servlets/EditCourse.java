@@ -1,122 +1,67 @@
 package servlets;
 
-import javax.servlet.ServletException;
+import com.google.gson.JsonObject;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
-
+import java.util.List;
 import constants.Pages;
-import constants.Roles;
+import dao.CourseDAO;
 import dao.DAOFactory;
 import hibernate.CourseEntity;
-import hibernate.UserEntity;
-import request.AuthHelper;
-import request.CookieHelper;
 import response.ResponseData;
-import constants.Roles.*;
+import servlets.Utils.ServletHelper;
+import servlets.core.AbstractEditServlet;
 
-import static constants.Constants.Constant.CookieAuthToken;
 
 @WebServlet("/EditCourse")
-public class EditCourse extends HttpServlet {
+public class EditCourse extends AbstractEditServlet<CourseEntity, CourseDAO> {
 
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
-        Writer wr = response.getWriter();
-        String courseName = request.getParameter("courseName");
-        String courseDescription = request.getParameter("courseDescription");
-        String idCourse = request.getParameter("idCourse");
-        CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(idCourse));
-
-        if (course == null || user == null || (user.getRole() != Role.Admin && course.getAuthor() != user.getIdUser())){
-            ResponseData responseData = new ResponseData("", Pages.Page.Login, null);
-            wr.write(responseData.ToJson());
-            wr.close();
-            return;
-        }
-
-        if (ErrorsCourseName(courseName) != null || ErrorsCourseDescription(courseDescription) != null) {
-            ResponseData responseData = new ResponseData("Invalid data. ", Pages.Page.Courses, new ArrayList<>());
-            String errors = ErrorsCourseName(courseName);
-            if (errors != null) {
-                responseData.setError(responseData.getError() + errors + " ");
-                responseData.getNameErrors().add("login");
-            }
-            errors = ErrorsCourseDescription(courseDescription);
-            if (errors != null) {
-                responseData.setError(responseData.getError() + errors + " ");
-                responseData.getNameErrors().add("email");
-            }
-            wr.write(responseData.ToJson());
-            wr.close();
-            return;
-        }
-
-        course.setName(courseName);
-        course.setDescription(courseDescription);
-        DAOFactory.getInstance().getCourseDAO().mergeCourse(course);
-
-        ResponseData responseData = new ResponseData("", Pages.Page.Courses, null);
-        wr.write(responseData.ToJson());
-        wr.close();
+    protected CourseDAO getDao(){
+        return DAOFactory.getInstance().getCourseDAO();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
-        String id = request.getParameter("id");
-
-        if (user == null || id == null || id.equals("")) {
-            response.sendRedirect("Login");
-            return;
-        }
-
-        CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(id));
-        if (course == null || (user.getRole() != Roles.Role.Admin && course.getAuthor() != user.getIdUser())) {
-            response.sendRedirect("Login");
-            return;
-        }
-
-        request.setAttribute("course", course);
-        request.setAttribute("userName", user.getName());
-        request.getRequestDispatcher("EditCourse.jsp").forward(request, response);
+    @Override
+    protected CourseEntity createEntity(ServletHelper<CourseEntity> helper){
+        CourseEntity result = new CourseEntity();
+        return result;
     }
 
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Writer wr = response.getWriter();
-        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
-        String id = request.getParameter("id");
-
-        if (user != null && id != null && !id.equals("")){
-            CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(id));
-            if (course != null && (user.getRole() == Roles.Role.Admin || course.getAuthor() == user.getIdUser())) {
-                DAOFactory.getInstance().getCourseDAO().removeCourse(course);
-                ResponseData responseData = new ResponseData("", null, null);
-                wr.write(responseData.ToJson());
-                wr.close();
-                return;
-            }
-        }
-
-        ResponseData responseData = new ResponseData("Error.", null, null);
-        wr.write(responseData.ToJson());
-        wr.close();
+    @Override
+    protected void parseEntity(CourseEntity entity, JsonObject json){
+        entity.setName(json.get("name").getAsString());
+        entity.setDescription(json.get("description").getAsString());
     }
 
-    private String ErrorsCourseName(String courseName) {
-        if (courseName.length() == 0){
-            return "Input course name.";
+    @Override
+    protected ResponseData getResponseData(CourseEntity entity){
+        String errorString = "";
+        List<String> nameErrors = new ArrayList<>();
+
+        if (entity.getName().length() == 0){
+            errorString = errorString + "Input course name.\n";
+            nameErrors.add("name");
         }
-        return null;
+
+        if (entity.getDescription().length() == 0){
+            errorString = errorString + "Input course description.\n";
+            nameErrors.add("description");
+        }
+        if(nameErrors.isEmpty()){
+            return new ResponseData("", Pages.Page.Courses, null);
+        }
+        else{
+            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.Courses, nameErrors);
+        }
     }
 
-    private String ErrorsCourseDescription(String courseDescription) {
-        if (courseDescription.length() == 0){
-            return "Input course description.";
-        }
-        return null;
+    @Override
+    protected void setUpdateAttributes(HttpServletRequest request, ServletHelper<CourseEntity> helper){
+        request.setAttribute("userName", helper.getUser().getName());
+    }
+
+    @Override
+    protected String getJspName(){
+        return "EditCourse.jsp";
     }
 }

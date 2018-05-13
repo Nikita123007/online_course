@@ -1,7 +1,9 @@
 package dao.impl;
 
+import dao.DAOFactory;
 import dao.LectionDAO;
 import hibernate.LectionEntity;
+import hibernate.UserEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -20,33 +22,36 @@ public class MysqlLectionDAO implements LectionDAO {
         entityManager = Persistence.createEntityManagerFactory("EntityManager").createEntityManager();
     }
 
-    public void addLection(LectionEntity entity){
+    public void add(LectionEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.persist(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
-    public void removeLection(LectionEntity entity){
+    public void remove(LectionEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.remove(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
-    public void mergeLection(LectionEntity entity){
+    public void merge(LectionEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.merge(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
@@ -56,7 +61,7 @@ public class MysqlLectionDAO implements LectionDAO {
         return (Collection<LectionEntity>) query.getResultList();
     }
 
-    public LectionEntity getLection(int id) {
+    public LectionEntity get(int id) {
         try {
             entityManager.clear();
             return entityManager.find(LectionEntity.class, id);

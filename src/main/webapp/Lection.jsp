@@ -7,9 +7,8 @@
 <body>
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
-    <p><h1>${lection.name}</h1></p>
-    <h3>${lection.description}</h3>
-    <h6>${lection.text}</h6>
+    <p><h1>${entity.name}</h1></p>
+    <h6>${entity.text}</h6>
 </div>
 <%@ include file="resources/templates/footer.html" %>
 </body>

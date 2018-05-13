@@ -2,6 +2,7 @@ package servlets;
 
 import constants.Pages;
 import constants.Roles.*;
+import dao.CourseDAO;
 import dao.DAOFactory;
 import hibernate.CourseEntity;
 import hibernate.SubscriptionEntity;
@@ -9,9 +10,11 @@ import hibernate.UserEntity;
 import request.AuthHelper;
 import request.CookieHelper;
 import response.ResponseData;
+import servlets.Utils.ServletHelper;
+import servlets.core.AbstractServlet;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,11 +24,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static constants.Constants.Constant.CookieAuthToken;
 
 @WebServlet("/Courses")
-public class Courses extends HttpServlet {
+public class Courses extends AbstractServlet<CourseEntity, CourseDAO> {
+
+    @Override
+    protected CourseDAO getDao(){
+        return DAOFactory.getInstance().getCourseDAO();
+    }
+
+    @Override
+    protected String getJspName(){
+        return "Courses.jsp";
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
         Writer wr = response.getWriter();
@@ -33,60 +48,59 @@ public class Courses extends HttpServlet {
 
         if (user == null || idCourse == null || idCourse.equals("")){
             ResponseData responseData = new ResponseData("", Pages.Page.Courses, null);
-            wr.write(responseData.ToJson());
+            wr.write(responseData.toJson());
             wr.close();
             return;
         }
 
-        CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(idCourse));
+        CourseEntity course = DAOFactory.getInstance().getCourseDAO().get(Integer.parseInt(idCourse));
         if (course == null || course.isSubscribed(user.getIdUser())) {
             ResponseData responseData = new ResponseData("", Pages.Page.Courses, null);
-            wr.write(responseData.ToJson());
+            wr.write(responseData.toJson());
             wr.close();
             return;
         }
 
         SubscriptionEntity subscription = new SubscriptionEntity();
-        subscription.setCourse(Integer.parseInt(idCourse));
-        subscription.setUser(user.getIdUser());
+        subscription.setCourseByCourse(DAOFactory.getInstance().getCourseDAO().get(Integer.parseInt(idCourse)));
+        subscription.setUserByUser(user);
         subscription.setDate(new Timestamp(new Date().getTime()));
-        DAOFactory.getInstance().getSubscriptionDAO().addSubscription(subscription);
+        user.getSubscriptionsByIdUser().add(subscription);
+        DAOFactory.getInstance().getSubscriptionDAO().add(subscription);
 
         ResponseData responseData = new ResponseData("", Pages.Page.Courses, null);
-        wr.write(responseData.ToJson());
+        wr.write(responseData.toJson());
         wr.close();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
-        List<CourseEntity> coursesSelf = new ArrayList<>();
-        List<CourseEntity> courses = new ArrayList<>();
-        List<CourseEntity> subscribeCourses = new ArrayList<>();
-
-        if (user == null) {
-            response.sendRedirect("Login");
+        ServletHelper checker = new ServletHelper();
+        if(checker.checkAndSetCollectionError(request, response))
             return;
-        }
 
-        if (user.getRole() == Role.User) {
-            coursesSelf = new ArrayList<>(DAOFactory.getInstance().getCourseDAO().getAllByUser(user.getIdUser()));
-            Collection<SubscriptionEntity> subscriptions = DAOFactory.getInstance().getSubscriptionDAO().getAllSubscriptionByUser(user.getIdUser());
-            for (SubscriptionEntity subscription : subscriptions){
-                subscribeCourses.add(DAOFactory.getInstance().getCourseDAO().getCourse(subscription.getCourse()));
-            }
-            Collection<CourseEntity> tempAllCourses = DAOFactory.getInstance().getCourseDAO().getAll();
-            for (CourseEntity course : tempAllCourses){
-                if (!coursesSelf.contains(course) && !subscribeCourses.contains(course)){
-                    courses.add(course);
-                }
-            }
-        }else if (user.getRole() == Role.Admin){
-            coursesSelf = new ArrayList<>(DAOFactory.getInstance().getCourseDAO().getAll());
+        UserEntity user = checker.getUser();
+        List<CourseEntity> courses;
+        List<CourseEntity> subscribeCourses;
+        Collection<CourseEntity> coursesSelf;
+
+        if (user.getRole() == Role.Admin){
+            courses = new ArrayList<>();
+            subscribeCourses = new ArrayList<>();
+            coursesSelf = DAOFactory.getInstance().getCourseDAO().getAll();
+        }
+        else{
+            coursesSelf = user.getCoursesByIdUser();
+
+            subscribeCourses = user.getSubscriptionsByIdUser().stream()
+                    .map(s ->  s.getCourseByCourse()).collect(Collectors.toList());
+
+            courses = DAOFactory.getInstance().getCourseDAO().getAll().stream()
+                    .filter(c -> !coursesSelf.contains(c) && !subscribeCourses.contains(c)).collect(Collectors.toList());
         }
         request.setAttribute("courses", courses);
         request.setAttribute("coursesSelf", coursesSelf);
         request.setAttribute("subscribeCourses", subscribeCourses);
         request.setAttribute("userName", user.getName());
-        request.getRequestDispatcher("Courses.jsp").forward(request, response);
+        request.getRequestDispatcher(getJspName()).forward(request, response);
     }
 }

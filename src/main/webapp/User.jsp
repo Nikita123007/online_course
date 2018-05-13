@@ -8,13 +8,10 @@
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <div class="form-group">
-        Name: ${user.firstName}
+        Name: ${user.name}
     </div>
     <div class="form-group">
-        Suname: ${user.secondName}
-    </div>
-    <div class="form-group">
-        Age: ${user.age}
+        Role: ${user.admin() ? "Admin" : "User"}
     </div>
 </div>
 <%@ include file="resources/templates/footer.html" %>

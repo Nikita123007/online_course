@@ -49,7 +49,7 @@ public class Registration extends HttpServlet {
                 responseData.setError(responseData.getError() + errors + " ");
                 responseData.getNameErrors().add("password");
             }
-            wr.write(responseData.ToJson());
+            wr.write(responseData.toJson());
             wr.close();
             return;
         }
@@ -84,11 +84,11 @@ public class Registration extends HttpServlet {
             user.setAuthToken(AuthToken.GetToken());
             response.addCookie(new Cookie(CookieAuthToken, user.getAuthToken()));
             user.setRole(Role.User);
-            DAOFactory.getInstance().getUserDAO().addUser(user);
+            DAOFactory.getInstance().getUserDAO().add(user);
             responseData = new ResponseData("", Page.Courses, null);
         }
 
-        wr.write(responseData.ToJson());
+        wr.write(responseData.toJson());
         wr.close();
     }
 

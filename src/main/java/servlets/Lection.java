@@ -1,20 +1,20 @@
 package servlets;
 
-import dao.DAOFactory;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+        import dao.DAOFactory;
+        import dao.LectionDAO;
+        import hibernate.LectionEntity;
+        import servlets.core.AbstractViewServlet;
+        import javax.servlet.annotation.WebServlet;
 
 @WebServlet("/Lection")
-public class Lection extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
+public class Lection extends AbstractViewServlet<LectionEntity, LectionDAO> {
 
-        request.setAttribute("lection", DAOFactory.getInstance().getLectionDAO().getLection(id));
-        request.getRequestDispatcher("Lection.jsp").forward(request, response);
+    protected LectionDAO getDao(){
+        return DAOFactory.getInstance().getLectionDAO();
+    }
+
+    @Override
+    protected String getJspName(){
+        return "Lection.jsp";
     }
 }

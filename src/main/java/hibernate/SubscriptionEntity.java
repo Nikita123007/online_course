@@ -1,12 +1,14 @@
 package hibernate;
 
+import common.ActionType;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "subscription", schema = "online_course", catalog = "")
 @IdClass(SubscriptionEntityPK.class)
-public class SubscriptionEntity {
+public class SubscriptionEntity implements AbstractEntity {
     private int user;
     private int course;
     private Timestamp date;
@@ -73,6 +75,7 @@ public class SubscriptionEntity {
 
     public void setUserByUser(UserEntity userByUser) {
         this.userByUser = userByUser;
+        setUser(userByUser.getIdUser());
     }
 
     @ManyToOne
@@ -83,5 +86,10 @@ public class SubscriptionEntity {
 
     public void setCourseByCourse(CourseEntity courseByCourse) {
         this.courseByCourse = courseByCourse;
+        setCourse(courseByCourse.getIdCourse());
+    }
+
+    public boolean checkRights(UserEntity user, ActionType action){
+        return false;
     }
 }

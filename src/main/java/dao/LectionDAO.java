@@ -1,13 +1,12 @@
 package dao;
 
+import hibernate.AbstractEntity;
 import hibernate.LectionEntity;
 
 import java.util.Collection;
 
-public interface LectionDAO {
-    void addLection(LectionEntity entity);
-    void mergeLection(LectionEntity entity);
-    void removeLection(LectionEntity entity);
-    Collection<LectionEntity> getAll();
-    LectionEntity getLection(int id);
+public interface LectionDAO extends AbstractEntityDAO<LectionEntity> {
+    default AbstractEntity getParent(int parentId){
+        return DAOFactory.getInstance().getCourseDAO().get(parentId);
+    }
 }

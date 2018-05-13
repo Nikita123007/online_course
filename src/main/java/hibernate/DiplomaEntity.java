@@ -1,11 +1,13 @@
 package hibernate;
 
+import common.ActionType;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "diploma", schema = "online_course", catalog = "")
-public class DiplomaEntity {
+public class DiplomaEntity implements AbstractEntity {
     private int idDiploma;
     private int user;
     private int course;
@@ -108,5 +110,9 @@ public class DiplomaEntity {
 
     public void setCourseByCourse(CourseEntity courseByCourse) {
         this.courseByCourse = courseByCourse;
+    }
+
+    public boolean checkRights(UserEntity user, ActionType action){
+        return action == ActionType.Read && user != null;
     }
 }

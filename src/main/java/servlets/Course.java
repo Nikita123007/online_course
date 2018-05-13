@@ -1,60 +1,42 @@
 package servlets;
 
-import constants.Roles;
+import dao.CourseDAO;
 import dao.DAOFactory;
 import hibernate.*;
-import request.AuthHelper;
-import request.CookieHelper;
+import servlets.Utils.ServletHelper;
+import servlets.core.AbstractViewServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static constants.Constants.Constant.CookieAuthToken;
-
 @WebServlet("/Course")
-public class Course extends HttpServlet {
+public class Course extends AbstractViewServlet<CourseEntity, CourseDAO> {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
-        String id = request.getParameter("id");
+    @Override
+    protected CourseDAO getDao(){
+        return DAOFactory.getInstance().getCourseDAO();
+    }
 
-        //TODO return 403, 404
-        if (user == null) {
-            response.sendRedirect("Login");
-            return;
-        }
+    @Override
+    protected String getJspName(){
+        return "Course.jsp";
+    }
 
-        if(user.getRole() == Roles.Role.Admin || id == null || id.equals("")){
-            response.sendRedirect("Courses");
-            return;
-        }
-
-        CourseEntity course = DAOFactory.getInstance().getCourseDAO().getCourse(Integer.parseInt(id));
-        if (course == null) {
-            response.sendRedirect("Courses");
-            return;
-        }
-
-        if (! course.isSubscribed(user.getIdUser())) {
-            response.sendRedirect("Courses");
-            return;
-        }
-
+    protected void processGet(HttpServletRequest request, HttpServletResponse response, ServletHelper<CourseEntity> helper) throws ServletException, IOException {
         List<TestEntityViewModel> tests = new ArrayList<>();
-        for (TestEntity test : course.getTestsByIdCourse()) {
-            CompletedTestEntity completedTest = DAOFactory.getInstance().getCompletedTestDAO().getCompletedTest(user.getIdUser(), test.getIdTest());
+        for (TestEntity test : helper.getEntity().getTestsByIdCourse()) {
+            CompletedTestEntity completedTest = DAOFactory.getInstance().getCompletedTestDAO().getCompletedTest(helper.getUser().getIdUser(), test.getIdTest());
             TestEntityViewModel testViewModel = new TestEntityViewModel(test.getIdTest(), test.getCourse(), test.getName(), completedTest == null ? (byte) 0 : (byte) 1);
             tests.add(testViewModel);
         }
-        request.setAttribute("course", course);
+
         request.setAttribute("tests", tests);
-        request.setAttribute("userName", user.getName());
+        request.setAttribute("userName", helper.getUser().getName());
         request.getRequestDispatcher("Course.jsp").forward(request, response);
     }
 

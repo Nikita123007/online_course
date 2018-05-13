@@ -23,21 +23,21 @@ public class Login extends HttpServlet {
         Writer wr = response.getWriter();
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-        UserEntity user = DAOFactory.getInstance().getUserDAO().findUser(login);
+        UserEntity user = DAOFactory.getInstance().getUserDAO().findUserByLogin(login);
         String passwordHashInString = DatatypeConverter.printHexBinary(AlgorithmsHelper.GetHash(password));
-        if (user != null && user.getPasswordHash().equals(passwordHashInString)) {
+        if (user != null && user.getPasswordHash().toUpperCase().equals(passwordHashInString.toUpperCase())) {
             if (user.getAuthToken() == null || user.getAuthToken().equals("")) {
                 user.setAuthToken(AuthToken.GetToken());
-                DAOFactory.getInstance().getUserDAO().mergeUser(user);
+                DAOFactory.getInstance().getUserDAO().merge(user);
             }
             response.addCookie(new Cookie(CookieAuthToken, user.getAuthToken()));
             ResponseData responseData = new ResponseData("", Page.Courses, null);
-            wr.write(responseData.ToJson());
+            wr.write(responseData.toJson());
         } else {
             ResponseData responseData = new ResponseData("Incorrect login or password.", null, new ArrayList<>());
             responseData.getNameErrors().add("login");
             responseData.getNameErrors().add("password");
-            wr.write(responseData.ToJson());
+            wr.write(responseData.toJson());
         }
         wr.close();
     }
@@ -50,7 +50,7 @@ public class Login extends HttpServlet {
             response.addCookie(new Cookie(CookieAuthToken, ""));
             if (user != null) {
                 user.setAuthToken("");
-                DAOFactory.getInstance().getUserDAO().mergeUser(user);
+                DAOFactory.getInstance().getUserDAO().merge(user);
             }
         }else {
             if (AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken)) != null) {

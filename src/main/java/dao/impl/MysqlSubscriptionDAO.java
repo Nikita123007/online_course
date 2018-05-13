@@ -18,33 +18,36 @@ public class MysqlSubscriptionDAO implements SubscriptionDAO {
         entityManager = Persistence.createEntityManagerFactory("EntityManager").createEntityManager();
     }
 
-    public void addSubscription(SubscriptionEntity entity){
+    public void add(SubscriptionEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.persist(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
-    public void removeSubscription(SubscriptionEntity entity){
+    public void remove(SubscriptionEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.remove(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
-    public void mergeSubscription(SubscriptionEntity entity){
+    public void merge(SubscriptionEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.merge(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
@@ -54,21 +57,10 @@ public class MysqlSubscriptionDAO implements SubscriptionDAO {
         return (Collection<SubscriptionEntity>) query.getResultList();
     }
 
-    public SubscriptionEntity getSubscription(int id) {
+    public SubscriptionEntity get(int id) {
         try {
             entityManager.clear();
             return entityManager.find(SubscriptionEntity.class, id);
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    public Collection<SubscriptionEntity> getAllSubscriptionByUser(int userId) {
-        try {
-            entityManager.clear();
-            TypedQuery<SubscriptionEntity> query = entityManager.createQuery("FROM SubscriptionEntity WHERE user=?", SubscriptionEntity.class);
-            query.setParameter(0, userId);
-            return (Collection<SubscriptionEntity>) query.getResultList();
         } catch (Exception ex) {
             return null;
         }

@@ -1,5 +1,7 @@
 package hibernate;
 
+import common.ActionType;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -7,7 +9,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "course", schema = "online_course", catalog = "")
-public class CourseEntity {
+public class CourseEntity implements AbstractEntity {
     private int idCourse;
     private int author;
     private String name;
@@ -199,7 +201,20 @@ public class CourseEntity {
         this.testsByIdCourse = testsByIdCourse;
     }
 
-    public boolean isSubscribed(int user){
-        return getSubscriptionsByIdCourse().stream().filter(c -> c.getUser() == user).collect(Collectors.toList()).size() == 1;
+    public boolean isSubscribed(int userId){
+        return getSubscriptionsByIdCourse().stream().filter(c -> c.getUser() == userId).collect(Collectors.toList()).size() == 1;
+    }
+
+    public boolean isAuthor(int userId){
+        return getAuthor() == userId;
+    }
+
+    public boolean checkRights(UserEntity user, ActionType action){
+        if(action == ActionType.Read){
+            return user != null && (isSubscribed(user.getIdUser()) || user.admin());
+        }
+        else{
+            return user != null && (isAuthor(user.getIdUser()) || user.admin());
+        }
     }
 }

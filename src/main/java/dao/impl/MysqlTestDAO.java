@@ -1,7 +1,9 @@
 package dao.impl;
 
+import dao.DAOFactory;
 import dao.TestDAO;
 import hibernate.TestEntity;
+import hibernate.UserEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -19,33 +21,36 @@ public class MysqlTestDAO implements TestDAO {
         entityManager = Persistence.createEntityManagerFactory("EntityManager").createEntityManager();
     }
 
-    public void addTest(TestEntity entity){
+    public void add(TestEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.persist(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
-    public void removeTest(TestEntity entity){
+    public void remove(TestEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.remove(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
-    public void mergeTest(TestEntity entity){
+    public void merge(TestEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.merge(entity);
         }
         finally {
             entityManager.getTransaction().commit();
+            entityManager.clear();
         }
     }
 
@@ -55,7 +60,7 @@ public class MysqlTestDAO implements TestDAO {
         return (Collection<TestEntity>) query.getResultList();
     }
 
-    public TestEntity getTest(int id) {
+    public TestEntity get(int id) {
         try {
             entityManager.clear();
             return entityManager.find(TestEntity.class, id);

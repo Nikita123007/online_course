@@ -1,11 +1,13 @@
 package hibernate;
 
+import common.ActionType;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
 @Table(name = "lection", schema = "online_course", catalog = "")
-public class LectionEntity {
+public class LectionEntity implements AbstractEntity {
     private int idLection;
     private int course;
     private String name;
@@ -104,5 +106,14 @@ public class LectionEntity {
 
     public void setVideoLinksByIdLection(Collection<VideoLinkEntity> videoLinksByIdLection) {
         this.videoLinksByIdLection = videoLinksByIdLection;
+    }
+
+    public boolean checkRights(UserEntity user, ActionType action){
+        if(action == ActionType.Read || action == ActionType.Create){
+            return user != null && (getCourseByCourse().isSubscribed(user.getIdUser()) || user.admin());
+        }
+        else{
+            return user != null && (getCourseByCourse().isAuthor(user.getIdUser()) || user.admin());
+        }
     }
 }
