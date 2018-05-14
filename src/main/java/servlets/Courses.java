@@ -78,30 +78,4 @@ public class Courses extends AbstractViewServlet<CourseEntity, CourseDAO> {
         wr.write(responseData.toJson());
         wr.close();
     }
-
-    @Override
-    protected void processGet(ServletHelper<CourseEntity> helper) throws ServletException, IOException {
-        UserEntity user = helper.getUser();
-        List<CourseEntity> courses;
-        List<CourseEntity> subscribeCourses;
-        Collection<CourseEntity> coursesSelf;
-
-        if (user.admin()){
-            courses = new ArrayList<>();
-            subscribeCourses = new ArrayList<>();
-            coursesSelf = DAOFactory.getInstance().getCourseDAO().getAll();
-        }
-        else{
-            coursesSelf = user.getCoursesByIdUser();
-
-            subscribeCourses = user.getSubscriptionsByIdUser().stream()
-                    .map(s ->  s.getCourseByCourse()).collect(Collectors.toList());
-
-            courses = DAOFactory.getInstance().getCourseDAO().getAll().stream()
-                    .filter(c -> !coursesSelf.contains(c) && !subscribeCourses.contains(c)).collect(Collectors.toList());
-        }
-        helper.getRequest().setAttribute("courses", courses);
-        helper.getRequest().setAttribute("coursesSelf", coursesSelf);
-        helper.getRequest().setAttribute("subscribeCourses", subscribeCourses);
-    }
 }

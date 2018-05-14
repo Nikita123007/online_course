@@ -24,6 +24,15 @@ public abstract class AbstractViewServlet<EntityType extends AbstractEntity, DAO
             if(helper.getEntity() != null)
                 request.setAttribute("entity", helper.getEntity());
 
+            if(isCollection()){
+                if(helper.getParentId() != null){
+                    request.setAttribute("entities", getDao().getAllByParent(getDao().getParent(helper.getParentId())));
+                }
+                else{
+                    request.setAttribute("entities", getDao().getAll());
+                }
+            }
+
             request.setAttribute("user", helper.getUser());
             processGet(helper);
             request.getRequestDispatcher(getJspName()).forward(request, response);

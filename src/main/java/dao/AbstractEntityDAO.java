@@ -15,4 +15,7 @@ public interface AbstractEntityDAO <T extends AbstractEntity> {
     default AbstractEntity getParent(int parentId){
         return null;
     }
+    default Collection<T> getAllByParent(AbstractEntity parent){
+        return null;
+    }
 }

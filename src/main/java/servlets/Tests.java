@@ -26,10 +26,4 @@ public class Tests extends AbstractViewServlet<TestEntity, TestDAO> {
     protected boolean isCollection(){
         return true;
     }
-
-    @Override
-    protected void processGet(ServletHelper<TestEntity> helper) {
-        CourseEntity course = (CourseEntity)getDao().getParent(helper.getParentId());
-        helper.getRequest().setAttribute("entities", course.getTestsByIdCourse());
-    }
 }

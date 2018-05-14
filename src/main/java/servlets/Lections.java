@@ -26,10 +26,4 @@ public class Lections extends AbstractViewServlet<LectionEntity, LectionDAO> {
     protected boolean isCollection(){
         return true;
     }
-
-    @Override
-    protected void processGet(ServletHelper<LectionEntity> helper) {
-        CourseEntity course = (CourseEntity)getDao().getParent(helper.getParentId());
-        helper.getRequest().setAttribute("entities", course.getLectionsByIdCourse());
-    }
 }

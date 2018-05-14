@@ -44,30 +44,18 @@
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <div class="courses">
-        <c:forEach var="course" items="${coursesSelf}">
+        <c:forEach var="course" items="${entities}">
             <div class="form-group">
-                <p><h2><a class="nameCourse">${course.name}</a></h2></p>
+                <p><h2><a <c:if test="${course.isSubscribed(user.idUser)}">href="Course?id=${course.idCourse}"</c:if> class="nameCourse">${course.name}</a></h2></p>
                 <h6>Price: ${course.price}</h6>
                 <h4>Level: ${course.level}</h4>
                 <h4>Description: ${course.description}</h4>
-                <h3><a href="EditCourse?id=${course.idCourse}" class="design">Edit</a></h3>
-            </div>
-            <hr>
-        </c:forEach>
-        <c:forEach var="course" items="${subscribeCourses}">
-            <div class="form-group">
-                <p><h2><a href="Course?id=${course.idCourse}" class="nameCourse">${course.name}</a></h2></p>
-                <h4>Level: ${course.level}</h4>
-                <h4>Description: ${course.description}</h4>
-            </div>
-            <hr>
-        </c:forEach>
-        <c:forEach var="course" items="${courses}">
-            <div class="form-group">
-                <p><h2><a class="nameCourse">${course.name}</a></h2></p>
-                <h4>Level: ${course.level}</h4>
-                <h4>Description: ${course.description}</h4>
-                <h3><button type="button" id="subscribe" name="subscribe" onclick="SubscribeOnCourse(${course.idCourse})">Subscribe</button></h3><text class="price" id="price">${course.price}</text>
+                <c:if test="${course.checkRights(user, ActionType.Edit)}">
+                    <h3><a href="EditCourse?id=${course.idCourse}" class="design">Edit</a></h3>
+                </c:if>
+                <c:if test="${!course.isSubscribed(user.idUser)}">
+                    <h3><button type="button" id="subscribe" name="subscribe" onclick="SubscribeOnCourse(${course.idCourse})">Subscribe</button></h3><text class="price" id="price">${course.price}</text>
+                </c:if>
             </div>
             <hr>
         </c:forEach>
