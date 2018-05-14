@@ -18,4 +18,9 @@ public class User extends AbstractViewServlet<UserEntity, UserDAO> {
     protected String getJspName(){
         return "User.jsp";
     }
+
+    @Override
+    protected boolean isCollection(){
+        return false;
+    }
 }

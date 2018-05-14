@@ -19,4 +19,9 @@ public class Diploma extends AbstractViewServlet<DiplomaEntity, DiplomaDAO> {
     protected String getJspName(){
         return "Diploma.jsp";
     }
+
+    @Override
+    protected boolean isCollection(){
+        return false;
+    }
 }

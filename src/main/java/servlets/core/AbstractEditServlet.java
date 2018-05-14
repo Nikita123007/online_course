@@ -5,9 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import common.ActionType;
 import dao.AbstractEntityDAO;
-import dao.DAOFactory;
 import hibernate.AbstractEntity;
-import hibernate.UserEntity;
 import response.ResponseData;
 import servlets.Utils.ServletHelper;
 
@@ -34,10 +32,15 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
     }
 
     private void doEdit(HttpServletRequest request, HttpServletResponse response, ActionType action) throws IOException{
-        ServletHelper<EntityType> helper = new ServletHelper<>();
         Writer wr = response.getWriter();
 
-        if(helper.getEntityErrorCode(request, getDao(), action) != null){
+        ServletHelper<EntityType> helper = new ServletHelper<>();
+        helper.setAction(action);
+        helper.setRequest(request);
+        helper.setResponse(response);
+        helper.setDao(getDao());
+
+        if(helper.getErrorCode(request, getDao(), action) != null){
             wr.write(new ResponseData("Error.", null, null).toJson());
             wr.close();
             return;
@@ -79,17 +82,22 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
     protected final void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletHelper<EntityType> helper = new ServletHelper<>();
 
+        helper.setAction(ActionType.Read);
+        helper.setRequest(request);
+        helper.setResponse(response);
+        helper.setDao(getDao());
+
         String addStr = request.getParameter("add");
         ActionType action = addStr != null && addStr.equals("true") ? ActionType.Create : ActionType.Update;
-        if(helper.checkAndSetEntityError(request, response, getDao(), action))
+        if(helper.checkAndSetError())
             return;
 
         if (action == ActionType.Update) {
             request.setAttribute("entity", helper.getEntity());
-            setUpdateAttributes(request, helper);
+            setUpdateAttributes(helper);
         }else{
             request.setAttribute("entity", createEntity(helper));
-            setAddAttributes(request, helper);
+            setAddAttributes(helper);
         }
         request.getRequestDispatcher(getJspName()).forward(request, response);
     }
@@ -97,9 +105,9 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
     protected abstract EntityType createEntity(ServletHelper<EntityType> helper);
     protected abstract ResponseData getResponseData(EntityType entity);
     protected abstract void parseEntity(EntityType entity, JsonObject json);
-    protected void setUpdateAttributes(HttpServletRequest request, ServletHelper<EntityType> helper){
+    protected void setUpdateAttributes(ServletHelper<EntityType> helper){
     }
-    protected void setAddAttributes(HttpServletRequest request, ServletHelper<EntityType> helper){
-        setUpdateAttributes(request, helper);
+    protected void setAddAttributes(ServletHelper<EntityType> helper){
+        setUpdateAttributes(helper);
     }
 }

@@ -7,8 +7,8 @@
 <body>
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
-    <h2>${test.name}</h2>
-    <c:forEach var="question" items="${test.testQuestionsByIdTest}">
+    <h2>${entity.name}</h2>
+    <c:forEach var="question" items="${entity.testQuestionsByIdTest}">
         <h4>${question.question}</h4>
         <c:forEach var="answer" items="${question.testAnswersByIdTestQuestion}">
             <h6><input name="${question.question}" type="radio" value="id">${answer.text}</h6>

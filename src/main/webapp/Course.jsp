@@ -11,7 +11,7 @@
     <p style="margin-bottom: 0px">Duration: ${entity.duration}</p>
     <p style="margin-bottom: 0px">Level: ${entity.level}</p>
     <p>Category: ${course.categoryByCategory.name}</p>
-    <p><h2>Lections</h2></p>
+    <p><h2><a href="Lections?parentId=${entity.idCourse}">Lections</a></h2></p>
     <table border="solid 1px black">
         <tr>
             <th>Name</th>
@@ -22,7 +22,7 @@
             </tr>
         </c:forEach>
     </table>
-    <p><h2>Tests</h2></p>
+    <p><h2><a href="Tests?parentId=${entity.idCourse}">Tests</a></h2></p>
     <table border="solid 1px black">
         <tr>
             <th>Name</th>

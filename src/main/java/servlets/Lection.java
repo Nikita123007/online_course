@@ -17,4 +17,9 @@ public class Lection extends AbstractViewServlet<LectionEntity, LectionDAO> {
     protected String getJspName(){
         return "Lection.jsp";
     }
+
+    @Override
+    protected boolean isCollection(){
+        return false;
+    }
 }

@@ -15,25 +15,18 @@ import java.io.IOException;
 import static constants.Constants.Constant.CookieAuthToken;
 
 public class ServletHelper<T extends AbstractEntity> {
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+    private AbstractEntityDAO<T> dao;
+    private ActionType action;
+    private boolean isCollection = false;
 
     private Integer parentId = null;
     private UserEntity user;
     private T entity;
 
-    public UserEntity getUser(){
-        return user;
-    }
-
-    public T getEntity(){
-        return entity;
-    }
-
-    public Integer getParentId(){
-        return parentId;
-    }
-
-    public boolean checkAndSetEntityError(HttpServletRequest request, HttpServletResponse response, AbstractEntityDAO<T> dao, ActionType action) throws IOException {
-        Integer errorCode = getEntityErrorCode(request, dao, action);
+    public boolean checkAndSetError() throws IOException {
+        Integer errorCode = getErrorCode(request, dao, action);
         if(errorCode != null){
             response.sendError(errorCode);
             return true;
@@ -42,13 +35,13 @@ public class ServletHelper<T extends AbstractEntity> {
         return false;
     }
 
-    public Integer getEntityErrorCode(HttpServletRequest request, AbstractEntityDAO<T> dao, ActionType action){
+    public Integer getErrorCode(HttpServletRequest request, AbstractEntityDAO<T> dao, ActionType action){
         user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
 
         if (user == null)
             return HttpServletResponse.SC_UNAUTHORIZED;
 
-        if(action != ActionType.Create){
+        if(action != ActionType.Create && !isCollection){
             String id = request.getParameter("id");
             if(id == null || id.equals(""))
                 return HttpServletResponse.SC_NOT_FOUND;
@@ -71,14 +64,55 @@ public class ServletHelper<T extends AbstractEntity> {
         return null;
     }
 
-    public boolean checkAndSetCollectionError(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
+    public UserEntity getUser(){
+        return user;
+    }
 
-        if (user == null){
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-            return true;
-        }
+    public T getEntity(){
+        return entity;
+    }
 
-        return false;
+    public Integer getParentId(){
+        return parentId;
+    }
+
+    public HttpServletRequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
+    }
+
+    public HttpServletResponse getResponse() {
+        return response;
+    }
+
+    public void setResponse(HttpServletResponse response) {
+        this.response = response;
+    }
+
+    public AbstractEntityDAO<T> getDao() {
+        return dao;
+    }
+
+    public void setDao(AbstractEntityDAO<T> dao) {
+        this.dao = dao;
+    }
+
+    public ActionType getAction() {
+        return action;
+    }
+
+    public void setAction(ActionType action) {
+        this.action = action;
+    }
+
+    public boolean isCollection() {
+        return isCollection;
+    }
+
+    public void setCollection(boolean collection) {
+        isCollection = collection;
     }
 }

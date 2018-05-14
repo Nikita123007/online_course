@@ -2,8 +2,10 @@ package servlets;
 
 import common.ActionType;
 import dao.DAOFactory;
+import dao.TestDAO;
 import hibernate.TestEntity;
 import servlets.Utils.ServletHelper;
+import servlets.core.AbstractViewServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,17 +15,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/TestRun")
-public class TestRun extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+public class TestRun extends AbstractViewServlet<TestEntity, TestDAO> {
 
+    @Override
+    protected TestDAO getDao(){
+        return DAOFactory.getInstance().getTestDAO();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServletHelper<TestEntity> checker = new ServletHelper<>();
-        if(checker.checkAndSetEntityError(request, response, DAOFactory.getInstance().getTestDAO(), ActionType.Read))
-            return;
+    @Override
+    protected String getJspName(){
+        return "TestRun.jsp";
+    }
 
-        request.setAttribute("test", checker.getEntity());
-        request.getRequestDispatcher("TestRun.jsp").forward(request, response);
+    @Override
+    protected boolean isCollection(){
+        return false;
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 }

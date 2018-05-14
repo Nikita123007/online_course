@@ -96,8 +96,8 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
     }
 
     @Override
-    protected void setUpdateAttributes(HttpServletRequest request, ServletHelper<TestEntity> helper){
-        request.setAttribute("userName", helper.getUser().getName());
+    protected void setUpdateAttributes(ServletHelper<TestEntity> helper){
+        helper.getRequest().setAttribute("userName", helper.getUser().getName());
     }
 
     @Override

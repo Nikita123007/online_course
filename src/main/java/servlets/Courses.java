@@ -12,6 +12,7 @@ import request.CookieHelper;
 import response.ResponseData;
 import servlets.Utils.ServletHelper;
 import servlets.core.AbstractServlet;
+import servlets.core.AbstractViewServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 import static constants.Constants.Constant.CookieAuthToken;
 
 @WebServlet("/Courses")
-public class Courses extends AbstractServlet<CourseEntity, CourseDAO> {
+public class Courses extends AbstractViewServlet<CourseEntity, CourseDAO> {
 
     @Override
     protected CourseDAO getDao(){
@@ -39,6 +40,11 @@ public class Courses extends AbstractServlet<CourseEntity, CourseDAO> {
     @Override
     protected String getJspName(){
         return "Courses.jsp";
+    }
+
+    @Override
+    protected boolean isCollection(){
+        return true;
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -73,17 +79,14 @@ public class Courses extends AbstractServlet<CourseEntity, CourseDAO> {
         wr.close();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServletHelper checker = new ServletHelper();
-        if(checker.checkAndSetCollectionError(request, response))
-            return;
-
-        UserEntity user = checker.getUser();
+    @Override
+    protected void processGet(ServletHelper<CourseEntity> helper) throws ServletException, IOException {
+        UserEntity user = helper.getUser();
         List<CourseEntity> courses;
         List<CourseEntity> subscribeCourses;
         Collection<CourseEntity> coursesSelf;
 
-        if (user.getRole() == Role.Admin){
+        if (user.admin()){
             courses = new ArrayList<>();
             subscribeCourses = new ArrayList<>();
             coursesSelf = DAOFactory.getInstance().getCourseDAO().getAll();
@@ -97,10 +100,9 @@ public class Courses extends AbstractServlet<CourseEntity, CourseDAO> {
             courses = DAOFactory.getInstance().getCourseDAO().getAll().stream()
                     .filter(c -> !coursesSelf.contains(c) && !subscribeCourses.contains(c)).collect(Collectors.toList());
         }
-        request.setAttribute("courses", courses);
-        request.setAttribute("coursesSelf", coursesSelf);
-        request.setAttribute("subscribeCourses", subscribeCourses);
-        request.setAttribute("userName", user.getName());
-        request.getRequestDispatcher(getJspName()).forward(request, response);
+        helper.getRequest().setAttribute("courses", courses);
+        helper.getRequest().setAttribute("coursesSelf", coursesSelf);
+        helper.getRequest().setAttribute("subscribeCourses", subscribeCourses);
+        helper.getRequest().setAttribute("userName", user.getName());
     }
 }

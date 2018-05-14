@@ -27,7 +27,13 @@ public class Course extends AbstractViewServlet<CourseEntity, CourseDAO> {
         return "Course.jsp";
     }
 
-    protected void processGet(HttpServletRequest request, HttpServletResponse response, ServletHelper<CourseEntity> helper) throws ServletException, IOException {
+    @Override
+    protected boolean isCollection(){
+        return false;
+    }
+
+    @Override
+    protected void processGet(ServletHelper<CourseEntity> helper) throws ServletException, IOException {
         List<TestEntityViewModel> tests = new ArrayList<>();
         for (TestEntity test : helper.getEntity().getTestsByIdCourse()) {
             CompletedTestEntity completedTest = DAOFactory.getInstance().getCompletedTestDAO().getCompletedTest(helper.getUser().getIdUser(), test.getIdTest());
@@ -35,9 +41,8 @@ public class Course extends AbstractViewServlet<CourseEntity, CourseDAO> {
             tests.add(testViewModel);
         }
 
-        request.setAttribute("tests", tests);
-        request.setAttribute("userName", helper.getUser().getName());
-        request.getRequestDispatcher("Course.jsp").forward(request, response);
+        helper.getRequest().setAttribute("tests", tests);
+        helper.getRequest().setAttribute("userName", helper.getUser().getName());
     }
 
     public class TestEntityViewModel {

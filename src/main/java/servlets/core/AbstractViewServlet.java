@@ -14,13 +14,22 @@ public abstract class AbstractViewServlet<EntityType extends AbstractEntity, DAO
     @Override
     protected final void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletHelper<EntityType> helper = new ServletHelper<>();
-        if(!helper.checkAndSetEntityError(request, response, getDao(), ActionType.Read)){
-            request.setAttribute("entity", helper.getEntity());
-            processGet(request, response, helper);
+        helper.setAction(ActionType.Read);
+        helper.setRequest(request);
+        helper.setResponse(response);
+        helper.setDao(getDao());
+        helper.setCollection(isCollection());
+
+        if(!helper.checkAndSetError()){
+            if(helper.getEntity() != null)
+                request.setAttribute("entity", helper.getEntity());
+
+            processGet(helper);
             request.getRequestDispatcher(getJspName()).forward(request, response);
         }
     }
 
-    protected void processGet(HttpServletRequest request, HttpServletResponse response, ServletHelper<EntityType> helper) throws ServletException, IOException{
+    protected void processGet(ServletHelper<EntityType> helper) throws ServletException, IOException{
     }
+    protected abstract boolean isCollection();
 }
