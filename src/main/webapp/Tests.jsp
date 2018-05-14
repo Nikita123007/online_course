@@ -4,6 +4,7 @@
 <html>
 <% String title = "Tests"; %>
 <%@ include file="resources/templates/headers.html" %>
+<c:set var="servletName" value = "Tests?parentId=${parentId}&"/>
 <body>
 <style>
     .courses{
@@ -50,6 +51,7 @@
             </div>
             <hr>
         </c:forEach>
+        <%@ include file="resources/templates/PrevNext.jsp" %>
     </div>
 </div>
 <%@ include file="resources/templates/footer.html" %>
