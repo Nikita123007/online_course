@@ -96,11 +96,6 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
     }
 
     @Override
-    protected void setUpdateAttributes(ServletHelper<TestEntity> helper){
-        helper.getRequest().setAttribute("userName", helper.getUser().getName());
-    }
-
-    @Override
     protected String getJspName(){
         return "TestEdit.jsp";
     }

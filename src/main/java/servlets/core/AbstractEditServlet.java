@@ -92,6 +92,7 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
         if(helper.checkAndSetError())
             return;
 
+        request.setAttribute("user", helper.getUser());
         if (action == ActionType.Update) {
             request.setAttribute("entity", helper.getEntity());
             setUpdateAttributes(helper);

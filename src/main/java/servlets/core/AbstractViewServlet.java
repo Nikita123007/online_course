@@ -24,6 +24,7 @@ public abstract class AbstractViewServlet<EntityType extends AbstractEntity, DAO
             if(helper.getEntity() != null)
                 request.setAttribute("entity", helper.getEntity());
 
+            request.setAttribute("user", helper.getUser());
             processGet(helper);
             request.getRequestDispatcher(getJspName()).forward(request, response);
         }

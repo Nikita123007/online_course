@@ -42,7 +42,6 @@ public class Course extends AbstractViewServlet<CourseEntity, CourseDAO> {
         }
 
         helper.getRequest().setAttribute("tests", tests);
-        helper.getRequest().setAttribute("userName", helper.getUser().getName());
     }
 
     public class TestEntityViewModel {

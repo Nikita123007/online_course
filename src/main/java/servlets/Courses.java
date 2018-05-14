@@ -103,6 +103,5 @@ public class Courses extends AbstractViewServlet<CourseEntity, CourseDAO> {
         helper.getRequest().setAttribute("courses", courses);
         helper.getRequest().setAttribute("coursesSelf", coursesSelf);
         helper.getRequest().setAttribute("subscribeCourses", subscribeCourses);
-        helper.getRequest().setAttribute("userName", user.getName());
     }
 }

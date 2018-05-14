@@ -56,11 +56,6 @@ public class EditCourse extends AbstractEditServlet<CourseEntity, CourseDAO> {
     }
 
     @Override
-    protected void setUpdateAttributes(ServletHelper<CourseEntity> helper){
-        helper.getRequest().setAttribute("userName", helper.getUser().getName());
-    }
-
-    @Override
     protected String getJspName(){
         return "EditCourse.jsp";
     }

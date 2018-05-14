@@ -57,13 +57,11 @@ public class LectionEdit extends AbstractEditServlet<LectionEntity, LectionDAO> 
 
     @Override
     protected void setUpdateAttributes(ServletHelper<LectionEntity> helper){
-        helper.getRequest().setAttribute("userName", helper.getUser().getName());
         helper.getRequest().setAttribute("add", false);
     }
 
     @Override
     protected void setAddAttributes(ServletHelper<LectionEntity> helper){
-        helper.getRequest().setAttribute("userName", helper.getUser().getName());
         helper.getRequest().setAttribute("add", true);
         helper.getRequest().setAttribute("parentId", helper.getRequest().getParameter("parentId"));
     }
