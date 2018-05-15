@@ -81,7 +81,8 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
 
     protected final void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String addStr = request.getParameter("add");
-        ActionType action = addStr != null && addStr.equals("true") ? ActionType.Create : ActionType.Update;
+        String updateStr = request.getParameter("updateStr");
+        ActionType action = addStr != null && addStr.equals("true") ? ActionType.Create : updateStr != null && updateStr.equals("true") ? ActionType.Update : ActionType.Read;
 
         ServletHelper<EntityType> helper = new ServletHelper<>();
         helper.setAction(action);
@@ -96,9 +97,11 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
         if (action == ActionType.Update) {
             request.setAttribute("entity", helper.getEntity());
             setUpdateAttributes(helper);
-        }else{
+        }else if (action == ActionType.Create){
             request.setAttribute("entity", createEntity(helper));
             setAddAttributes(helper);
+        }else{
+            request.setAttribute("entity", createEntity(helper));
         }
         request.getRequestDispatcher(getJspName()).forward(request, response);
     }

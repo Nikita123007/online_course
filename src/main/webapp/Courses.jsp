@@ -53,7 +53,7 @@
                 <h4>Level: ${course.level}</h4>
                 <h4>Description: ${course.description}</h4>
                 <c:if test="${course.checkRights(user, ActionType.Edit)}">
-                    <h3><a href="EditCourse?id=${course.idCourse}" class="design">Edit</a></h3>
+                    <h3><a href="EditCourse?update=true&id=${course.idCourse}" class="design">Edit</a></h3>
                 </c:if>
                 <c:if test="${!course.isSubscribed(user.idUser)}">
                     <h3><button type="button" id="subscribe" name="subscribe" onclick="SubscribeOnCourse(${course.idCourse})">Subscribe</button></h3><text class="price" id="price">${course.price}</text>

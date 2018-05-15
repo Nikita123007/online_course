@@ -57,19 +57,19 @@ header{
     font-size: 24px;
     font-family: fantasy;
 }
-.header-center a {
+.header-center a, .header-logout a {
     color: white;
-    text-decoration:none
+    text-decoration:none;
 }
-.header-center a:active {
+.header-center a:active, .header-logout a:active {
     color: #0b2e13;
-    text-decoration:none
+    text-decoration:none;
 }
-.header-center a:visited {
+.header-center a:visited, .header-logout a:visited {
     color: white;
-    text-decoration:none
+    text-decoration:none;
 }
-.header-center a:hover {
+.header-center a:hover, .header-logout a:hover {
     color: #0b2e13;
-    text-decoration: underline
+    text-decoration: underline;
 }
