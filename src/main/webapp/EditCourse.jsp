@@ -22,7 +22,7 @@
                 </tr>
                 <c:forEach var="lection" items="${entity.lectionsByIdCourse}">
                     <tr>
-                        <td><a href="/LectionEdit?update=true&id=${lection.idLection}">${lection.name}</a></td>
+                        <td><a href="/LectionEdit?id=${lection.idLection}">${lection.name}</a></td>
                     </tr>
                 </c:forEach>
             </table>
@@ -34,7 +34,7 @@
                 </tr>
                 <c:forEach var="test" items="${entity.testsByIdCourse}">
                     <tr>
-                        <td><a href="/TestEdit?update=true&id=${test.idTest}">${test.name}</a></td>
+                        <td><a href="/TestEdit?id=${test.idTest}">${test.name}</a></td>
                     </tr>
                 </c:forEach>
             </table>
