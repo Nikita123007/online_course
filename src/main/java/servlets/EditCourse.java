@@ -5,6 +5,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+
+import common.ActionType;
 import constants.Pages;
 import dao.CourseDAO;
 import dao.DAOFactory;
@@ -28,30 +30,35 @@ public class EditCourse extends AbstractEditServlet<CourseEntity, CourseDAO> {
     }
 
     @Override
-    protected void parseEntity(CourseEntity entity, JsonObject json){
+    protected void parseEntity(ServletHelper<CourseEntity> helper, CourseEntity entity, JsonObject json){
         entity.setName(json.get("name").getAsString());
         entity.setDescription(json.get("description").getAsString());
+        entity.setPrice(json.get("price").getAsBigDecimal());
+        entity.setLevel(json.get("level").getAsString());
+
+        if(helper.getAction() == ActionType.Create)
+            entity.setAuthor(helper.getUser().getIdUser());
+
+        if(entity.getCategory() == 0)
+            entity.setCategory(1);
     }
 
     @Override
-    protected ResponseData getResponseData(CourseEntity entity){
+    protected ResponseData getResponseData(ServletHelper<CourseEntity> helper, CourseEntity entity){
         String errorString = "";
-        List<String> nameErrors = new ArrayList<>();
 
         if (entity.getName().length() == 0){
             errorString = errorString + "Input course name.\n";
-            nameErrors.add("name");
         }
 
         if (entity.getDescription().length() == 0){
             errorString = errorString + "Input course description.\n";
-            nameErrors.add("description");
         }
-        if(nameErrors.isEmpty()){
-            return new ResponseData("", Pages.Page.Courses, null);
+        if(errorString.isEmpty()){
+            return new ResponseData("", Pages.Page.Courses);
         }
         else{
-            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.Courses, nameErrors);
+            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.Courses);
         }
     }
 

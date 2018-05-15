@@ -41,7 +41,7 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
         helper.setDao(getDao());
 
         if(helper.getErrorCode(request, getDao(), action) != null){
-            wr.write(new ResponseData("Error.", null, null).toJson());
+            wr.write(new ResponseData("Error.", null).toJson());
             wr.close();
             return;
         }
@@ -56,15 +56,15 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
 
         ResponseData responseData;
         if(action == ActionType.Delete) {
-            responseData = new ResponseData("", null, null);
+            responseData = new ResponseData("", null);
             getDao().remove(entity);
         }
         else{
             request.setCharacterEncoding("UTF-8");
             JsonObject json = new Gson().fromJson(request.getReader(), JsonElement.class).getAsJsonObject();
-            parseEntity(entity, json);
+            parseEntity(helper, entity, json);
 
-            responseData = getResponseData(entity);
+            responseData = getResponseData(helper, entity);
             if(!responseData.isError()){
                 if(action == ActionType.Create){
                     getDao().add(entity);
@@ -80,19 +80,19 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
     }
 
     protected final void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServletHelper<EntityType> helper = new ServletHelper<>();
+        String addStr = request.getParameter("add");
+        ActionType action = addStr != null && addStr.equals("true") ? ActionType.Create : ActionType.Update;
 
-        helper.setAction(ActionType.Read);
+        ServletHelper<EntityType> helper = new ServletHelper<>();
+        helper.setAction(action);
         helper.setRequest(request);
         helper.setResponse(response);
         helper.setDao(getDao());
-
-        String addStr = request.getParameter("add");
-        ActionType action = addStr != null && addStr.equals("true") ? ActionType.Create : ActionType.Update;
         if(helper.checkAndSetError())
             return;
 
         request.setAttribute("user", helper.getUser());
+        request.setAttribute("add", action == ActionType.Create);
         if (action == ActionType.Update) {
             request.setAttribute("entity", helper.getEntity());
             setUpdateAttributes(helper);
@@ -104,8 +104,8 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
     }
 
     protected abstract EntityType createEntity(ServletHelper<EntityType> helper);
-    protected abstract ResponseData getResponseData(EntityType entity);
-    protected abstract void parseEntity(EntityType entity, JsonObject json);
+    protected abstract ResponseData getResponseData(ServletHelper<EntityType> helper, EntityType entity);
+    protected abstract void parseEntity(ServletHelper<EntityType> helper, EntityType entity, JsonObject json);
     protected void setUpdateAttributes(ServletHelper<EntityType> helper){
     }
     protected void setAddAttributes(ServletHelper<EntityType> helper){

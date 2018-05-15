@@ -8,12 +8,10 @@ import java.util.List;
 public class ResponseData {
     private String error;
     private String nextPage;
-    private List<String> nameErrors;
 
-    public ResponseData(String error, String nextPage, List<String> nameErrors){
+    public ResponseData(String error, String nextPage){
         this.error = error;
         this.nextPage = nextPage;
-        this.nameErrors = nameErrors;
     }
 
     public String getError() {
@@ -32,16 +30,8 @@ public class ResponseData {
         this.nextPage = nextPage;
     }
 
-    public List<String> getNameErrors() {
-        return nameErrors;
-    }
-
-    public void setNameErrors(List<String> nameErrors) {
-        this.nameErrors = nameErrors;
-    }
-
     public boolean isError(){
-        return nameErrors != null && !nameErrors.isEmpty();
+        return error != null && !error.isEmpty();
     }
 
     public String toJson(){

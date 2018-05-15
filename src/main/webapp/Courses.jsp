@@ -45,6 +45,7 @@
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <div class="courses">
+        <h3><a href="EditCourse?add=true" class="design">Create</a></h3>
         <c:forEach var="course" items="${entities}">
             <div class="form-group">
                 <p><h2><a <c:if test="${course.isSubscribed(user.idUser)}">href="Course?id=${course.idCourse}"</c:if> class="nameCourse">${course.name}</a></h2></p>

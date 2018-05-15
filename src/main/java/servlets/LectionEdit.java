@@ -28,30 +28,27 @@ public class LectionEdit extends AbstractEditServlet<LectionEntity, LectionDAO> 
     }
 
     @Override
-    protected void parseEntity(LectionEntity entity, JsonObject json){
+    protected void parseEntity(ServletHelper<LectionEntity> helper, LectionEntity entity, JsonObject json){
         entity.setName(json.get("name").getAsString());
         entity.setText(json.get("text").getAsString());
     }
 
     @Override
-    protected ResponseData getResponseData(LectionEntity entity){
+    protected ResponseData getResponseData(ServletHelper<LectionEntity> helper, LectionEntity entity){
         String errorString = "";
-        List<String> nameErrors = new ArrayList<>();
 
         if (entity.getName().length() == 0){
             errorString = errorString + "Input lection name.\n";
-            nameErrors.add("name");
         }
 
         if (entity.getText().length() == 0){
             errorString = errorString + "Input lection text.\n";
-            nameErrors.add("text");
         }
-        if(nameErrors.isEmpty()){
-            return new ResponseData("", Pages.Page.Courses, null);
+        if(errorString.isEmpty()){
+            return new ResponseData("", Pages.Page.Courses);
         }
         else{
-            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.Courses, nameErrors);
+            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.Courses + "?id=" + helper.getParentId().toString());
         }
     }
 

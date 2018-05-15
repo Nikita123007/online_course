@@ -55,7 +55,7 @@
         }else{
             parseData.nameErrors.forEach(function(item) {
                 var formGroup = $('input[name="'+item+'"]').parents('.input-group');
-                formGroup.addClass('inputError').removeClass('inputSeccuss');
+                formGroup.addClass('inputError').removeClass('inputSuccess');
             });
             confirm(parseData.error);
         }
@@ -85,9 +85,9 @@
                 var inputGroup = $(this).parents('.input-group');
                 var errors = CheckValidFormData(id, value);
                 if (this.checkValidity() && (errors == "")) {
-                    inputGroup.addClass('inputSeccuss').removeClass('inputError');
+                    inputGroup.addClass('inputSuccess').removeClass('inputError');
                 } else {
-                    inputGroup.addClass('inputError').removeClass('inputSeccuss');
+                    inputGroup.addClass('inputError').removeClass('inputSuccess');
                     if (errors != "") {
                         confirm(errors);
                     }

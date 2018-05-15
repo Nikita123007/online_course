@@ -9,9 +9,11 @@
 <div class="container main">
     <form class="form-horizontal" onsubmit="return false;">
         <div class="input-group">
-            <p><h2><input type="text" name="courseName" id="courseName" placeholder="Course name" pattern=".{5,}" value="${entity.name}"></h2></p>
+            <p><h2><input type="text" name="name" id="name" placeholder="Course name" required value="${entity.name}"></h2></p>
         </div>
-        <p><textarea cols="100" rows="20" name="courseDesccription" id="courseDesccription" placeholder="Course decription" pattern=".{15,}" >${entity.description}</textarea></p>
+        <p><textarea cols="100" rows="20" name="description" id="description" placeholder="Course description" required>${entity.description}</textarea></p>
+        <p><h2><input type="number" name="price" id="price" placeholder="Price" required value="${entity.price}"></h2></p>
+        <p><h2><input type="text" name="level" id="level" placeholder="Level" value="${entity.level}"></h2></p>
         <p><h2>Lections</h2></p>
         <table border="solid 1px black" id="lections">
             <tr>
@@ -36,8 +38,13 @@
             </c:forEach>
         </table>
         <h4><a id="addNewTest" name="addNewTest" href="/TestEdit?add=true&parentId=${entity.idCourse}">Add new test</a></h4><br></br></br>
-        <h2><button type="button" id="save" name="save">Save</button></h2>
-        <h2><button type="button" id="delete" name="delete" onclick="DeleteCourse()">Delete</button></h2>
+        <c:if test="${!add}">
+            <h2><button type="button" id="save" name="save" onclick="Save()">Save</button></h2>
+            <h2><button type="button" id="delete" name="delete" onclick="Delete()">Delete</button></h2>
+        </c:if>
+        <c:if test="${add}">
+            <h2><button type="button" id="create" name="create" onclick="Create(${entity.idCourse})">Create</button></h2>
+        </c:if>
     </form>
 </div>
 <%@ include file="resources/templates/footer.html" %>
@@ -45,88 +52,65 @@
 </html>
 
 <script>
-    function SuccessDelete(data) {
+    function GetData(){
+        return {
+            name: $('#name').val(),
+            description: $('#description').val(),
+            price: parseInt($('#price').val()),
+            level: $('#level').val()
+        };
+    }
+
+    function GetEditUrl(){
+        return "/EditCourse?id=${entity.idCourse}";
+    }
+
+    function Validate(){
+        var validForm = true;
+        $('input').each(function() {
+            validForm = validForm && this.checkValidity();
+        });
+        return validForm;
+    }
+
+    function SuccessChange(data) {
         var parseData = JSON.parse(data);
         if (parseData.error == ""){
-            document.location.href = document.location.protocol + "//" + document.location.host + "/Courses"
+            document.location.href = document.location.protocol + "//" + document.location.host + parseData.nextPage
         }else{
             confirm(parseData.error);
         }
     }
-    function ErrorDelete(data) {
+    function ErrorChange(data) {
         console.log("error");
         console.log(data);
     }
-    function DeleteCourse() {
-        var locationURL = document.location.protocol + "//" + document.location.host + "/EditCourse?id=${entity.idCourse}";
+
+    function SendAction(actionType){
+        var locationURL = document.location.protocol + "//" + document.location.host + GetEditUrl();
         $.ajax({
             url: locationURL,
-            type: "DELETE",
-            success: SuccessDelete,
-            error: ErrorDelete
+            type: actionType,
+            contentType: "application/json",
+            data: JSON.stringify(GetData()),
+            success: SuccessChange,
+            error: ErrorChange
         });
     }
-    function SuccessReguest(data) {
-        var parseData = JSON.parse(data);
-        if (parseData.error == ""){
-            document.location.href = document.location.protocol + "//" + document.location.host + parseData.nextPage;
-        }else{
-            parseData.nameErrors.forEach(function(item) {
-                var formGroup = $('input[name="'+item+'"]').parents('.input-group');
-                formGroup.addClass('inputError').removeClass('inputSeccuss');
-            });
-            confirm(parseData.error);
+
+    function Create(){
+        if (Validate()){
+            SendAction("POST");
         }
     }
-    function ErrorReguest(data) {
-        console.log("error");
-        console.log(data);
+
+    function Delete() {
+        SendAction("DELETE");
     }
-    function CheckValidFormData( id, value) {
-        var errors = "";
-        switch (id){
-            case "id":
-                break;
-        }
-        return errors;
-    }
-    $(function() {
-        //при нажатии на кнопку с id="save"
-        $('#save').click(function() {
-            var validForm = true;
-            //перебрать все элементы управления input
-            $('input').each(function() {
-                var id = $(this).attr('id');
-                var value = $(this).val();
-                var inputGroup = $(this).parents('.input-group');
-                var errors = CheckValidFormData(id, value);
-                if (this.checkValidity() && (errors == "")) {
-                    inputGroup.addClass('inputSeccuss').removeClass('inputError');
-                } else {
-                    inputGroup.addClass('inputError').removeClass('inputSeccuss');
-                    if (errors != ""){
-                        confirm(errors);
-                    }
-                    validForm = false;
-                }
-            });
-            if (validForm){
-                var courseNameVal = $('#courseName').val();
-                var courseDescriptionVal = $('#courseDesccription').val();
-                var data = {
-                    name: courseNameVal,
-                    description: courseDescriptionVal,
-                };
-                var locationURL = document.location.protocol + "//" + document.location.host + "/EditCourse?id=${entity.idCourse}&check=1";
-                $.ajax({
-                    url: locationURL,
-                    type: "PUT",
-                    contentType: "application/json",
-                    data: JSON.stringify(data),
-                    success: SuccessReguest,
-                    error: ErrorReguest
-                });
+
+    function Save() {
+            if (Validate()){
+                SendAction("PUT");
             }
-        });
-    });
+        };
 </script>

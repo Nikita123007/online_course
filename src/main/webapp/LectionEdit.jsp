@@ -11,7 +11,7 @@
     <h6><textarea cols="100" rows="20" name="lectionText" id="lectionText">${entity.text}</textarea></h6>
     <c:if test="${!add}">
         <h2><button type="button" id="save" name="save">Save</button></h2>
-        <h2><button type="button" id="delete" name="delete" onclick="DeleteLection()">Delete</button></h2>
+        <h2><button type="button" id="delete" name="delete" onclick="DeleteEntity()">Delete</button></h2>
     </c:if>
     <c:if test="${add}">
         <h2><button type="button" id="create" name="create" onclick="CreateLection(${entity.course})">Create</button></h2>
@@ -21,19 +21,26 @@
 </body>
 </html>
 <script>
+    function GetData() {
+        return{
+            name: $('#lectionName').val(),
+            text: $('#lectionText').val()
+        };
+    }
+
     function SuccessChange(data) {
         var parseData = JSON.parse(data);
         if (parseData.error == ""){
             document.location.href = document.location.protocol + "//" + document.location.host + "/EditCourse?id=${entity.course}"
         }else{
-            confirm(parseData.error);
+            alert(parseData.error);
         }
     }
     function ErrorChange(data) {
         console.log("error");
         console.log(data);
     }
-    function DeleteLection() {
+    function DeleteEntity() {
         var locationURL = document.location.protocol + "//" + document.location.host + "/LectionEdit?id=${entity.idLection}";
         $.ajax({
             url: locationURL,
@@ -43,18 +50,12 @@
         });
     }
     function CreateLection(idCourse) {
-        var lectionNameVal = $('#lectionName').val();
-        var lectionTextVal = $('#lectionText').val();
         var locationURL = document.location.protocol + "//" + document.location.host + "/LectionEdit?parentId=${parentId}&add=true";
-        var data = {
-            name: lectionNameVal,
-            text: lectionTextVal,
-        };
         $.ajax({
             url: locationURL,
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify(data),
+            data: JSON.stringify(GetData()),
             success: SuccessChange,
             error: ErrorChange
         });
@@ -62,13 +63,13 @@
     function SuccessReguest(data) {
         var parseData = JSON.parse(data);
         if (parseData.error == ""){
-            document.location.href = document.location.protocol + "//" + document.location.host + "/EditCourse?id=${entity.course}";
+            document.location.href = document.location.protocol + "//" + document.location.host + parseData.nextPage;
         }else{
             parseData.nameErrors.forEach(function(item) {
                 var formGroup = $('input[name="'+item+'"]').parents('.input-group');
-                formGroup.addClass('inputError').removeClass('inputSeccuss');
+                formGroup.addClass('inputError').removeClass('inputSuccess');
             });
-            confirm(parseData.error);
+            alert(parseData.error);
         }
     }
     function ErrorReguest(data) {
@@ -94,9 +95,9 @@
                 var inputGroup = $(this).parents('.input-group');
                 var errors = CheckValidFormData(id, value);
                 if (this.checkValidity() && (errors == "")) {
-                    inputGroup.addClass('inputSeccuss').removeClass('inputError');
+                    inputGroup.addClass('inputSuccess').removeClass('inputError');
                 } else {
-                    inputGroup.addClass('inputError').removeClass('inputSeccuss');
+                    inputGroup.addClass('inputError').removeClass('inputSuccess');
                     if (errors != ""){
                         confirm(errors);
                     }
@@ -104,18 +105,12 @@
                 }
             });
             if (validForm){
-                var lectionNameVal = $('#lectionName').val();
-                var lectionTextVal = $('#lectionText').val();
                 var locationURL = document.location.protocol + "//" + document.location.host + "/LectionEdit?id=${entity.idLection}";
-                var data = {
-                    name: lectionNameVal,
-                    text: lectionTextVal,
-                };
                 $.ajax({
                     url: locationURL,
                     type: "PUT",
                     contentType: "application/json",
-                    data: JSON.stringify(data),
+                    data: JSON.stringify(GetData()),
                     success: SuccessReguest,
                     error: ErrorReguest
                 });

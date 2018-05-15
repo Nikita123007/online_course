@@ -31,12 +31,10 @@ public class Login extends HttpServlet {
                 DAOFactory.getInstance().getUserDAO().merge(user);
             }
             response.addCookie(new Cookie(CookieAuthToken, user.getAuthToken()));
-            ResponseData responseData = new ResponseData("", Page.Courses, null);
+            ResponseData responseData = new ResponseData("", Page.Courses);
             wr.write(responseData.toJson());
         } else {
-            ResponseData responseData = new ResponseData("Incorrect login or password.", null, new ArrayList<>());
-            responseData.getNameErrors().add("login");
-            responseData.getNameErrors().add("password");
+            ResponseData responseData = new ResponseData("Incorrect login or password.", null);
             wr.write(responseData.toJson());
         }
         wr.close();

@@ -30,7 +30,7 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
     }
 
     @Override
-    protected void parseEntity(TestEntity entity, JsonObject json){
+    protected void parseEntity(ServletHelper<TestEntity> helper, TestEntity entity, JsonObject json){
         entity.setName(json.get("name").getAsString());
         JsonArray questions = json.get("questions").getAsJsonArray();
         for(JsonElement questionElement : questions){
@@ -53,45 +53,40 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
     }
 
     @Override
-    protected ResponseData getResponseData(TestEntity entity){
+    protected ResponseData getResponseData(ServletHelper<TestEntity> helper, TestEntity entity){
         String errorString = "";
-        List<String> nameErrors = new ArrayList<>();
 
         if (entity.getName().length() == 0){
             errorString = errorString + "Input test name.\n";
-            nameErrors.add("name");
         }
 
         if (entity.getTestQuestionsByIdTest().size() == 0){
             errorString = errorString + "Add test question.\n";
-            nameErrors.add("question");
         }
 
         for (TestQuestionEntity question : entity.getTestQuestionsByIdTest()) {
             if(question.getQuestion().isEmpty()){
                 errorString = errorString + "Input question.\n";
-                nameErrors.add("question name");
-                break;
             }
 
             if(question.getTestAnswersByIdTestQuestion().isEmpty()){
                 errorString = errorString + "Add answers.\n";
-                nameErrors.add("question answers");
                 break;
             }
 
             for(TestAnswerEntity answer : question.getTestAnswersByIdTestQuestion()){
-                errorString = errorString + "Input answer.\n";
-                nameErrors.add("answer");
-                break;
+                if(answer.getText().isEmpty()){
+                    errorString = errorString + "Input answer.\n";
+                    break;
+                }
             }
         }
 
-        if(nameErrors.isEmpty()){
-            return new ResponseData("", Pages.Page.Courses, null);
+        if(errorString.isEmpty()){
+            return new ResponseData("", Pages.Page.Courses);
         }
         else{
-            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.Courses, nameErrors);
+            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.Courses);
         }
     }
 
