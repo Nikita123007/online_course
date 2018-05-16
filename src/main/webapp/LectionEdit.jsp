@@ -30,6 +30,6 @@
     }
 
     function GetEditUrl(){
-        return "/LectionEdit?id=${entity.idLection}";
+        return "/LectionEdit?parentId=${entity.course}&id=${entity.idLection}";
     }
 </script>

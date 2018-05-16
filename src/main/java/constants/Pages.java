@@ -13,6 +13,6 @@ public class Pages {
         public static final String TestRun = "/TestRun";
         public static final String TestStatus = "/TestStatus";
         public static final String User = "/User";
-        public static final String EditCource = "/EditCourse";
+        public static final String EditCourse = "/EditCourse";
     }
 }

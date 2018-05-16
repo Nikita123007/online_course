@@ -45,6 +45,9 @@ public class EditCourse extends AbstractEditServlet<CourseEntity, CourseDAO> {
 
     @Override
     protected ResponseData getResponseData(ServletHelper<CourseEntity> helper, CourseEntity entity){
+        if (helper.getAction() == ActionType.Delete){
+            return new ResponseData("", Pages.Page.Courses);
+        }
         String errorString = "";
 
         if (entity.getName().length() == 0){

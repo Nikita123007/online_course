@@ -56,7 +56,7 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
 
         ResponseData responseData;
         if(action == ActionType.Delete) {
-            responseData = new ResponseData("", null);
+            responseData = getResponseData(helper, entity);
             getDao().remove(entity);
         }
         else{

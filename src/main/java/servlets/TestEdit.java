@@ -3,6 +3,7 @@ package servlets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import common.ActionType;
 import constants.Pages;
 import dao.DAOFactory;
 import dao.TestDAO;
@@ -54,6 +55,10 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
 
     @Override
     protected ResponseData getResponseData(ServletHelper<TestEntity> helper, TestEntity entity){
+        if (helper.getAction() == ActionType.Delete){
+            return new ResponseData("", Pages.Page.EditCourse + "?id=" + helper.getEntity().getCourse());
+        }
+
         String errorString = "";
 
         if (entity.getName().length() == 0){
@@ -83,10 +88,10 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
         }
 
         if(errorString.isEmpty()){
-            return new ResponseData("", Pages.Page.Courses);
+            return new ResponseData("", Pages.Page.EditCourse + "?id=" + helper.getEntity().getCourse());
         }
         else{
-            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.Courses);
+            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.EditCourse + "?id=" + helper.getParentId().toString());
         }
     }
 

@@ -1,6 +1,7 @@
 package servlets;
 
 import com.google.gson.JsonObject;
+import common.ActionType;
 import constants.Pages;
 import dao.DAOFactory;
 import dao.LectionDAO;
@@ -35,6 +36,10 @@ public class LectionEdit extends AbstractEditServlet<LectionEntity, LectionDAO> 
 
     @Override
     protected ResponseData getResponseData(ServletHelper<LectionEntity> helper, LectionEntity entity){
+        if (helper.getAction() == ActionType.Delete){
+            return new ResponseData("", Pages.Page.EditCourse + "?id=" + helper.getEntity().getCourse());
+        }
+
         String errorString = "";
 
         if (entity.getName().length() == 0){
@@ -45,10 +50,10 @@ public class LectionEdit extends AbstractEditServlet<LectionEntity, LectionDAO> 
             errorString = errorString + "Input lection text.\n";
         }
         if(errorString.isEmpty()){
-            return new ResponseData("", Pages.Page.Courses);
+            return new ResponseData("", Pages.Page.EditCourse + "?id=" + helper.getEntity().getCourse());
         }
         else{
-            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.Courses + "?id=" + helper.getParentId().toString());
+            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.EditCourse + "?id=" + helper.getParentId().toString());
         }
     }
 
