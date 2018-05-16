@@ -44,25 +44,20 @@ public class EditCourse extends AbstractEditServlet<CourseEntity, CourseDAO> {
     }
 
     @Override
-    protected ResponseData getResponseData(ServletHelper<CourseEntity> helper, CourseEntity entity){
-        if (helper.getAction() == ActionType.Delete){
-            return new ResponseData("", Pages.Page.Courses);
-        }
-        String errorString = "";
+    protected String getNextUrl(ServletHelper<CourseEntity> helper, CourseEntity entity){
+        return Pages.Page.Courses;
+    }
 
+    @Override
+    protected String getErrorString(ServletHelper<CourseEntity> helper, CourseEntity entity){
+        String errorString = "";
         if (entity.getName().length() == 0){
             errorString = errorString + "Input course name.\n";
         }
-
         if (entity.getDescription().length() == 0){
             errorString = errorString + "Input course description.\n";
         }
-        if(errorString.isEmpty()){
-            return new ResponseData("", Pages.Page.Courses);
-        }
-        else{
-            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.Courses);
-        }
+        return errorString;
     }
 
     @Override

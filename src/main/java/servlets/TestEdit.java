@@ -55,11 +55,12 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
     }
 
     @Override
-    protected ResponseData getResponseData(ServletHelper<TestEntity> helper, TestEntity entity){
-        if (helper.getAction() == ActionType.Delete){
-            return new ResponseData("", Pages.Page.EditCourse + "?id=" + entity.getCourse());
-        }
+    protected String getNextUrl(ServletHelper<TestEntity> helper, TestEntity entity){
+        return Pages.Page.EditCourse + "?id=" + entity.getCourse();
+    }
 
+    @Override
+    protected String getErrorString(ServletHelper<TestEntity> helper, TestEntity entity){
         String errorString = "";
 
         if (entity.getName().length() == 0){
@@ -87,13 +88,7 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
                 }
             }
         }*/
-
-        if(errorString.isEmpty()){
-            return new ResponseData("", Pages.Page.EditCourse + "?id=" + entity.getCourse());
-        }
-        else{
-            return new ResponseData("Invalid data.\n" + errorString, "");
-        }
+        return errorString;
     }
 
     @Override

@@ -56,22 +56,33 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
 
         ResponseData responseData;
         if(action == ActionType.Delete) {
-            responseData = getResponseData(helper, entity);
-            getDao().remove(entity);
+            responseData = new ResponseData("", getNextUrl(helper, entity));
         }
         else{
             request.setCharacterEncoding("UTF-8");
             JsonObject json = new Gson().fromJson(request.getReader(), JsonElement.class).getAsJsonObject();
             parseEntity(helper, entity, json);
 
-            responseData = getResponseData(helper, entity);
-            if(!responseData.isError()){
-                if(action == ActionType.Create){
+            String errorString = getErrorString(helper, entity);
+            if(errorString.isEmpty()){
+                responseData = new ResponseData("", getNextUrl(helper, entity));
+            }
+            else{
+                responseData = new ResponseData("Invalid data.\n" + errorString, "");
+            }
+        }
+
+        if(!responseData.isError()){
+            switch (action){
+                case Create:
                     getDao().add(entity);
-                }
-                else{
+                    break;
+                case Update:
                     getDao().merge(entity);
-                }
+                    break;
+                case Delete:
+                    getDao().remove(entity);
+                    break;
             }
         }
 
@@ -104,7 +115,8 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
     }
 
     protected abstract EntityType createEntity(ServletHelper<EntityType> helper);
-    protected abstract ResponseData getResponseData(ServletHelper<EntityType> helper, EntityType entity);
+    protected abstract String getNextUrl(ServletHelper<EntityType> helper, EntityType entity);
+    protected abstract String getErrorString(ServletHelper<EntityType> helper, EntityType entity);
     protected abstract void parseEntity(ServletHelper<EntityType> helper, EntityType entity, JsonObject json);
     protected void setUpdateAttributes(ServletHelper<EntityType> helper){
     }

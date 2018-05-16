@@ -37,23 +37,16 @@ public class QuestionEdit extends AbstractEditServlet<TestQuestionEntity, TestQu
     }
 
     @Override
-    protected ResponseData getResponseData(ServletHelper<TestQuestionEntity> helper, TestQuestionEntity entity){
-        if (helper.getAction() == ActionType.Delete){
-            return new ResponseData("", Pages.Page.TestEdit + "?id=" + entity.getTest());
-        }
+    protected String getNextUrl(ServletHelper<TestQuestionEntity> helper, TestQuestionEntity entity){
+        return Pages.Page.TestEdit + "?id=" + entity.getTest();
+    }
 
-        String errorString = "";
-
-        if (entity.getQuestion().length() == 0){
-            errorString = errorString + "Input test name.\n";
-        }
-
-        if(errorString.isEmpty()){
-            return new ResponseData("", Pages.Page.TestEdit + "?id=" + entity.getTest());
-        }
-        else{
-            return new ResponseData("Invalid data.\n" + errorString, "");
-        }
+    @Override
+    protected String getErrorString(ServletHelper<TestQuestionEntity> helper, TestQuestionEntity entity){
+        if (entity.getQuestion().length() == 0)
+            return  "Input test name.\n";
+        else
+            return "";
     }
 
     @Override

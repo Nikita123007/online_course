@@ -35,11 +35,12 @@ public class LectionEdit extends AbstractEditServlet<LectionEntity, LectionDAO> 
     }
 
     @Override
-    protected ResponseData getResponseData(ServletHelper<LectionEntity> helper, LectionEntity entity){
-        if (helper.getAction() == ActionType.Delete){
-            return new ResponseData("", Pages.Page.EditCourse + "?id=" + entity.getCourse());
-        }
+    protected String getNextUrl(ServletHelper<LectionEntity> helper, LectionEntity entity){
+        return Pages.Page.EditCourse + "?id=" + entity.getCourse();
+    }
 
+    @Override
+    protected String getErrorString(ServletHelper<LectionEntity> helper, LectionEntity entity){
         String errorString = "";
 
         if (entity.getName().length() == 0){
@@ -49,12 +50,7 @@ public class LectionEdit extends AbstractEditServlet<LectionEntity, LectionDAO> 
         if (entity.getText().length() == 0){
             errorString = errorString + "Input lection text.\n";
         }
-        if(errorString.isEmpty()){
-            return new ResponseData("", Pages.Page.EditCourse + "?id=" + entity.getCourse());
-        }
-        else{
-            return new ResponseData("Invalid data.\n" + errorString, "");
-        }
+        return errorString;
     }
 
     @Override
