@@ -12,30 +12,8 @@
     <p style="margin-bottom: 0px">Level: ${entity.level}</p>
     <p>Category: ${course.categoryByCategory.name}</p>
     <p><h2><a href="Lections?parentId=${entity.idCourse}">Lections</a></h2></p>
-    <table border="solid 1px black">
-        <tr>
-            <th>Name</th>
-        </tr>
-        <c:forEach var="lection" items="${entity.lectionsByIdCourse}">
-            <tr>
-                <td><a href="Lection?id=${lection.idLection}">${lection.name}</a></td>
-            </tr>
-        </c:forEach>
-    </table>
-    <p><h2><a href="Tests?parentId=${entity.idCourse}">Tests</a></h2></p>
-    <table border="solid 1px black">
-        <tr>
-            <th>Name</th>
-            <th>Status</th>
-        </tr>
-        <c:forEach var="test" items="${tests}">
-            <tr>
-                <td><a href="TestRun?id=${test.idTest}">${test.name}</a></td>
-                <td><c:if test="${test.completed == 1}">Completed</c:if><c:if test="${test.completed == 0}">Available</c:if></td>
-            </tr>
-        </c:forEach>
-    </table>
-    <c:if test="${courseCompleted==true}">
+    <p><h2><a href="/Tests?parentId=${entity.idCourse}">Tests</a></h2></p>
+    <c:if test="${courseCompleted == true}">
         <input type="button" id="diploma" name="diploma" value="diploma">
     </c:if>
 </div>

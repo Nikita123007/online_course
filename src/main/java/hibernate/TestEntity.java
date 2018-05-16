@@ -1,6 +1,7 @@
 package hibernate;
 
 import common.ActionType;
+import dao.DAOFactory;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -104,4 +105,7 @@ public class TestEntity implements AbstractEntity {
         }
     }
 
+    public boolean isTestCompleted(int userId){
+        return DAOFactory.getInstance().getCompletedTestDAO().getCompletedTest(userId, getIdTest()) != null;
+    }
 }

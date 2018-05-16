@@ -47,7 +47,7 @@
     <div class="courses">
         <c:forEach var="entity" items="${entities}">
             <div class="form-group">
-                <p><h2><a href="TestRun?id=${entity.idTest}">${entity.name}</a></h2></p>
+                <p><h2><a <c:if test="${!entity.isTestCompleted(user.idUser)}">href="TestRun?id=${entity.idTest}"</c:if>>${entity.name}</a></h2></p>
             </div>
             <hr>
         </c:forEach>
