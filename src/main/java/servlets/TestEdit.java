@@ -33,6 +33,7 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
     @Override
     protected void parseEntity(ServletHelper<TestEntity> helper, TestEntity entity, JsonObject json){
         entity.setName(json.get("name").getAsString());
+        /*entity.setName(json.get("name").getAsString());
         JsonArray questions = json.get("questions").getAsJsonArray();
         for(JsonElement questionElement : questions){
             TestQuestionEntity questionEntity = new TestQuestionEntity();
@@ -50,13 +51,13 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
             }
 
             entity.getTestQuestionsByIdTest().add(questionEntity);
-        }
+        }*/
     }
 
     @Override
     protected ResponseData getResponseData(ServletHelper<TestEntity> helper, TestEntity entity){
         if (helper.getAction() == ActionType.Delete){
-            return new ResponseData("", Pages.Page.EditCourse + "?id=" + helper.getEntity().getCourse());
+            return new ResponseData("", Pages.Page.EditCourse + "?id=" + entity.getCourse());
         }
 
         String errorString = "";
@@ -65,7 +66,7 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
             errorString = errorString + "Input test name.\n";
         }
 
-        if (entity.getTestQuestionsByIdTest().size() == 0){
+        /*if (entity.getTestQuestionsByIdTest().size() == 0){
             errorString = errorString + "Add test question.\n";
         }
 
@@ -85,13 +86,13 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
                     break;
                 }
             }
-        }
+        }*/
 
         if(errorString.isEmpty()){
-            return new ResponseData("", Pages.Page.EditCourse + "?id=" + helper.getEntity().getCourse());
+            return new ResponseData("", Pages.Page.EditCourse + "?id=" + entity.getCourse());
         }
         else{
-            return new ResponseData("Invalid data.\n" + errorString, Pages.Page.EditCourse + "?id=" + helper.getParentId().toString());
+            return new ResponseData("Invalid data.\n" + errorString, "");
         }
     }
 

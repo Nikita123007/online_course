@@ -44,7 +44,7 @@
                 <h2><button type="button" id="delete" name="delete" onclick="Delete()">Delete</button></h2>
             </c:if>
             <c:if test="${add}">
-                <h2><button type="button" id="create" name="create" onclick="Create(${entity.idCourse})">Create</button></h2>
+                <h2><button type="button" id="create" name="create" onclick="Create()">Create</button></h2>
             </c:if>
         </form>
     </div>
