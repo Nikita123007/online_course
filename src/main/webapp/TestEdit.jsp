@@ -14,14 +14,17 @@
     <p><h2>Questions</h2></p>
     <table border="solid 1px black" id="questions">
         <tr>
+            <th></th>
             <th>Name</th>
         </tr>
         <c:forEach var="question" items="${entity.testQuestionsByIdTest}">
             <tr>
+                <td><input type="checkbox" value="${question.idTestQuestion}"></td>
                 <td><a href="/QuestionEdit?id=${question.idTestQuestion}">${question.question}</a></td>
             </tr>
         </c:forEach>
     </table>
+    <h2><button type="button" id="deleteQuestions" name="deleteQuestions" onclick="DeleteEntityes('/QuestionEdit','questions')">Delete selected questions</button></h2>
     <h4><a id="addNewQuestion" name="addNewQuestion" href="/QuestionEdit?add=true&parentId=${entity.idTest}">Add new question</a></h4><br>
     <c:if test="${!add}">
         <h2><button type="button" id="save" name="save" onclick="Save()">Save</button></h2>

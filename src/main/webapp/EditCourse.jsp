@@ -18,26 +18,32 @@
             <p><h2>Lections</h2></p>
             <table border="solid 1px black" id="lections">
                 <tr>
+                    <th></th>
                     <th>Name</th>
                 </tr>
                 <c:forEach var="lection" items="${entity.lectionsByIdCourse}">
                     <tr>
+                        <td><input type="checkbox" value="${lection.idLection}"></td>
                         <td><a href="/LectionEdit?id=${lection.idLection}">${lection.name}</a></td>
                     </tr>
                 </c:forEach>
             </table>
+            <h2><button type="button" id="deleteLections" name="deleteLections" onclick="DeleteEntityes('/LectionEdit','lections')">Delete selected lections</button></h2>
             <h4><a id="addNewLection" name="addNewLection" href="/LectionEdit?add=true&parentId=${entity.idCourse}">Add new lection</a></h4><br>
             <p><h2>Tests</h2></p>
             <table border="solid 1px black" id="tests">
                 <tr>
+                    <th></th>
                     <th>Name</th>
                 </tr>
                 <c:forEach var="test" items="${entity.testsByIdCourse}">
                     <tr>
+                        <td><input type="checkbox" value="${test.idTest}"></td>
                         <td><a href="/TestEdit?id=${test.idTest}">${test.name}</a></td>
                     </tr>
                 </c:forEach>
             </table>
+            <h2><button type="button" id="deleteTests" name="deleteTests" onclick="DeleteEntityes('/TestEdit','tests')">Delete selected tests</button></h2>
             <h4><a id="addNewTest" name="addNewTest" href="/TestEdit?add=true&parentId=${entity.idCourse}">Add new test</a></h4><br></br></br>
             <c:if test="${!add}">
                 <h2><button type="button" id="save" name="save" onclick="Save()">Save</button></h2>

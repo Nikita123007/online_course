@@ -14,16 +14,19 @@
     <p><h2>Answers</h2></p>
     <table border="solid 1px black" id="answers">
         <tr>
+            <th></th>
             <th>Correct</th>
             <th>Name</th>
         </tr>
         <c:forEach var="answer" items="${entity.testAnswersByIdTestQuestion}">
             <tr>
+                <td><input type="checkbox" value="${answer.idTestAnswer}"></td>
                 <td><input id="answer" name="answer" value="${answer.idTestAnswer}" type="checkbox" <c:if test="${answer.isCorrect == 1}">checked</c:if> disabled></td>
                 <td><a href="/AnswerEdit?id=${answer.idTestAnswer}">${answer.text}</a></td>
             </tr>
         </c:forEach>
     </table>
+    <h2><button type="button" id="deleteAnswers" name="deleteAnswers" onclick="DeleteEntityes('/AnswerEdit','answers')">Delete selected questions</button></h2>
     <h4><a id="addNewAnswer" name="addNewAnswer" href="/AnswerEdit?add=true&parentId=${entity.idTestQuestion}">Add new answer</a></h4><br>
     <c:if test="${!add}">
         <h2><button type="button" id="save" name="save" onclick="Save()">Save</button></h2>

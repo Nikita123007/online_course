@@ -48,3 +48,34 @@ function Save() {
         SendAction("PUT");
     }
 }
+
+var urlGlobal = "";
+var itemGlobal = "";
+
+function DeleteEntityes(url, item) {
+    urlGlobal = url;
+    itemGlobal = item;
+    DeleteNextEntity("");
+}
+
+function DeleteNextEntity(data) {
+    var entity = $('#'+itemGlobal+' input:checked:first');
+
+    if (entity.val() != undefined){
+        entity.prop('checked', false);
+        DeleteEntity(entity.val());
+    }else {
+        location.reload();
+    }
+}
+
+function DeleteEntity(id){
+    var locationURL = document.location.protocol + "//" + document.location.host + urlGlobal + "?id=" + id;
+    $.ajax({
+        url: locationURL,
+        type: "DELETE",
+        contentType: "application/json",
+        success: DeleteNextEntity,
+        error: DeleteNextEntity
+    });
+}

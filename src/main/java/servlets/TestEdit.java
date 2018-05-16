@@ -33,25 +33,6 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
     @Override
     protected void parseEntity(ServletHelper<TestEntity> helper, TestEntity entity, JsonObject json){
         entity.setName(json.get("name").getAsString());
-        /*entity.setName(json.get("name").getAsString());
-        JsonArray questions = json.get("questions").getAsJsonArray();
-        for(JsonElement questionElement : questions){
-            TestQuestionEntity questionEntity = new TestQuestionEntity();
-            JsonObject questionObject = questionElement.getAsJsonObject();
-
-            questionEntity.setQuestion(questionObject.get("question").getAsString());
-
-            for(JsonElement answerElement : questionObject.getAsJsonArray()){
-                TestAnswerEntity answerEntity = new TestAnswerEntity();
-                JsonObject answerObject = answerElement.getAsJsonObject();
-
-                questionEntity.setQuestion(answerObject.get("text").getAsString());
-
-                questionEntity.getTestAnswersByIdTestQuestion().add(answerEntity);
-            }
-
-            entity.getTestQuestionsByIdTest().add(questionEntity);
-        }*/
     }
 
     @Override
