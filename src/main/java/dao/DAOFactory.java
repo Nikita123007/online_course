@@ -13,6 +13,7 @@ public class DAOFactory {
     private final TestDAO testDAO = new MysqlTestDAO();
     private final SubscriptionDAO subscriptionDAO = new MysqlSubscriptionDAO();
     private final CompletedTestDAO completedTestDAO = new MysqlCompletedTestDAO();
+    private final TestQuestionDAO testQuestionDAO = new MysqlTestQuestionDAO();
 
     private DAOFactory() { }
 
@@ -37,4 +38,6 @@ public class DAOFactory {
     public SubscriptionDAO getSubscriptionDAO() { return subscriptionDAO; }
 
     public CompletedTestDAO getCompletedTestDAO() { return completedTestDAO; }
+
+    public TestQuestionDAO getTestQuestionDAO() { return testQuestionDAO; }
 }

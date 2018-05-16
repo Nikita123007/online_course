@@ -14,5 +14,6 @@ public class Pages {
         public static final String TestStatus = "/TestStatus";
         public static final String User = "/User";
         public static final String EditCourse = "/EditCourse";
+        public static final String QuestionEdit = "/QuestionEdit";
     }
 }
