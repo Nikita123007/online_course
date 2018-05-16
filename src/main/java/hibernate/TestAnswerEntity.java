@@ -1,10 +1,12 @@
 package hibernate;
 
+import common.ActionType;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "test_answer", schema = "online_course", catalog = "")
-public class TestAnswerEntity {
+public class TestAnswerEntity implements AbstractEntity {
     private int idTestAnswer;
     private int testQuestion;
     private String text;
@@ -83,5 +85,15 @@ public class TestAnswerEntity {
 
     public void setTestQuestionByTestQuestion(TestQuestionEntity testQuestionByTestQuestion) {
         this.testQuestionByTestQuestion = testQuestionByTestQuestion;
+    }
+
+    @Override
+    public boolean checkRights(UserEntity user, ActionType action) {
+        if(action == ActionType.Read || action == ActionType.Create){
+            return user != null && (getTestQuestionByTestQuestion().getTestByTest().getCourseByCourse().isSubscribed(user.getIdUser()) || user.admin());
+        }
+        else{
+            return user != null && (getTestQuestionByTestQuestion().getTestByTest().getCourseByCourse().isAuthor(user.getIdUser()) || user.admin());
+        }
     }
 }
