@@ -99,10 +99,8 @@ public abstract class DocumentService {
                 pdfTable.setWidths(widths);
 
                 PdfUtil.addTableHeader(pdfTable, Element.ALIGN_LEFT, table.name);
-                //PdfUtil.addTableHeader(pdfTable, Element.ALIGN_LEFT, "");
                 for(int i = 1; i < columnCount; i++){
                     PdfUtil.addTableHeader(pdfTable, Element.ALIGN_LEFT, "");
-                    //PdfUtil.addTableHeader(pdfTable, Element.ALIGN_LEFT, "");
                 }
 
                 for(String[] row : table.rows){
@@ -156,11 +154,17 @@ public abstract class DocumentService {
         try{
             XSSFWorkbook workbook = new XSSFWorkbook();
 
-            XSSFSheet damageReportInfo = workbook.createSheet(getTitle());
+            List<String[]> rows = new ArrayList<>();
             for(Table table : getTables(key)){
-                ExcelUtil.createTable(damageReportInfo, table.rows, table.name, 1, 1);
+                String[] titleRows = new String[table.rows.get(0).length];
+                titleRows[0] = table.name;
+                rows.add(titleRows);
+                rows.addAll(table.rows);
             }
-            styleTable(workbook, damageReportInfo);
+
+            XSSFSheet sheet = workbook.createSheet(getTitle());
+            ExcelUtil.createTable(sheet, rows, getTitle(), 1, 1);
+            styleTable(workbook, sheet);
             workbook.write(outputStream);
         }
         catch (IOException e){

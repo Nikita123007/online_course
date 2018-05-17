@@ -72,13 +72,13 @@ public class DocumentServlet extends HttpServlet{
         if(type.equals("csv")){
             response.addHeader("Content-Type", "application/vnd.ms-excel");
             response.addHeader("Content-Disposition", "inline; filename=" + service.getTitle() + ".csv");
-            response.getOutputStream().write(service.generatePdf(id).toByteArray());
+            response.getOutputStream().write(service.generateCSV(id).toByteArray());
             return;
         }
         if(type.equals("excel")){
             response.addHeader("Content-Type", "application/vnd.ms-excel");
             response.addHeader("Content-Disposition", "inline; filename=" + service.getTitle() + ".xlsx");
-            response.getOutputStream().write(service.generatePdf(id).toByteArray());
+            response.getOutputStream().write(service.generateExcel(id).toByteArray());
             //return;
         }
     }
