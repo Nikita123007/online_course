@@ -27,7 +27,7 @@
         </c:forEach>
     </table><br>
     <div class="input-group">
-        <h2><button type="button" id="deleteAnswers" name="deleteAnswers" onclick="DeleteEntityes('/AnswerEdit','answers')">Delete selected questions</button></h2>
+        <h2><button type="button" id="deleteAnswers" name="deleteAnswers" onclick="DeleteEntities('/AnswerEdit','answers')">Delete selected questions</button></h2>
         <h4><a id="addNewAnswer" name="addNewAnswer" href="/AnswerEdit?add=true&parentId=${entity.idTestQuestion}">Add new answer</a></h4><br>
     </div><hr>
     <div class="input-group">

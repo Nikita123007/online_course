@@ -52,7 +52,7 @@ function Save() {
 var urlGlobal = "";
 var itemGlobal = "";
 
-function DeleteEntityes(url, item) {
+function DeleteEntities(url, item) {
     urlGlobal = url;
     itemGlobal = item;
     DeleteNextEntity("");

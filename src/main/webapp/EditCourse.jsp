@@ -29,7 +29,7 @@
                 </c:forEach>
             </table><br>
             <div class="input-group">
-                <h2><button type="button" id="deleteLections" name="deleteLections" onclick="DeleteEntityes('/LectionEdit','lections')">Delete selected lections</button></h2>
+                <h2><button type="button" id="deleteLections" name="deleteLections" onclick="DeleteEntities('/LectionEdit','lections')">Delete selected lections</button></h2>
                 <h4><a class="design" id="addNewLection" name="addNewLection" href="/LectionEdit?add=true&parentId=${entity.idCourse}">Add new lection</a></h4><br>
             </div><hr>
             <p><h2>Tests</h2></p>
@@ -46,7 +46,7 @@
                 </c:forEach>
             </table><br>
             <div class="input-group">
-                <h2><button type="button" id="deleteTests" name="deleteTests" onclick="DeleteEntityes('/TestEdit','tests')">Delete selected tests</button></h2>
+                <h2><button type="button" id="deleteTests" name="deleteTests" onclick="DeleteEntities('/TestEdit','tests')">Delete selected tests</button></h2>
                 <h4><a class="design" id="addNewTest" name="addNewTest" href="/TestEdit?add=true&parentId=${entity.idCourse}">Add new test</a></h4><br></br></br>
             </div><hr>
             <div class="input-group">
