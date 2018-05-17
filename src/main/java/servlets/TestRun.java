@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.time.DateTimeException;
 import java.util.ArrayList;
@@ -49,6 +50,8 @@ public class TestRun extends AbstractViewServlet<TestEntity, TestDAO> {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        PrintWriter wr = response.getWriter();
+
         ServletHelper<TestEntity> helper = new ServletHelper<>();
         helper.setAction(ActionType.Read);
         helper.setRequest(request);
@@ -87,6 +90,8 @@ public class TestRun extends AbstractViewServlet<TestEntity, TestDAO> {
 
             request.setAttribute("user", helper.getUser());
             ResponseData responseData = new ResponseData("", Pages.Page.Tests + "?parentId=" + helper.getEntity().getCourse());
+            wr.write(responseData.toJson());
+            wr.close();
         }
     }
 
