@@ -42,11 +42,11 @@ public class ServletHelper<T extends AbstractEntity> {
             return HttpServletResponse.SC_UNAUTHORIZED;
 
         if(action != ActionType.Create && !isCollection){
-            String id = request.getParameter("id");
-            if(id == null || id.equals(""))
+            Integer id = Utils.getInteger(request.getParameter("id"));
+            if(id == null)
                 return HttpServletResponse.SC_BAD_REQUEST;
 
-            entity = dao.get(Integer.parseInt(id));
+            entity = dao.get(id);
             if (entity == null)
                 return HttpServletResponse.SC_NOT_FOUND;
 
