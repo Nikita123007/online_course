@@ -50,6 +50,7 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     public Collection<UserEntity> getAll(){
+        entityManager.clear();
         Query query = entityManager.createQuery("FROM UserEntity");
         return (Collection<UserEntity>) query.getResultList();
     }

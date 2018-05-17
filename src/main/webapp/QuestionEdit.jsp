@@ -21,7 +21,7 @@
         <c:forEach var="answer" items="${entity.testAnswersByIdTestQuestion}">
             <tr>
                 <td class="deletecheckbox"><input type="checkbox" value="${answer.idTestAnswer}" style="margin-left: 20px;"></td>
-                <td><input id="answer" name="answer" value="${answer.idTestAnswer}" type="checkbox" <c:if test="${answer.isCorrect == 1}">checked</c:if> disabled></td>
+                <td><c:if test="${answer.isCorrect == 1}">True</c:if><c:if test="${answer.isCorrect == 0}">False</c:if></td>
                 <td><a href="/AnswerEdit?id=${answer.idTestAnswer}">${answer.text}</a></td>
             </tr>
         </c:forEach>

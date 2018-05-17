@@ -9,6 +9,9 @@ import java.io.Writer;
 import java.util.ArrayList;
 
 import algorithms.AlgorithmsHelper;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import dao.DAOFactory;
 import hibernate.UserEntity;
 import response.AuthToken;
@@ -21,8 +24,21 @@ import request.*;
 public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Writer wr = response.getWriter();
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
+        JsonObject json = new Gson().fromJson(request.getReader(), JsonElement.class).getAsJsonObject();
+        String login = json.get("login").getAsString();
+        String password = json.get("password").getAsString();
+        if (login == null || login.equals("")){
+            ResponseData responseData = new ResponseData("Enter login.", null);
+            wr.write(responseData.toJson());
+            wr.close();
+            return;
+        }
+        if (password == null || password.equals("")){
+            ResponseData responseData = new ResponseData("Enter password.", null);
+            wr.write(responseData.toJson());
+            wr.close();
+            return;
+        }
         UserEntity user = DAOFactory.getInstance().getUserDAO().findUserByLogin(login);
         String passwordHashInString = DatatypeConverter.printHexBinary(AlgorithmsHelper.GetHash(password));
         if (user != null && user.getPasswordHash().toUpperCase().equals(passwordHashInString.toUpperCase())) {

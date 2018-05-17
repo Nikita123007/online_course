@@ -12,8 +12,8 @@
         <p><h2><input type="text" name="name" id="name" placeholder="Answer name" required value="${entity.text}"></h2></p>
     </div><br>
     <div class="input-group">
-        <h4><input name="answer" value="true" type="radio" <c:if test="${entity.isCorrect == 1}">checked</c:if>>Correct</h4>
-        <h4><input name="answer" value="false" type="radio" <c:if test="${entity.isCorrect == 0}">checked</c:if> style="margin-left: 20px;">Wrong</h4>
+        <h4><input name="answer" id="correct" value="true" type="radio" <c:if test="${entity.isCorrect == 1}">checked</c:if>><label for="correct">Correct</label></h4>
+        <h4><input name="answer" id="wrong" value="false" type="radio" <c:if test="${entity.isCorrect == 0}">checked</c:if> style="margin-left: 20px;"><label for="wrong">Wrong</label></h4>
     </div><br>
 
     <c:if test="${!add}">

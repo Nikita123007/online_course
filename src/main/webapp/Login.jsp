@@ -2,8 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
-<% String title = "Login"; %>
-<%@ include file="resources/templates/headers.html" %>
+    <% String title = "Login"; %>
+    <%@ include file="resources/templates/headers.html" %>
+    <script ty pe="text/javascript" src="resources/js/EditEntity.js"></script>
 <body>
 <style>
     .form form {
@@ -13,7 +14,7 @@
         margin-top: 160px;
     }
     .hrefReg{
-        margin-left: 25px;
+        margin-left: 10px;
     }
 </style>
 <div class="container main">
@@ -36,9 +37,9 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button id="enterLogin" type="submit" class="btn btn-default btn-sm">Login</button>
-                    <a class="hrefReg" href="Registration">Registration</a>
+                <div class="input-group">
+                    <button id="enterLogin" type="submit" class="hrefReg" onclick="Create()">Login</button>
+                    <a class="design" href="Registration">Registration</a>
                 </div>
             </div>
     </form>
@@ -48,65 +49,14 @@
 </body>
 </html>
 <script>
-    function SuccessReguest(data) {
-        var parseData = JSON.parse(data);
-        if (parseData.error == ""){
-            document.location.href = document.location.protocol + "//" + document.location.host + parseData.nextPage;
-        }else{
-            parseData.nameErrors.forEach(function(item) {
-                var formGroup = $('input[name="'+item+'"]').parents('.input-group');
-                formGroup.addClass('inputError').removeClass('inputSuccess');
-            });
-            confirm(parseData.error);
-        }
+    function GetData() {
+        return{
+            login: $('#login').val(),
+            password: $('#password').val()
+        };
     }
-    function ErrorReguest(data) {
-        console.log("error");
-        console.log(data);
+
+    function GetEditUrl(){
+        return "/Login";
     }
-    function CheckValidFormData( id, value) {
-        var errors = "";
-        switch (id){
-            case "login":
-                break;
-            case "password":
-                break;
-        }
-        return errors;
-    }
-    $(function() {
-        //при нажатии на кнопку с id="save"
-        $('#enterLogin').click(function() {
-            var validForm = true;
-            //перебрать все элементы управления input
-            $('input').each(function() {
-                var id = $(this).attr('id');
-                var value = $(this).val();
-                var inputGroup = $(this).parents('.input-group');
-                var errors = CheckValidFormData(id, value);
-                if (this.checkValidity() && (errors == "")) {
-                    inputGroup.addClass('inputSuccess').removeClass('inputError');
-                } else {
-                    inputGroup.addClass('inputError').removeClass('inputSuccess');
-                    if (errors != "") {
-                        confirm(errors);
-                    }
-                    validForm = false;
-                }
-            });
-            if (validForm){
-                var loginVal = $('#login').val();
-                var passwordVal = $('#password').val();
-                var locationURL = document.location.protocol + "//" + document.location.host + "/Login";
-                console.log(locationURL);
-                $.ajax({
-                    url: locationURL,
-                    type: "POST",
-                    data:({login: loginVal, password: passwordVal}),
-                    success: SuccessReguest,
-                    error: ErrorReguest
-                });
-            }
-        });
-    });
 </script>
