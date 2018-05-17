@@ -5,6 +5,13 @@
             <li><a href="Courses">Cources</a></li>
         </ul>
     </div>
+    <c:if test="${user.admin()}">
+    <div class="header-center">
+        <ul>
+            <li><a href="Users">Users</a></li>
+        </ul>
+    </div>
+    </c:if>
     <div class="header-name">
         Hello, ${user.name}.
     </div>
