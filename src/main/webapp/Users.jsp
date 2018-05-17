@@ -45,10 +45,10 @@
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <div class="courses">
-        <h3><a href="EditCourse?add=true" class="design">Create</a></h3>
+        <button type="button" id="email" name="email" onclick="SendEmail()">Send emails</button>
         <c:forEach var="user" items="${entities}">
             <div class="form-group">
-                <h2><a href="SendEmail?id=${user.idUser}">${user.name}</a></h2>
+                <h2><input type="checkbox" value="${user.idUser}"><a href="SendEmail?id=${user.idUser}">${user.name}</a></h2>
                 <h4>Email: ${user.email}</h4>
                 <c:if test="${user.admin()}">
                     <h4>Role: Admin</h4>
@@ -65,3 +65,15 @@
 <%@ include file="resources/templates/footer.html" %>
 </body>
 </html>
+<script>
+    function SendEmail() {
+        var idStr = "";
+        var inputs = document.getElementsByTagName("input");
+        for(var i = 0; i < inputs.length; i++) {
+            if(inputs[i].type == "checkbox" && inputs[i].checked) {
+                idStr = idStr.concat(inputs[i].value).concat("_");
+            }
+        }
+        document.location.href = document.location.protocol + "//" + document.location.host + "/SendEmail?id=" + idStr;
+    }
+</script>

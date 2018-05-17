@@ -40,6 +40,15 @@ public class SendEmail extends HttpServlet {
         return null;
     }
 
+    List<UserEntity> getUsers(String str){
+        List<UserEntity> result = new ArrayList<>();
+        String[] idStrings = str.split("_");
+        for(String idStr : idStrings){
+            result.add(DAOFactory.getInstance().getUserDAO().get(Integer.parseInt(idStr)));
+        }
+        return result;
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Writer wr = response.getWriter();
@@ -50,12 +59,9 @@ public class SendEmail extends HttpServlet {
             return;
         }
 
-        int id = Integer.parseInt(request.getParameter("id"));
         EmailEntity entity = new EmailEntity();
 
-        List<UserEntity> users = new ArrayList<>();
-        users.add(DAOFactory.getInstance().getUserDAO().get(id));
-        entity.setRecipients(users);
+        entity.setRecipients(getUsers(request.getParameter("id")));
 
         request.setCharacterEncoding("UTF-8");
         JsonObject json = new Gson().fromJson(request.getReader(), JsonElement.class).getAsJsonObject();
@@ -79,9 +85,9 @@ public class SendEmail extends HttpServlet {
             return;
         }
 
-        int id = Integer.parseInt(request.getParameter("id"));
         request.setAttribute("user", AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken)));
-        request.setAttribute("id", id);
+        request.setAttribute("users", getUsers(request.getParameter("id")));
+        request.setAttribute("idString", request.getParameter("id"));
         request.getRequestDispatcher("SendEmail.jsp").forward(request, response);
     }
 

@@ -9,12 +9,12 @@
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <form class="form-horizontal" onsubmit="return false;">
-        <!--<p><h2><input type="text" name="name" id="name" placeholder="Course name" required value=""></h2></p>-->
+        <input type="text" readonly value="<c:forEach var="user" items="${users}">${user.email};</c:forEach>">
         <p><h2><input type="text" name="title" id="title" placeholder="Title" required value=""></h2></p>
         <p><textarea cols="100" rows="20" name="text" id="text" placeholder="Email text" required></textarea></p>
         <div class="input-group">
             <h2><button type="button" id="send" name="send" onclick="Send()">Send</button></h2>
-            <h2><button type="button" id="back" name="back" href="Back()">Back</button></h2>
+            <h2><button type="button" id="back" name="back" onclick="Back()">Back</button></h2>
         </div>
     </form>
 </div>
@@ -43,7 +43,7 @@
     }
 
     function Send(){
-        var locationURL = "/SendEmail?id=${id}";
+        var locationURL = "/SendEmail?id=${idString}";
         $.ajax({
             url: locationURL,
             type: "Post",
