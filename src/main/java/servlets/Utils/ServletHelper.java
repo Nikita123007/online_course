@@ -44,7 +44,7 @@ public class ServletHelper<T extends AbstractEntity> {
         if(action != ActionType.Create && !isCollection){
             String id = request.getParameter("id");
             if(id == null || id.equals(""))
-                return HttpServletResponse.SC_NOT_FOUND;
+                return HttpServletResponse.SC_BAD_REQUEST;
 
             entity = dao.get(Integer.parseInt(id));
             if (entity == null)
