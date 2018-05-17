@@ -65,6 +65,7 @@ public class MysqlUserDAO implements UserDAO {
 
     public UserEntity findUserByLogin(String login){
         try {
+            entityManager.clear();
             TypedQuery<UserEntity> tq = entityManager.createQuery("FROM UserEntity WHERE name=?", UserEntity.class);
             return tq.setParameter(0, login).getSingleResult();
         }catch (Exception ex) {
@@ -75,6 +76,7 @@ public class MysqlUserDAO implements UserDAO {
     @Override
     public UserEntity findUserByEmail(String email){
         try {
+            entityManager.clear();
             TypedQuery<UserEntity> tq = entityManager.createQuery("FROM UserEntity WHERE email=?", UserEntity.class);
             return tq.setParameter(0, email).getSingleResult();
         } catch (Exception ex) {
@@ -84,6 +86,7 @@ public class MysqlUserDAO implements UserDAO {
 
     public UserEntity findUserByAuthToken(String authToken) {
         try {
+            entityManager.clear();
             TypedQuery<UserEntity> tq = entityManager.createQuery("FROM UserEntity WHERE authToken=?", UserEntity.class);
             return tq.setParameter(0, authToken).getSingleResult();
         } catch (Exception ex) {
