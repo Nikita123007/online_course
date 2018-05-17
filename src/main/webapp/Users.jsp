@@ -48,7 +48,7 @@
         <h3><a href="EditCourse?add=true" class="design">Create</a></h3>
         <c:forEach var="user" items="${entities}">
             <div class="form-group">
-                <h2>${user.name}</h2>
+                <h2><a href="SendEmail?id=${user.idUser}">${user.name}</a></h2>
                 <h4>Email: ${user.email}</h4>
                 <c:if test="${user.admin()}">
                     <h4>Role: Admin</h4>

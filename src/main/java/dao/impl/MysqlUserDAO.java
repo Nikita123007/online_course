@@ -72,6 +72,16 @@ public class MysqlUserDAO implements UserDAO {
         }
     }
 
+    @Override
+    public UserEntity findUserByEmail(String email){
+        try {
+            TypedQuery<UserEntity> tq = entityManager.createQuery("FROM UserEntity WHERE email=?", UserEntity.class);
+            return tq.setParameter(0, email).getSingleResult();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
     public UserEntity findUserByAuthToken(String authToken) {
         try {
             TypedQuery<UserEntity> tq = entityManager.createQuery("FROM UserEntity WHERE authToken=?", UserEntity.class);
