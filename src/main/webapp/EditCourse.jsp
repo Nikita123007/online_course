@@ -58,6 +58,14 @@
                     <h2><button type="button" id="create" name="create" onclick="Create()">Create</button></h2>
                 </c:if>
             </div>
+            <hr>
+            <c:if test="${user.admin()}">
+                <div class="input-group">
+                    <h2><a class="design" href="/Document?id=${entity.idCourse}&type=pdf&name=Course">Generate pdf</a></h2>
+                    <h2><a class="design" href="/Document?id=${entity.idCourse}&type=csv&name=Course">Generate csv</a></h2>
+                    <h2><a class="design" href="/Document?id=${entity.idCourse}&type=excel&name=Course">Generate excel</a></h2>
+                </div>
+            </c:if>
         </form>
     </div>
     <%@ include file="resources/templates/footer.html" %>
