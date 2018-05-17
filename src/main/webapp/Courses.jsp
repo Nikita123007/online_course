@@ -23,24 +23,6 @@
         display: block;
         text-align: center;
     }
-    .design {
-        display: inline-block; /* Строчно-блочный элемент */
-        padding: 5px 20px; /* Добавляем поля */
-        text-decoration: none; /* Убираем подчёркивание у ссылки */
-        cursor: pointer; /* Курсор в виде руки */
-        background: #deefff; /* Фон для браузеров, не поддерживающих градиент */
-        /* Градиент */
-        background: -moz-linear-gradient(top, #deefff 0%, #98bede 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#deefff), color-stop(100%,#98bede));
-        background: -webkit-linear-gradient(top, #deefff 0%,#98bede 100%);
-        background: -o-linear-gradient(top, #deefff 0%,#98bede 100%);
-        background: -ms-linear-gradient(top, #deefff 0%,#98bede 100%);
-        background: linear-gradient(top, #deefff 0%,#98bede 100%);
-        border-radius: 10px; /* Скругляем уголки */
-        border: 1px solid #008; /* Добавляем синюю рамку */
-        font: 12px/1 Arial, sans-serif; /* Рубленый шрифт */
-        color: #2c539e; /* Цвет текста и ссылки */
-    }
 </style>
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
@@ -52,12 +34,14 @@
                 <h6>Price: ${course.price}</h6>
                 <h4>Level: ${course.level}</h4>
                 <h4>Description: ${course.description}</h4>
-                <c:if test="${course.checkRights(user, ActionType.Edit)}">
-                    <h3><a href="EditCourse?id=${course.idCourse}" class="design">Edit</a></h3>
-                </c:if>
-                <c:if test="${!course.isSubscribed(user.idUser)}">
-                    <h3><button type="button" id="subscribe" name="subscribe" onclick="SubscribeOnCourse(${course.idCourse})">Subscribe</button></h3><text class="price" id="price">${course.price}</text>
-                </c:if>
+                <div class="input-group">
+                    <c:if test="${course.checkRights(user, ActionType.Edit)}">
+                        <h3><a href="EditCourse?id=${course.idCourse}" class="design">Edit</a></h3>
+                    </c:if>
+                    <c:if test="${!course.isSubscribed(user.idUser)}">
+                        <h3><button type="button" id="subscribe" name="subscribe" onclick="SubscribeOnCourse(${course.idCourse})">Subscribe</button></h3>
+                    </c:if>
+                </div>
             </div>
             <hr>
         </c:forEach>

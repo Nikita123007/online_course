@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
-    <% String title = "Courses"; %>
+    <% String title = "Test run"; %>
     <%@ include file="resources/templates/headers.html" %>
     <script ty pe="text/javascript" src="resources/js/EditEntity.js"></script>
 <body>
@@ -15,7 +15,7 @@
             <h6><input type="checkbox" value="${answer.idTestAnswer}">${answer.text}</h6>
         </c:forEach>
     </c:forEach>
-    <input type="button" name="sendTest" id="sendTest" value="Send" onclick="Create()">
+    <input class="design" type="button" name="sendTest" id="sendTest" value="Send" onclick="Create()">
 </div>
 <%@ include file="resources/templates/footer.html" %>
 </body>

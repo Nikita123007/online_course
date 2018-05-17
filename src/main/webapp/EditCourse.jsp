@@ -14,7 +14,7 @@
             </div>
             <p><textarea cols="100" rows="20" name="description" id="description" placeholder="Course description" required>${entity.description}</textarea></p>
             <p><h2><input type="number" name="price" id="price" placeholder="Price" required value="${entity.price}"></h2></p>
-            <p><h2><input type="text" name="level" id="level" placeholder="Level" value="${entity.level}"></h2></p>
+            <p><h2><input type="text" name="level" id="level" placeholder="Level" value="${entity.level}"></h2></p><hr>
             <p><h2>Lections</h2></p>
             <table border="solid 1px black" id="lections">
                 <tr>
@@ -27,31 +27,37 @@
                         <td><a href="/LectionEdit?id=${lection.idLection}">${lection.name}</a></td>
                     </tr>
                 </c:forEach>
-            </table>
-            <h2><button type="button" id="deleteLections" name="deleteLections" onclick="DeleteEntityes('/LectionEdit','lections')">Delete selected lections</button></h2>
-            <h4><a id="addNewLection" name="addNewLection" href="/LectionEdit?add=true&parentId=${entity.idCourse}">Add new lection</a></h4><br>
+            </table><br>
+            <div class="input-group">
+                <h2><button type="button" id="deleteLections" name="deleteLections" onclick="DeleteEntityes('/LectionEdit','lections')">Delete selected lections</button></h2>
+                <h4><a class="design" id="addNewLection" name="addNewLection" href="/LectionEdit?add=true&parentId=${entity.idCourse}">Add new lection</a></h4><br>
+            </div><hr>
             <p><h2>Tests</h2></p>
             <table border="solid 1px black" id="tests">
                 <tr>
-                    <th></th>
+                    <th class="deletecheckbox"></th>
                     <th>Name</th>
                 </tr>
                 <c:forEach var="test" items="${entity.testsByIdCourse}">
                     <tr>
-                        <td><input type="checkbox" value="${test.idTest}"></td>
+                        <td class="deletecheckbox"><input type="checkbox" value="${test.idTest}"></td>
                         <td><a href="/TestEdit?id=${test.idTest}">${test.name}</a></td>
                     </tr>
                 </c:forEach>
-            </table>
-            <h2><button type="button" id="deleteTests" name="deleteTests" onclick="DeleteEntityes('/TestEdit','tests')">Delete selected tests</button></h2>
-            <h4><a id="addNewTest" name="addNewTest" href="/TestEdit?add=true&parentId=${entity.idCourse}">Add new test</a></h4><br></br></br>
-            <c:if test="${!add}">
-                <h2><button type="button" id="save" name="save" onclick="Save()">Save</button></h2>
-                <h2><button type="button" id="delete" name="delete" onclick="Delete()">Delete</button></h2>
-            </c:if>
-            <c:if test="${add}">
-                <h2><button type="button" id="create" name="create" onclick="Create()">Create</button></h2>
-            </c:if>
+            </table><br>
+            <div class="input-group">
+                <h2><button type="button" id="deleteTests" name="deleteTests" onclick="DeleteEntityes('/TestEdit','tests')">Delete selected tests</button></h2>
+                <h4><a class="design" id="addNewTest" name="addNewTest" href="/TestEdit?add=true&parentId=${entity.idCourse}">Add new test</a></h4><br></br></br>
+            </div><hr>
+            <div class="input-group">
+                <c:if test="${!add}">
+                    <h2><button type="button" id="save" name="save" onclick="Save()">Save</button></h2>
+                    <h2><button type="button" id="delete" name="delete" onclick="Delete()">Delete</button></h2>
+                </c:if>
+                <c:if test="${add}">
+                    <h2><button type="button" id="create" name="create" onclick="Create()">Create</button></h2>
+                </c:if>
+            </div>
         </form>
     </div>
     <%@ include file="resources/templates/footer.html" %>
