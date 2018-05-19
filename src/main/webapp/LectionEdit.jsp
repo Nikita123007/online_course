@@ -8,8 +8,10 @@
 <body>
     <%@ include file="resources/templates/header.html" %>
     <div class="container main">
+        <label for="name">Name</label>
         <p><h1><input type="text" placeholder="Lection name" name="name" id="name" value="${entity.name}" autofocus required pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h1></p>
-        <h6><textarea cols="100" rows="20" name="text" id="text" required>${entity.text}</textarea></h6>
+        <label for="text">Text</label>
+        <h6><textarea placeholder="Lection text" cols="100" rows="20" name="text" id="text" required>${entity.text}</textarea></h6>
         <div class="input-group">
             <c:if test="${!add}">
                 <h2><button type="button" id="save" name="save" onclick="Save()">Save</button></h2>

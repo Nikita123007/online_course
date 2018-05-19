@@ -9,11 +9,15 @@
     <%@ include file="resources/templates/header.html" %>
     <div class="container main">
         <form class="form-horizontal" onsubmit="return false;">
+            <label for="name">Name</label>
             <div class="input-group">
                 <p><h2><input type="text" name="name" id="name" placeholder="Course name" autofocus required value="${entity.name}" pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h2></p>
             </div>
+            <label for="description">Description</label>
             <p><textarea cols="100" rows="20" name="description" id="description" placeholder="Course description" required>${entity.description}</textarea></p>
+            <label for="price">Price</label>
             <p><h2><input type="number" name="price" id="price" placeholder="Price" required value="${entity.price}"></h2></p>
+            <label for="level">Level</label>
             <p><h2><input type="text" name="level" id="level" placeholder="Level" value="${entity.level}"></h2></p><hr>
             <p><h2>Lections</h2></p>
             <table border="solid 1px black" id="lections">

@@ -9,8 +9,11 @@
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <form class="form-horizontal" onsubmit="return false;">
-        <input disabled type="text" readonly value="<c:forEach var="user" items="${users}">${user.email};</c:forEach>">
+        <label for="emails">Emails</label>
+        <input disabled id="emails" type="text" readonly value="<c:forEach var="user" items="${users}">${user.email};</c:forEach>"><br>
+        <label for="title">Title</label>
         <p><h2><input type="text" name="title" id="title" placeholder="Title" autofocus required value=""></h2></p>
+        <label for="text">Text</label>
         <p><textarea cols="100" rows="20" name="text" id="text" placeholder="Email text" required></textarea></p>
         <div class="input-group">
             <h2><button type="button" id="send" name="send" onclick="Send()">Send</button></h2>
