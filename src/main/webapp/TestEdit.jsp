@@ -9,7 +9,7 @@
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <div class="input-group">
-        <p><h2><input type="text" name="name" id="name" placeholder="Test name" required value="${entity.name}"></h2></p>
+        <p><h2><input type="text" name="name" id="name" placeholder="Test name" autofocus required value="${entity.name}" pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h2></p>
     </div>
     <p><h2>Questions</h2></p>
     <table border="solid 1px black" id="questions">

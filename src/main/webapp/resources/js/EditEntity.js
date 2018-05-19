@@ -1,7 +1,13 @@
 function Validate(){
     var validForm = true;
     $('input').each(function() {
-        validForm = validForm && this.checkValidity();
+        var checkValid = this.checkValidity();
+        validForm = validForm && checkValid;
+        if (checkValid){
+            $(this).addClass('inputSuccess').removeClass('inputError');
+        }else{
+            $(this).addClass('inputError').removeClass('inputSuccess');
+        }
     });
     return validForm;
 }

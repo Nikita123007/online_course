@@ -29,7 +29,7 @@
                     <label for="login" class="col-sm-2 control-label">Login</label>
                     <div class="col-sm-10">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Login" name="login" id="login" autofocus required="required" pattern="[a-zA-ZА-Яа-я]{2,30}">
+                            <input type="text" class="form-control" placeholder="Login" name="login" id="login" autofocus required="required" pattern="[a-zA-ZА-Яа-я_0-9]{2,30}">
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                     <label for="password" class="col-sm-2 control-label">Password</label>
                     <div class="col-sm-10">
                         <div class="input-group">
-                            <input type="password" class="form-control" placeholder="Password" name="password" id="password" required="required" pattern="[a-zA-Z0-9_]{5,15}">
+                            <input type="password" class="form-control" placeholder="Password" name="password" id="password" required="required" pattern="[a-zA-ZА-Яа-я_0-9]{5,15}">
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                     <label for="passwordConfirm" class="col-sm-2 control-label">ConfirmPassword</label>
                     <div class="col-sm-10">
                         <div class="input-group">
-                            <input type="password" class="form-control" placeholder="ConfirmPassword" name="passwordConfirm" required="required" id="passwordConfirm" pattern="[a-zA-Z0-9_]{5,15}">
+                            <input type="password" class="form-control" placeholder="ConfirmPassword" name="passwordConfirm" required="required" id="passwordConfirm" pattern="[a-zA-ZА-Яа-я_0-9]{5,15}">
                         </div>
                     </div>
                 </div>

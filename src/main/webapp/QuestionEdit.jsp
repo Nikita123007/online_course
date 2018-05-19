@@ -9,7 +9,7 @@
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <div class="input-group">
-        <p><h2><input type="text" name="name" id="name" placeholder="Question name" required value="${entity.question}"></h2></p>
+        <p><h2><input type="text" name="name" id="name" placeholder="Question name" autofocus required value="${entity.question}" pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h2></p>
     </div>
     <p><h2>Answers</h2></p>
     <table border="solid 1px black" id="answers">
@@ -28,7 +28,7 @@
     </table><br>
     <div class="input-group">
         <h2><button type="button" id="deleteAnswers" name="deleteAnswers" onclick="DeleteEntities('/AnswerEdit','answers')">Delete selected questions</button></h2>
-        <h4><a id="addNewAnswer" name="addNewAnswer" href="/AnswerEdit?add=true&parentId=${entity.idTestQuestion}">Add new answer</a></h4><br>
+        <h4><a class="design" id="addNewAnswer" name="addNewAnswer" href="/AnswerEdit?add=true&parentId=${entity.idTestQuestion}">Add new answer</a></h4><br>
     </div><hr>
     <div class="input-group">
         <c:if test="${!add}">

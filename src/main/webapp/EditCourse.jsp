@@ -10,7 +10,7 @@
     <div class="container main">
         <form class="form-horizontal" onsubmit="return false;">
             <div class="input-group">
-                <p><h2><input type="text" name="name" id="name" placeholder="Course name" required value="${entity.name}"></h2></p>
+                <p><h2><input type="text" name="name" id="name" placeholder="Course name" autofocus required value="${entity.name}" pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h2></p>
             </div>
             <p><textarea cols="100" rows="20" name="description" id="description" placeholder="Course description" required>${entity.description}</textarea></p>
             <p><h2><input type="number" name="price" id="price" placeholder="Price" required value="${entity.price}"></h2></p>
