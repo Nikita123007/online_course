@@ -6,24 +6,6 @@
 <%@ include file="resources/templates/headers.html" %>
 <c:set var="servletName" value = "Courses?"/>
 <body>
-<style>
-    .courses{
-        margin: auto;
-        align-content: center;
-    }
-    .price{
-        float: right;
-        margin-right: 10%;
-    }
-    .form-group{
-        font-size: 24px;
-    }
-    .nameCourse{
-        font-size: 32px;
-        display: block;
-        text-align: center;
-    }
-</style>
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <div class="courses">

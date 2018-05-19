@@ -13,13 +13,6 @@
         margin-bottom: 80px;
     }
 </style>
-<style>
-    .form form {
-        width: 800px;
-        margin: 0 auto;
-        padding-top: 20px;
-    }
-</style>
 <div class="container main">
     <h2>Registration</h2>
     <div class="form">
@@ -37,7 +30,7 @@
                     <label for="email" class="col-sm-2 control-label">Email</label>
                     <div class="col-sm-10">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Email" name="email" id="email" required="required" pattern="\S+@[a-z]+\.[a-z]+">
+                            <input type="text" class="form-control" placeholder="email.email@gmail.com" name="email" id="email" required="required" pattern="\S+@[a-z]+\.[a-z]+">
                         </div>
                     </div>
                 </div>
@@ -53,7 +46,7 @@
                     <label for="passwordConfirm" class="col-sm-2 control-label">ConfirmPassword</label>
                     <div class="col-sm-10">
                         <div class="input-group">
-                            <input type="password" class="form-control" placeholder="ConfirmPassword" name="passwordConfirm" required="required" id="passwordConfirm" pattern="[a-zA-ZА-Яа-я_0-9]{5,15}">
+                            <input type="password" class="form-control" placeholder="Password" name="passwordConfirm" required="required" id="passwordConfirm" pattern="[a-zA-ZА-Яа-я_0-9]{5,15}">
                         </div>
                     </div>
                 </div>

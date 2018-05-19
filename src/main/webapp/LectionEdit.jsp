@@ -8,7 +8,7 @@
 <body>
     <%@ include file="resources/templates/header.html" %>
     <div class="container main">
-        <p><h1><input type="text" name="name" id="name" value="${entity.name}" autofocus required pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h1></p>
+        <p><h1><input type="text" placeholder="Lection name" name="name" id="name" value="${entity.name}" autofocus required pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h1></p>
         <h6><textarea cols="100" rows="20" name="text" id="text" required>${entity.text}</textarea></h6>
         <div class="input-group">
             <c:if test="${!add}">
