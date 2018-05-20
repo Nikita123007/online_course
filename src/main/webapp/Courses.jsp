@@ -11,7 +11,7 @@
     <div class="courses">
         <h3><a href="EditCourse?add=true" class="design">Create</a></h3>
         <c:forEach var="course" items="${entities}">
-            <div class="form-group">
+            <div class="form-group courseDiv">
                 <p><h2><a <c:if test="${course.isSubscribed(user.idUser)}">href="Course?id=${course.idCourse}"</c:if> class="nameCourse">${course.name}</a></h2></p>
                 <h6>Price: ${course.price}</h6>
                 <h4>Level: ${course.level}</h4>
