@@ -71,6 +71,7 @@ public class CompletedTestEntity {
     }
     public void setUser(UserEntity userObject) {
         if(! userObject.equals(this.userObject)){
+            this.user = userObject.getId();
             this.userObject = userObject;
             userObject.addCompletedTest(this);
         }
@@ -81,6 +82,7 @@ public class CompletedTestEntity {
     }
     public void setTest(TestEntity testObject) {
         if(! testObject.equals(this.testObject)){
+            this.test = testObject.getId();
             this.testObject = testObject;
             testObject.addCompletedTests(this);
         }
