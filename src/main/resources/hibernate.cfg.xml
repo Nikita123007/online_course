@@ -17,8 +17,8 @@
         <mapping class="hibernate.ReadedLectionEntity"/>
         <mapping class="hibernate.SubscriptionEntity"/>
         <mapping class="hibernate.TestEntity"/>
-        <mapping class="hibernate.TestAnswerEntity"/>
-        <mapping class="hibernate.TestQuestionEntity"/>
+        <mapping class="hibernate.AnswerEntity"/>
+        <mapping class="hibernate.QuestionEntity"/>
         <mapping class="hibernate.UserEntity"/>
         <mapping class="hibernate.VideoLinkEntity"/>
 

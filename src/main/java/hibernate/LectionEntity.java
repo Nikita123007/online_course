@@ -4,54 +4,52 @@ import common.ActionType;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "lection", schema = "online_course", catalog = "")
 public class LectionEntity implements AbstractEntity {
-    private int idLection;
-    private int course;
-    private String name;
-    private String text;
-    private CourseEntity courseByCourse;
-    private Collection<ReadedLectionEntity> readedLectionsByIdLection;
-    private Collection<VideoLinkEntity> videoLinksByIdLection;
-
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id_lection")
-    public int getIdLection() {
-        return idLection;
-    }
-
-    public void setIdLection(int idLection) {
-        this.idLection = idLection;
-    }
-
-    @Basic
-    @Column(name = "course")
-    public int getCourse() {
-        return course;
-    }
-
-    public void setCourse(int course) {
-        this.course = course;
-    }
+    private int id;
 
     @Basic
     @Column(name = "name")
+    private String name;
+
+    @Basic
+    @Column(name = "text")
+    private String text;
+
+    @ManyToOne
+    @JoinColumn(name = "course")
+    private CourseEntity course;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lection")
+    private Set<ReadedLectionEntity> readedLections = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lection")
+    private Set<VideoLinkEntity> videoLinks = new HashSet<>();
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int idLection) {
+        this.id = idLection;
+    }
+
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "text")
     public String getText() {
         return text;
     }
-
     public void setText(String text) {
         this.text = text;
     }
@@ -63,7 +61,7 @@ public class LectionEntity implements AbstractEntity {
 
         LectionEntity that = (LectionEntity) o;
 
-        if (idLection != that.idLection) return false;
+        if (id != that.id) return false;
         if (course != that.course) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (text != null ? !text.equals(that.text) : that.text != null) return false;
@@ -73,47 +71,48 @@ public class LectionEntity implements AbstractEntity {
 
     @Override
     public int hashCode() {
-        int result = idLection;
-        result = 31 * result + course;
+        int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (text != null ? text.hashCode() : 0);
         return result;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "course", referencedColumnName = "id_course", nullable = false, insertable = false, updatable = false)
-    public CourseEntity getCourseByCourse() {
-        return courseByCourse;
+    public CourseEntity getCourse() {
+        return course;
+    }
+    public void setCourse(CourseEntity course) {
+        if(! course.equals(this.course)){
+            this.course = course;
+            course.addLection(this);
+        }
     }
 
-    public void setCourseByCourse(CourseEntity courseByCourse) {
-        this.courseByCourse = courseByCourse;
+    public Set<ReadedLectionEntity> getReadedLections() {
+        return readedLections;
+    }
+    public void addReadedLection(ReadedLectionEntity readedLection) {
+        if(! this.readedLections.contains(readedLection)){
+            this.readedLections.add(readedLection);
+            readedLection.setLection(this);
+        }
     }
 
-    @OneToMany(mappedBy = "lectionByLection")
-    public Collection<ReadedLectionEntity> getReadedLectionsByIdLection() {
-        return readedLectionsByIdLection;
+    public Set<VideoLinkEntity> getVideoLinks() {
+        return videoLinks;
     }
-
-    public void setReadedLectionsByIdLection(Collection<ReadedLectionEntity> readedLectionsByIdLection) {
-        this.readedLectionsByIdLection = readedLectionsByIdLection;
-    }
-
-    @OneToMany(mappedBy = "lectionByLection")
-    public Collection<VideoLinkEntity> getVideoLinksByIdLection() {
-        return videoLinksByIdLection;
-    }
-
-    public void setVideoLinksByIdLection(Collection<VideoLinkEntity> videoLinksByIdLection) {
-        this.videoLinksByIdLection = videoLinksByIdLection;
+    public void addVideoLink(VideoLinkEntity videoLink) {
+        if(! this.videoLinks.contains(videoLink)) {
+            this.videoLinks.add(videoLink);
+            videoLink.setLection(this);
+        }
     }
 
     public boolean checkRights(UserEntity user, ActionType action){
         if(action == ActionType.Read || action == ActionType.Create){
-            return user != null && (getCourseByCourse().isSubscribed(user.getIdUser()) || user.admin());
+            return user != null && (getCourse().isSubscribed(user.getId()) || user.admin());
         }
         else{
-            return user != null && (getCourseByCourse().isAuthor(user.getIdUser()) || user.admin());
+            return user != null && (getCourse().isAuthor(user.getId()) || user.admin());
         }
     }
 }

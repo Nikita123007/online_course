@@ -26,7 +26,7 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
     @Override
     protected TestEntity createEntity(ServletHelper<TestEntity> helper){
         TestEntity result = new TestEntity();
-        result.setCourse(helper.getParentId());
+        result.setCourse((CourseEntity) getDao().getParent(helper.getParentId()));
         return result;
     }
 
@@ -37,7 +37,7 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
 
     @Override
     protected String getNextUrl(ServletHelper<TestEntity> helper, TestEntity entity){
-        return Pages.Page.EditCourse + "?id=" + entity.getCourse();
+        return Pages.Page.EditCourse + "?id=" + entity.getCourse().getId();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
             errorString = errorString + "Add test question.\n";
         }
 
-        for (TestQuestionEntity question : entity.getTestQuestionsByIdTest()) {
+        for (QuestionEntity question : entity.getTestQuestionsByIdTest()) {
             if(question.getQuestion().isEmpty()){
                 errorString = errorString + "Input question.\n";
             }
@@ -62,7 +62,7 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
                 break;
             }
 
-            for(TestAnswerEntity answer : question.getTestAnswersByIdTestQuestion()){
+            for(AnswerEntity answer : question.getTestAnswersByIdTestQuestion()){
                 if(answer.getText().isEmpty()){
                     errorString = errorString + "Input answer.\n";
                     break;

@@ -1,9 +1,7 @@
 package dao.impl;
 
-import dao.TestAnswerDAO;
-import dao.TestQuestionDAO;
-import hibernate.TestAnswerEntity;
-import hibernate.TestQuestionEntity;
+import dao.RoleDAO;
+import hibernate.RoleEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -13,15 +11,15 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 
 @Transactional
-public class MysqlTestAnswerDAO implements TestAnswerDAO {
+public class MysqlRoleDAO implements RoleDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public MysqlTestAnswerDAO(){
+    public MysqlRoleDAO(){
         entityManager = Persistence.createEntityManagerFactory("EntityManager").createEntityManager();
     }
 
-    public void add(TestAnswerEntity entity){
+    public void add(RoleEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.persist(entity);
@@ -32,7 +30,7 @@ public class MysqlTestAnswerDAO implements TestAnswerDAO {
         }
     }
 
-    public void remove(TestAnswerEntity entity){
+    public void remove(RoleEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.remove(entity);
@@ -43,7 +41,7 @@ public class MysqlTestAnswerDAO implements TestAnswerDAO {
         }
     }
 
-    public void merge(TestAnswerEntity entity){
+    public void merge(RoleEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.merge(entity);
@@ -54,16 +52,16 @@ public class MysqlTestAnswerDAO implements TestAnswerDAO {
         }
     }
 
-    public Collection<TestAnswerEntity> getAll(){
+    public Collection<RoleEntity> getAll(){
         entityManager.clear();
-        Query query = entityManager.createQuery("FROM TestAnswerEntity");
-        return (Collection<TestAnswerEntity>) query.getResultList();
+        Query query = entityManager.createQuery("FROM QuestionEntity");
+        return (Collection<RoleEntity>) query.getResultList();
     }
 
-    public TestAnswerEntity get(int id) {
+    public RoleEntity get(int id) {
         try {
             entityManager.clear();
-            return entityManager.find(TestAnswerEntity.class, id);
+            return entityManager.find(RoleEntity.class, id);
         } catch (Exception ex) {
             return null;
         }

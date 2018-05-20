@@ -74,7 +74,7 @@
 <script>
     function SuccessRequest(data) {
         var parseData = JSON.parse(data);
-        if (parseData.error == ""){
+        if (parseData.error === ""){
             document.location.href = document.location.protocol + "//" + document.location.host + parseData.nextPage;
         }else{
             parseData.nameErrors.forEach(function(item) {
@@ -93,7 +93,7 @@
         switch (id){
             case "passwordConfirm":
                 var passwordVal = $('#password').val();
-                if (value != passwordVal){
+                if (value !== passwordVal){
                     errors += "Confirm password and password do not match. ";
                 }
                 break;
@@ -110,11 +110,11 @@
                 var value = $(this).val();
                 var inputGroup = $(this).parents('.input-group');
                 var errors = CheckValidFormData(id, value);
-                if (this.checkValidity() && (errors == "")) {
+                if (this.checkValidity() && (errors === "")) {
                     inputGroup.addClass('inputSuccess').removeClass('inputError');
                 } else {
                     inputGroup.addClass('inputError').removeClass('inputSuccess');
-                    if (errors != ""){
+                    if (errors !== ""){
                         confirm(errors);
                     }
                     validForm = false;

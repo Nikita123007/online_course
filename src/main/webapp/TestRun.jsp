@@ -1,15 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored = "false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:useBean id="entity" scope="request" type="hibernate.TestEntity"/>
 
 <html>
     <% String title = "Test run"; %>
     <%@ include file="resources/templates/headers.html" %>
-    <script ty pe="text/javascript" src="resources/js/EditEntity.js"></script>
+    <script type="text/javascript" src="resources/js/EditEntity.js"></script>
 <body>
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <h2>${entity.name}</h2>
-    <c:forEach var="question" items="${entity.testQuestionsByIdTest}">
+    <c:forEach var="question" items="${entity.questions}">
         <h4>${question.question}</h4>
         <c:forEach var="answer" items="${question.testAnswersByIdTestQuestion}">
             <h6><input type="checkbox" value="${answer.idTestAnswer}">${answer.text}</h6>
@@ -22,7 +23,7 @@
 </html>
 <script>
     function GetData() {
-        var answers = new Array();
+        var answers = [];
 
         $('input:checked').each(function () {
             answers.push($(this).val());
@@ -34,6 +35,6 @@
     }
 
     function GetEditUrl(){
-        return "/TestRun?id=${entity.idTest}";
+        return "/TestRun?id=${entity.id}";
     }
 </script>

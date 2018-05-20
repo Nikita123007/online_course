@@ -5,29 +5,25 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import common.ActionType;
-import constants.Constants;
 import constants.Pages;
 import dao.DAOFactory;
 import dao.TestDAO;
+import hibernate.AnswerEntity;
 import hibernate.CompletedTestEntity;
-import hibernate.TestAnswerEntity;
+import hibernate.QuestionEntity;
 import hibernate.TestEntity;
-import hibernate.TestQuestionEntity;
 import response.ResponseData;
 import servlets.Utils.ServletHelper;
 import servlets.core.AbstractViewServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.time.DateTimeException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -64,15 +60,15 @@ public class TestRun extends AbstractViewServlet<TestEntity, TestDAO> {
             List<String> answersClient = getArrayString(json.get("answersCorrect").getAsJsonArray());
             int correct_answers = 0;
 
-            for (TestQuestionEntity question: helper.getEntity().getTestQuestionsByIdTest()) {
-                for (TestAnswerEntity answer: question.getTestAnswersByIdTestQuestion()) {
+            for (QuestionEntity question: helper.getEntity().getQuestions()) {
+                for (AnswerEntity answer: question.getAnswers()) {
                     if (answer.getIsCorrect() == 1){
-                        if (answersClient.indexOf(String.valueOf(answer.getIdTestAnswer())) < 0){
+                        if (answersClient.indexOf(String.valueOf(answer.getId())) < 0){
                             correct_answers--;
                             break;
                         }
                     }else {
-                        if (answersClient.indexOf(String.valueOf(answer.getIdTestAnswer())) >= 0){
+                        if (answersClient.indexOf(String.valueOf(answer.getId())) >= 0){
                             correct_answers--;
                             break;
                         }
@@ -84,8 +80,8 @@ public class TestRun extends AbstractViewServlet<TestEntity, TestDAO> {
             CompletedTestEntity entity = new CompletedTestEntity();
             entity.setCorrectAnswers(correct_answers);
             entity.setDate(new Timestamp((new Date()).getTime() - 1000000));
-            entity.setUser(helper.getUser().getIdUser());
-            entity.setTest(helper.getEntity().getIdTest());
+            entity.setUser(helper.getUser());
+            entity.setTest(helper.getEntity());
             DAOFactory.getInstance().getCompletedTestDAO().addCompletedTest(entity);
 
             request.setAttribute("user", helper.getUser());

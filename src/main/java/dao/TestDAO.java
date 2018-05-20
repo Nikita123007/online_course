@@ -12,7 +12,7 @@ public interface TestDAO extends AbstractEntityDAO<TestEntity> {
     }
     default Collection<TestEntity> getAllByParent(AbstractEntity parent) {
         if(parent instanceof CourseEntity){
-            return ((CourseEntity)parent).getTestsByIdCourse();
+            return ((CourseEntity)parent).getTests();
         }
         return null;
     }

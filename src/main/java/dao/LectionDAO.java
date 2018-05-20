@@ -3,7 +3,6 @@ package dao;
 import hibernate.AbstractEntity;
 import hibernate.CourseEntity;
 import hibernate.LectionEntity;
-import hibernate.TestEntity;
 
 import java.util.Collection;
 
@@ -13,7 +12,7 @@ public interface LectionDAO extends AbstractEntityDAO<LectionEntity> {
     }
     default Collection<LectionEntity> getAllByParent(AbstractEntity parent) {
         if(parent instanceof CourseEntity){
-            return ((CourseEntity)parent).getLectionsByIdCourse();
+            return ((CourseEntity)parent).getLections();
         }
         return null;
     }

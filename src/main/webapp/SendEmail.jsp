@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" isELIgnored = "false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:useBean id="users" scope="request" type="java.util.List<hibernate.UserEntity>"/>
+<jsp:useBean id="idString" scope="request" type="java.lang.String"/>
 
 <html>
 <% String title = "Send email"; %>
@@ -12,7 +14,7 @@
         <label for="emails">Emails</label>
         <input disabled id="emails" type="text" readonly value="<c:forEach var="user" items="${users}">${user.email};</c:forEach>"><br>
         <label for="title">Title</label>
-        <p><h2><input type="text" name="title" id="title" placeholder="Title" autofocus required value=""></h2></p>
+        <h2><input type="text" name="title" id="title" placeholder="Title" autofocus required value=""></h2>
         <label for="text">Text</label>
         <p><textarea cols="100" rows="20" name="text" id="text" placeholder="Email text" required></textarea></p>
         <div class="input-group">
@@ -32,7 +34,7 @@
 
     function SuccessChange(data) {
         var parseData = JSON.parse(data);
-        if (parseData.error == ""){
+        if (parseData.error === ""){
             document.location.href = document.location.protocol + "//" + document.location.host + parseData.nextPage
         }
         else{

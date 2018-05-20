@@ -7,49 +7,40 @@ import java.sql.Timestamp;
 @Table(name = "readed_lection", schema = "online_course", catalog = "")
 @IdClass(ReadedLectionEntityPK.class)
 public class ReadedLectionEntity {
-    private int user;
-    private int lection;
-    private Timestamp firstView;
-    private Timestamp lastView;
-    private UserEntity userByUser;
-    private LectionEntity lectionByLection;
-
     @Id
     @Column(name = "user")
-    public int getUser() {
-        return user;
-    }
-
-    public void setUser(int user) {
-        this.user = user;
-    }
+    private int user;
 
     @Id
     @Column(name = "lection")
-    public int getLection() {
-        return lection;
-    }
-
-    public void setLection(int lection) {
-        this.lection = lection;
-    }
+    private int lection;
 
     @Basic
     @Column(name = "first_view")
+    private Timestamp firstView;
+
+    @Basic
+    @Column(name = "last_view")
+    private Timestamp lastView;
+
+    @ManyToOne
+    @JoinColumn(name = "user", referencedColumnName = "id_user", insertable = false, updatable = false)
+    private UserEntity userObject;
+
+    @ManyToOne
+    @JoinColumn(name = "lection", referencedColumnName = "id_lection", insertable = false, updatable = false)
+    private LectionEntity lectionObject;
+
     public Timestamp getFirstView() {
         return firstView;
     }
-
     public void setFirstView(Timestamp firstView) {
         this.firstView = firstView;
     }
 
-    @Basic
-    @Column(name = "last_view")
     public Timestamp getLastView() {
         return lastView;
     }
-
     public void setLastView(Timestamp lastView) {
         this.lastView = lastView;
     }
@@ -61,8 +52,6 @@ public class ReadedLectionEntity {
 
         ReadedLectionEntity that = (ReadedLectionEntity) o;
 
-        if (user != that.user) return false;
-        if (lection != that.lection) return false;
         if (firstView != null ? !firstView.equals(that.firstView) : that.firstView != null) return false;
         if (lastView != null ? !lastView.equals(that.lastView) : that.lastView != null) return false;
 
@@ -71,30 +60,28 @@ public class ReadedLectionEntity {
 
     @Override
     public int hashCode() {
-        int result = user;
-        result = 31 * result + lection;
-        result = 31 * result + (firstView != null ? firstView.hashCode() : 0);
+        int result = (firstView != null ? firstView.hashCode() : 0);
         result = 31 * result + (lastView != null ? lastView.hashCode() : 0);
         return result;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user", referencedColumnName = "id_user", nullable = false, insertable = false, updatable = false)
-    public UserEntity getUserByUser() {
-        return userByUser;
+    public UserEntity getUser() {
+        return userObject;
+    }
+    public void setUser(UserEntity userObject) {
+        if(! userObject.equals(this.userObject)){
+            this.userObject = userObject;
+            userObject.addReadedLection(this);
+        }
     }
 
-    public void setUserByUser(UserEntity userByUser) {
-        this.userByUser = userByUser;
+    public LectionEntity getLection() {
+        return lectionObject;
     }
-
-    @ManyToOne
-    @JoinColumn(name = "lection", referencedColumnName = "id_lection", nullable = false, insertable = false, updatable = false)
-    public LectionEntity getLectionByLection() {
-        return lectionByLection;
-    }
-
-    public void setLectionByLection(LectionEntity lectionByLection) {
-        this.lectionByLection = lectionByLection;
+    public void setLection(LectionEntity lectionObject) {
+        if(! lectionObject.equals(this.lectionObject)){
+            this.lectionObject = lectionObject;
+            lectionObject.addReadedLection(this);
+        }
     }
 }

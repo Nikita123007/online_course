@@ -1,31 +1,37 @@
 package hibernate;
 
+import common.ActionType;
+
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "role", schema = "online_course", catalog = "")
-public class RoleEntity {
-    private int idRole;
-    private String name;
-    private Collection<UserEntity> usersByIdRole;
-
+public class RoleEntity implements AbstractEntity {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id_role")
-    public int getIdRole() {
-        return idRole;
-    }
-
-    public void setIdRole(int idRole) {
-        this.idRole = idRole;
-    }
+    private int id;
 
     @Basic
     @Column(name = "name")
+    private String name;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
+    private Set<UserEntity> users = new HashSet<>();
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int idRole) {
+        this.id = idRole;
+    }
+
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -37,7 +43,7 @@ public class RoleEntity {
 
         RoleEntity that = (RoleEntity) o;
 
-        if (idRole != that.idRole) return false;
+        if (id != that.id) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
         return true;
@@ -45,17 +51,23 @@ public class RoleEntity {
 
     @Override
     public int hashCode() {
-        int result = idRole;
+        int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
 
-    @OneToMany(mappedBy = "roleByRole")
-    public Collection<UserEntity> getUsersByIdRole() {
-        return usersByIdRole;
+
+    public Set<UserEntity> getUsers() {
+        return users;
+    }
+    public void addUser(UserEntity user) {
+        if(! this.users.contains(user)){
+            this.users.add(user);
+            user.setRole(this);
+        }
     }
 
-    public void setUsersByIdRole(Collection<UserEntity> usersByIdRole) {
-        this.usersByIdRole = usersByIdRole;
+    public boolean checkRights(UserEntity user, ActionType action){
+        return action == ActionType.Read;
     }
 }

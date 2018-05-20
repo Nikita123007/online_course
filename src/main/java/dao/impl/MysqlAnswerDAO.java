@@ -1,9 +1,7 @@
 package dao.impl;
 
-import dao.TestDAO;
-import dao.TestQuestionDAO;
-import hibernate.TestEntity;
-import hibernate.TestQuestionEntity;
+import dao.AnswerDAO;
+import hibernate.AnswerEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -13,15 +11,15 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 
 @Transactional
-public class MysqlTestQuestionDAO implements TestQuestionDAO {
+public class MysqlAnswerDAO implements AnswerDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public MysqlTestQuestionDAO(){
+    public MysqlAnswerDAO(){
         entityManager = Persistence.createEntityManagerFactory("EntityManager").createEntityManager();
     }
 
-    public void add(TestQuestionEntity entity){
+    public void add(AnswerEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.persist(entity);
@@ -32,7 +30,7 @@ public class MysqlTestQuestionDAO implements TestQuestionDAO {
         }
     }
 
-    public void remove(TestQuestionEntity entity){
+    public void remove(AnswerEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.remove(entity);
@@ -43,7 +41,7 @@ public class MysqlTestQuestionDAO implements TestQuestionDAO {
         }
     }
 
-    public void merge(TestQuestionEntity entity){
+    public void merge(AnswerEntity entity){
         entityManager.getTransaction().begin();
         try{
             entityManager.merge(entity);
@@ -54,16 +52,16 @@ public class MysqlTestQuestionDAO implements TestQuestionDAO {
         }
     }
 
-    public Collection<TestQuestionEntity> getAll(){
+    public Collection<AnswerEntity> getAll(){
         entityManager.clear();
-        Query query = entityManager.createQuery("FROM TestQuestionEntity");
-        return (Collection<TestQuestionEntity>) query.getResultList();
+        Query query = entityManager.createQuery("FROM AnswerEntity");
+        return (Collection<AnswerEntity>) query.getResultList();
     }
 
-    public TestQuestionEntity get(int id) {
+    public AnswerEntity get(int id) {
         try {
             entityManager.clear();
-            return entityManager.find(TestQuestionEntity.class, id);
+            return entityManager.find(AnswerEntity.class, id);
         } catch (Exception ex) {
             return null;
         }

@@ -4,7 +4,7 @@
 <html>
     <% String title = "Login"; %>
     <%@ include file="resources/templates/headers.html" %>
-    <script ty pe="text/javascript" src="resources/js/EditEntity.js"></script>
+    <script type="text/javascript" src="resources/js/EditEntity.js"></script>
 <body>
 <style>
     .form form {

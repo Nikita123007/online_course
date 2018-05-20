@@ -5,6 +5,7 @@ import common.ActionType;
 import constants.Pages;
 import dao.DAOFactory;
 import dao.LectionDAO;
+import hibernate.CourseEntity;
 import hibernate.LectionEntity;
 import response.ResponseData;
 import servlets.Utils.ServletHelper;
@@ -24,7 +25,7 @@ public class LectionEdit extends AbstractEditServlet<LectionEntity, LectionDAO> 
     @Override
     protected LectionEntity createEntity(ServletHelper<LectionEntity> helper){
         LectionEntity result = new LectionEntity();
-        result.setCourse(helper.getParentId());
+        result.setCourse((CourseEntity) getDao().getParent(helper.getParentId()));
         return result;
     }
 
@@ -36,7 +37,7 @@ public class LectionEdit extends AbstractEditServlet<LectionEntity, LectionDAO> 
 
     @Override
     protected String getNextUrl(ServletHelper<LectionEntity> helper, LectionEntity entity){
-        return Pages.Page.EditCourse + "?id=" + entity.getCourse();
+        return Pages.Page.EditCourse + "?id=" + entity.getCourse().getId();
     }
 
     @Override

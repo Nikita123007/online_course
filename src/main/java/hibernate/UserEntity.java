@@ -5,82 +5,88 @@ import constants.Roles;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user", schema = "online_course", catalog = "")
 public class UserEntity implements AbstractEntity {
-    private int idUser;
-    private String name;
-    private String email;
-    private String passwordHash;
-    private String authToken;
-    private int role;
-    private RoleEntity roleByRole;
-    private Collection<CommentEntity> commentsByIdUser;
-    private Collection<CompletedTestEntity> completedTestsByIdUser;
-    private Collection<CourseEntity> coursesByIdUser;
-    private Collection<DiplomaEntity> diplomasByIdUser;
-    private Collection<ReadedLectionEntity> readedLectionsByIdUser;
-    private Collection<SubscriptionEntity> subscriptionsByIdUser;
-
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id_user")
-    public int getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
-    }
+    private int id;
 
     @Basic
     @Column(name = "name")
+    private String name;
+
+    @Basic
+    @Column(name = "email")
+    private String email;
+
+    @Basic
+    @Column(name = "password_hash")
+    private String passwordHash;
+
+    @Basic
+    @Column(name = "auth_token")
+    private String authToken;
+
+    @ManyToOne
+    @JoinColumn(name = "role")
+    private RoleEntity role;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private Set<CommentEntity> comments = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<CompletedTestEntity> completedTests = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private Set<CourseEntity> createdCourses = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<DiplomaEntity> diplomas = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<ReadedLectionEntity> readedLections = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<SubscriptionEntity> subscriptions = new HashSet<>();
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int idUser) {
+        this.id = idUser;
+    }
+
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "email")
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
 
-    @Basic
-    @Column(name = "password_hash")
     public String getPasswordHash() {
         return passwordHash;
     }
-
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
     }
 
-    @Basic
-    @Column(name = "auth_token")
     public String getAuthToken() {
         return authToken;
     }
-
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
-    }
-
-    @Basic
-    @Column(name = "role")
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
     }
 
     @Override
@@ -90,7 +96,7 @@ public class UserEntity implements AbstractEntity {
 
         UserEntity that = (UserEntity) o;
 
-        if (idUser != that.idUser) return false;
+        if (id != that.id) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (passwordHash != null ? !passwordHash.equals(that.passwordHash) : that.passwordHash != null) return false;
@@ -100,79 +106,85 @@ public class UserEntity implements AbstractEntity {
 
     @Override
     public int hashCode() {
-        int result = idUser;
+        int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (passwordHash != null ? passwordHash.hashCode() : 0);
         return result;
     }
 
-    @OneToMany(mappedBy = "userByAuthor")
-    public Collection<CommentEntity> getCommentsByIdUser() {
-        return commentsByIdUser;
+    public Set<CommentEntity> getComments() {
+        return comments;
+    }
+    public void addComment(CommentEntity comment) {
+        if(! this.comments.contains(comment)){
+            this.comments.add(comment);
+            comment.setAuthor(this);
+        }
     }
 
-    public void setCommentsByIdUser(Collection<CommentEntity> commentsByIdUser) {
-        this.commentsByIdUser = commentsByIdUser;
+    public Set<CompletedTestEntity> getCompletedTests() {
+        return completedTests;
+    }
+    public void addCompletedTest(CompletedTestEntity completedTest) {
+        if(! this.completedTests.contains(completedTest)){
+            this.completedTests.add(completedTest);
+            completedTest.setUser(this);
+        }
     }
 
-    @OneToMany(mappedBy = "userByUser")
-    public Collection<CompletedTestEntity> getCompletedTestsByIdUser() {
-        return completedTestsByIdUser;
+    public Set<CourseEntity> getCreatedCourses() {
+        return createdCourses;
+    }
+    public void addCreatedCourse(CourseEntity createdCourse) {
+        if(! this.createdCourses.contains(createdCourse)){
+            this.createdCourses.add(createdCourse);
+            createdCourse.setAuthor(this);
+        }
     }
 
-    public void setCompletedTestsByIdUser(Collection<CompletedTestEntity> completedTestsByIdUser) {
-        this.completedTestsByIdUser = completedTestsByIdUser;
+    public Set<DiplomaEntity> getDiplomas() {
+        return diplomas;
+    }
+    public void addDiploma(DiplomaEntity diploma) {
+        if(! this.diplomas.contains(diploma)){
+            this.diplomas.add(diploma);
+            diploma.setUser(this);
+        }
     }
 
-    @OneToMany(mappedBy = "userByAuthor")
-    public Collection<CourseEntity> getCoursesByIdUser() {
-        return coursesByIdUser;
+    public Set<ReadedLectionEntity> getReadedLections() {
+        return readedLections;
+    }
+    public void addReadedLection(ReadedLectionEntity readedLection) {
+        if(! this.readedLections.contains(readedLection)){
+            this.readedLections.add(readedLection);
+            readedLection.setUser(this);
+        }
     }
 
-    public void setCoursesByIdUser(Collection<CourseEntity> coursesByIdUser) {
-        this.coursesByIdUser = coursesByIdUser;
+    public Set<SubscriptionEntity> getSubscriptions() {
+        return subscriptions;
+    }
+    public void addSubscription(SubscriptionEntity subscription) {
+        if(! this.subscriptions.contains(subscription)){
+            this.subscriptions.add(subscription);
+            subscription.setUser(this);
+        }
     }
 
-    @OneToMany(mappedBy = "userByUser")
-    public Collection<DiplomaEntity> getDiplomasByIdUser() {
-        return diplomasByIdUser;
+    public RoleEntity getRole() {
+        return role;
     }
-
-    public void setDiplomasByIdUser(Collection<DiplomaEntity> diplomasByIdUser) {
-        this.diplomasByIdUser = diplomasByIdUser;
-    }
-
-    @OneToMany(mappedBy = "userByUser")
-    public Collection<ReadedLectionEntity> getReadedLectionsByIdUser() {
-        return readedLectionsByIdUser;
-    }
-
-    public void setReadedLectionsByIdUser(Collection<ReadedLectionEntity> readedLectionsByIdUser) {
-        this.readedLectionsByIdUser = readedLectionsByIdUser;
-    }
-
-    @OneToMany(mappedBy = "userByUser")
-    public Collection<SubscriptionEntity> getSubscriptionsByIdUser() {
-        return subscriptionsByIdUser;
-    }
-
-    public void setSubscriptionsByIdUser(Collection<SubscriptionEntity> subscriptionsByIdUser) {
-        this.subscriptionsByIdUser = subscriptionsByIdUser;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "role", referencedColumnName = "id_role", nullable = false, insertable = false, updatable = false)
-    public RoleEntity getRoleByRole() {
-        return roleByRole;
-    }
-
-    public void setRoleByRole(RoleEntity roleByRole) {
-        this.roleByRole = roleByRole;
+    public void setRole(RoleEntity role) {
+        if(! role.equals(this.role)){
+            this.role = role;
+            role.addUser(this);
+        }
     }
 
     public boolean admin(){
-        return getRole() == Roles.Role.Admin;
+        return getRole().getId() == Roles.Role.Admin;
     }
 
     public boolean checkRights(UserEntity user, ActionType action){

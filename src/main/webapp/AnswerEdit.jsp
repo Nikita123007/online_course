@@ -1,16 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored = "false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:useBean id="entity" scope="request" type="hibernate.AnswerEntity"/>
+<jsp:useBean id="add" scope="request" type="java.lang.Boolean"/>
 
 <html>
     <% String title = "Answer edit"; %>
     <%@ include file="resources/templates/headers.html" %>
-    <script ty pe="text/javascript" src="resources/js/EditEntity.js"></script>
+    <script type="text/javascript" src="resources/js/EditEntity.js"></script>
 <body>
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <label for="name">Answer</label>
     <div class="input-group">
-        <p><h2><input type="text" name="name" id="name" placeholder="Answer" autofocus required value="${entity.text}" pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h2></p>
+        <h2><input type="text" name="name" id="name" placeholder="Answer" autofocus required value="${entity.text}" pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h2>
     </div><br>
     <div class="input-group">
         <h4><input name="answer" id="correct" value="true" type="radio" <c:if test="${entity.isCorrect == 1}">checked</c:if>><label for="correct">Correct</label></h4>
@@ -38,6 +40,6 @@
     }
 
     function GetEditUrl(){
-        return "/AnswerEdit?parentId=${entity.testQuestion}&id=${entity.idTestAnswer}";
+        return "/AnswerEdit?parentId=${entity.question.id}&id=${entity.id}";
     }
 </script>

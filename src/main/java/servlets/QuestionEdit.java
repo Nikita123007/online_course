@@ -1,52 +1,55 @@
 package servlets;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import common.ActionType;
 import constants.Pages;
 import dao.DAOFactory;
-import dao.TestDAO;
-import dao.TestQuestionDAO;
+import dao.QuestionDAO;
 import hibernate.*;
-import response.ResponseData;
 import servlets.Utils.ServletHelper;
 import servlets.core.AbstractEditServlet;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet("/QuestionEdit")
-public class QuestionEdit extends AbstractEditServlet<TestQuestionEntity, TestQuestionDAO> {
+public class QuestionEdit extends AbstractEditServlet<QuestionEntity, QuestionDAO> {
 
-    protected TestQuestionDAO getDao(){
-        return DAOFactory.getInstance().getTestQuestionDAO();
+    protected QuestionDAO getDao(){
+        return DAOFactory.getInstance().getQuestionDAO();
     }
 
     @Override
-    protected TestQuestionEntity createEntity(ServletHelper<TestQuestionEntity> helper){
-        TestQuestionEntity result = new TestQuestionEntity();
-        result.setTest(helper.getParentId());
+    protected QuestionEntity createEntity(ServletHelper<QuestionEntity> helper){
+        QuestionEntity result = new QuestionEntity();
+        result.setTest(DAOFactory.getInstance().getTestDAO().get(helper.getParentId()));
         return result;
     }
 
     @Override
-    protected void parseEntity(ServletHelper<TestQuestionEntity> helper, TestQuestionEntity entity, JsonObject json){
+    protected void parseEntity(ServletHelper<QuestionEntity> helper, QuestionEntity entity, JsonObject json){
         entity.setQuestion(json.get("name").getAsString());
     }
 
     @Override
-    protected String getNextUrl(ServletHelper<TestQuestionEntity> helper, TestQuestionEntity entity){
-        return Pages.Page.TestEdit + "?id=" + entity.getTest();
+    protected String getNextUrl(ServletHelper<QuestionEntity> helper, QuestionEntity entity){
+        return Pages.Page.TestEdit + "?id=" + entity.getTest().getId();
     }
 
     @Override
-    protected String getErrorString(ServletHelper<TestQuestionEntity> helper, TestQuestionEntity entity){
+    protected String getErrorString(ServletHelper<QuestionEntity> helper, QuestionEntity entity){
         if (entity.getQuestion().length() == 0)
             return  "Input test name.\n";
         else
             return "";
+    }
+
+    @Override
+    protected void setUpdateAttributes(ServletHelper<QuestionEntity> helper){
+        helper.getRequest().setAttribute("add", false);
+    }
+
+    @Override
+    protected void setAddAttributes(ServletHelper<QuestionEntity> helper){
+        helper.getRequest().setAttribute("add", true);
+        helper.getRequest().setAttribute("parentId", helper.getRequest().getParameter("parentId"));
     }
 
     @Override

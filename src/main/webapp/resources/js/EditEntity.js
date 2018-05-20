@@ -14,7 +14,7 @@ function Validate(){
 
 function SuccessChange(data) {
     var parseData = JSON.parse(data);
-    if (parseData.error == ""){
+    if (parseData.error === ""){
         document.location.href = document.location.protocol + "//" + document.location.host + parseData.nextPage
     }
     else{
@@ -67,7 +67,7 @@ function DeleteEntities(url, item) {
 function DeleteNextEntity(data) {
     var entity = $('#'+itemGlobal+' input:checked:first');
 
-    if (entity.val() != undefined){
+    if (entity.val() !== undefined){
         entity.prop('checked', false);
         DeleteEntity(entity.val());
     }else {

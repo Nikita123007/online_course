@@ -78,7 +78,7 @@ public class Registration extends HttpServlet {
             user.setEmail(email);
             user.setAuthToken(AuthToken.GetToken());
             response.addCookie(new Cookie(CookieAuthToken, user.getAuthToken()));
-            user.setRole(Role.User);
+            user.setRole(DAOFactory.getInstance().getRoleDAO().get(Role.User));
             DAOFactory.getInstance().getUserDAO().add(user);
             responseData = new ResponseData("", Page.Courses);
         }

@@ -53,7 +53,7 @@ public class Courses extends AbstractViewServlet<CourseEntity, CourseDAO> {
         }
 
         CourseEntity course = DAOFactory.getInstance().getCourseDAO().get(idCourse);
-        if (course == null || course.isSubscribed(user.getIdUser())) {
+        if (course == null || course.isSubscribed(user.getId())) {
             ResponseData responseData = new ResponseData("", Pages.Page.Courses);
             wr.write(responseData.toJson());
             wr.close();
@@ -61,10 +61,10 @@ public class Courses extends AbstractViewServlet<CourseEntity, CourseDAO> {
         }
 
         SubscriptionEntity subscription = new SubscriptionEntity();
-        subscription.setCourseByCourse(DAOFactory.getInstance().getCourseDAO().get(idCourse));
-        subscription.setUserByUser(user);
+        subscription.setCourse(DAOFactory.getInstance().getCourseDAO().get(idCourse));
+        subscription.setUser(user);
         subscription.setDate(new Timestamp(new Date().getTime()));
-        user.getSubscriptionsByIdUser().add(subscription);
+        user.getSubscriptions().add(subscription);
         DAOFactory.getInstance().getSubscriptionDAO().add(subscription);
 
         ResponseData responseData = new ResponseData("", Pages.Page.Courses);

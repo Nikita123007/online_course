@@ -54,9 +54,7 @@ public class ServletHelper<T extends AbstractEntity> {
                 return HttpServletResponse.SC_FORBIDDEN;
         }
         else{
-            String parentIdStr = request.getParameter("parentId");
-            if(parentIdStr != null && !parentIdStr.equals(""))
-                parentId = Integer.parseInt(parentIdStr);
+            parentId = Utils.getInteger(request.getParameter("parentId"));
             if(parentId != null && !dao.getParent(parentId).checkRights(user, action))
                 return HttpServletResponse.SC_FORBIDDEN;
         }

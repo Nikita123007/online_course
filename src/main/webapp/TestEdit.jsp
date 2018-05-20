@@ -1,33 +1,35 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored = "false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:useBean id="entity" scope="request" type="hibernate.TestEntity"/>
+<jsp:useBean id="add" scope="request" type="java.lang.Boolean"/>
 
 <html>
     <% String title = "Test edit"; %>
     <%@ include file="resources/templates/headers.html" %>
-    <script ty pe="text/javascript" src="resources/js/EditEntity.js"></script>
+    <script type="text/javascript" src="resources/js/EditEntity.js"></script>
 <body>
 <%@ include file="resources/templates/header.html" %>
 <div class="container main">
     <label for="name">Name</label>
     <div class="input-group">
-        <p><h2><input type="text" name="name" id="name" placeholder="Test" autofocus required value="${entity.name}" pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h2></p>
+        <h2><input type="text" name="name" id="name" placeholder="Test" autofocus required value="${entity.name}" pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h2>
     </div>
-    <p><h2>Questions</h2></p>
+    <h2>Questions</h2>
     <table border="solid 1px black" id="questions">
         <tr>
             <th class="deletecheckbox"></th>
             <th>Name</th>
         </tr>
-        <c:forEach var="question" items="${entity.testQuestionsByIdTest}">
+        <c:forEach var="question" items="${entity.questions}">
             <tr>
-                <td class="deletecheckbox"><input type="checkbox" value="${question.idTestQuestion}"></td>
-                <td><a href="/QuestionEdit?id=${question.idTestQuestion}">${question.question}</a></td>
+                <td class="deletecheckbox"><input type="checkbox" value="${question.id}"></td>
+                <td><a href="QuestionEdit?id=${question.id}">${question.question}</a></td>
             </tr>
         </c:forEach>
     </table><br>
     <div class="input-group">
         <h2><button type="button" id="deleteQuestions" name="deleteQuestions" onclick="DeleteEntities('/QuestionEdit','questions')">Delete selected questions</button></h2>
-        <h4><a class="design" id="addNewQuestion" name="addNewQuestion" href="/QuestionEdit?add=true&parentId=${entity.idTest}">Add new question</a></h4><br>
+        <h4><a class="design" id="addNewQuestion" name="addNewQuestion" href="QuestionEdit?add=true&parentId=${entity.id}">Add new question</a></h4><br>
     </div><hr>
     <div class="input-group">
         <c:if test="${!add}">
@@ -50,6 +52,6 @@
     }
 
     function GetEditUrl(){
-        return "/TestEdit?parentId=${entity.course}&id=${entity.idTest}";
+        return "/TestEdit?parentId=${entity.course.id}&id=${entity.id}";
     }
 </script>

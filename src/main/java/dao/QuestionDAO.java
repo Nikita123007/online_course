@@ -1,19 +1,18 @@
 package dao;
 
 import hibernate.AbstractEntity;
-import hibernate.CourseEntity;
+import hibernate.QuestionEntity;
 import hibernate.TestEntity;
-import hibernate.TestQuestionEntity;
 
 import java.util.Collection;
 
-public interface TestQuestionDAO extends AbstractEntityDAO<TestQuestionEntity> {
+public interface QuestionDAO extends AbstractEntityDAO<QuestionEntity> {
     default AbstractEntity getParent(int parentId){
         return DAOFactory.getInstance().getTestDAO().get(parentId);
     }
-    default Collection<TestQuestionEntity> getAllByParent(AbstractEntity parent) {
+    default Collection<QuestionEntity> getAllByParent(AbstractEntity parent) {
         if(parent instanceof TestEntity){
-            return ((TestEntity)parent).getTestQuestionsByIdTest();
+            return ((TestEntity)parent).getQuestions();
         }
         return null;
     }

@@ -7,49 +7,41 @@ import java.sql.Timestamp;
 @Table(name = "completed_test", schema = "online_course", catalog = "")
 @IdClass(CompletedTestEntityPK.class)
 public class CompletedTestEntity {
-    private int user;
-    private int test;
-    private int correctAnswers;
-    private Timestamp date;
-    private UserEntity userByUser;
-    private TestEntity testByTest;
-
     @Id
     @Column(name = "user")
-    public int getUser() {
-        return user;
-    }
-
-    public void setUser(int user) {
-        this.user = user;
-    }
+    private int user;
 
     @Id
     @Column(name = "test")
-    public int getTest() {
-        return test;
-    }
-
-    public void setTest(int test) {
-        this.test = test;
-    }
+    private int test;
 
     @Basic
     @Column(name = "correct_answers")
+    private int correctAnswers;
+
+    @Basic
+    @Column(name = "date")
+    private Timestamp date;
+
+    @ManyToOne
+    @JoinColumn(name = "user", referencedColumnName = "id_user", insertable = false, updatable = false)
+    private UserEntity userObject;
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "test", referencedColumnName = "id_test", insertable = false, updatable = false)
+    private TestEntity testObject;
+
     public int getCorrectAnswers() {
         return correctAnswers;
     }
-
     public void setCorrectAnswers(int correctAnswers) {
         this.correctAnswers = correctAnswers;
     }
 
-    @Basic
-    @Column(name = "date")
     public Timestamp getDate() {
         return date;
     }
-
     public void setDate(Timestamp date) {
         this.date = date;
     }
@@ -61,8 +53,6 @@ public class CompletedTestEntity {
 
         CompletedTestEntity that = (CompletedTestEntity) o;
 
-        if (user != that.user) return false;
-        if (test != that.test) return false;
         if (correctAnswers != that.correctAnswers) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
@@ -71,30 +61,28 @@ public class CompletedTestEntity {
 
     @Override
     public int hashCode() {
-        int result = user;
-        result = 31 * result + test;
-        result = 31 * result + correctAnswers;
+        int result = correctAnswers;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user", referencedColumnName = "id_user", nullable = false, insertable = false, updatable = false)
-    public UserEntity getUserByUser() {
-        return userByUser;
+    public UserEntity getUser() {
+        return userObject;
+    }
+    public void setUser(UserEntity userObject) {
+        if(! userObject.equals(this.userObject)){
+            this.userObject = userObject;
+            userObject.addCompletedTest(this);
+        }
     }
 
-    public void setUserByUser(UserEntity userByUser) {
-        this.userByUser = userByUser;
+    public TestEntity getTest() {
+        return testObject;
     }
-
-    @ManyToOne
-    @JoinColumn(name = "test", referencedColumnName = "id_test", nullable = false, insertable = false, updatable = false)
-    public TestEntity getTestByTest() {
-        return testByTest;
-    }
-
-    public void setTestByTest(TestEntity testByTest) {
-        this.testByTest = testByTest;
+    public void setTest(TestEntity testObject) {
+        if(! testObject.equals(this.testObject)){
+            this.testObject = testObject;
+            testObject.addCompletedTests(this);
+        }
     }
 }

@@ -2,68 +2,48 @@ package hibernate;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "comment", schema = "online_course", catalog = "")
 public class CommentEntity {
-    private int idComment;
-    private int author;
-    private int course;
-    private String text;
-    private Integer replyComment;
-    private UserEntity userByAuthor;
-    private CourseEntity courseByCourse;
-    private CommentEntity commentByReplyComment;
-    private Collection<CommentEntity> commentsByIdComment;
-
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id_comment")
-    public int getIdComment() {
-        return idComment;
-    }
-
-    public void setIdComment(int idComment) {
-        this.idComment = idComment;
-    }
-
-    @Basic
-    @Column(name = "author")
-    public int getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(int author) {
-        this.author = author;
-    }
-
-    @Basic
-    @Column(name = "course")
-    public int getCourse() {
-        return course;
-    }
-
-    public void setCourse(int course) {
-        this.course = course;
-    }
+    private int id;
 
     @Basic
     @Column(name = "text")
+    private String text;
+
+    @ManyToOne
+    @JoinColumn(name = "author")
+    private UserEntity author;
+
+    @ManyToOne
+    @JoinColumn(name = "course")
+    private CourseEntity course;
+
+    @ManyToOne
+    @JoinColumn(name = "reply_comment")
+    private CommentEntity replyTo;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "replyTo")
+    private Set<CommentEntity> replies = new HashSet<>();
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int idComment) {
+        this.id = idComment;
+    }
+
     public String getText() {
         return text;
     }
-
     public void setText(String text) {
         this.text = text;
-    }
-
-    @Basic
-    @Column(name = "reply_comment")
-    public Integer getReplyComment() {
-        return replyComment;
-    }
-
-    public void setReplyComment(Integer replyComment) {
-        this.replyComment = replyComment;
     }
 
     @Override
@@ -73,61 +53,47 @@ public class CommentEntity {
 
         CommentEntity that = (CommentEntity) o;
 
-        if (idComment != that.idComment) return false;
-        if (author != that.author) return false;
-        if (course != that.course) return false;
+        if (id != that.id) return false;
         if (text != null ? !text.equals(that.text) : that.text != null) return false;
-        if (replyComment != null ? !replyComment.equals(that.replyComment) : that.replyComment != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = idComment;
-        result = 31 * result + author;
-        result = 31 * result + course;
+        int result = id;
         result = 31 * result + (text != null ? text.hashCode() : 0);
-        result = 31 * result + (replyComment != null ? replyComment.hashCode() : 0);
         return result;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "author", referencedColumnName = "id_user", nullable = false, insertable = false, updatable = false)
-    public UserEntity getUserByAuthor() {
-        return userByAuthor;
+    public UserEntity getAuthor() {
+        return author;
+    }
+    public void setAuthor(UserEntity author) {
+        if(! author.equals(this.author)){
+            this.author = author;
+            author.addComment(this);
+        }
     }
 
-    public void setUserByAuthor(UserEntity userByAuthor) {
-        this.userByAuthor = userByAuthor;
+    public CourseEntity getCourse() {
+        return course;
+    }
+    public void setCourse(CourseEntity course) {
+        if(! course.equals(this.course)){
+            this.course = course;
+            course.addComment(this);
+        }
     }
 
-    @ManyToOne
-    @JoinColumn(name = "course", referencedColumnName = "id_course", nullable = false, insertable = false, updatable = false)
-    public CourseEntity getCourseByCourse() {
-        return courseByCourse;
+    public CommentEntity getReplyTo() {
+        return replyTo;
+    }
+    public void setReplyTo(CommentEntity replyTo) {
+        this.replyTo = replyTo;
     }
 
-    public void setCourseByCourse(CourseEntity courseByCourse) {
-        this.courseByCourse = courseByCourse;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "reply_comment", referencedColumnName = "id_comment", insertable = false, updatable = false)
-    public CommentEntity getCommentByReplyComment() {
-        return commentByReplyComment;
-    }
-
-    public void setCommentByReplyComment(CommentEntity commentByReplyComment) {
-        this.commentByReplyComment = commentByReplyComment;
-    }
-
-    @OneToMany(mappedBy = "commentByReplyComment")
-    public Collection<CommentEntity> getCommentsByIdComment() {
-        return commentsByIdComment;
-    }
-
-    public void setCommentsByIdComment(Collection<CommentEntity> commentsByIdComment) {
-        this.commentsByIdComment = commentsByIdComment;
+    public Set<CommentEntity> getReplies() {
+        return replies;
     }
 }

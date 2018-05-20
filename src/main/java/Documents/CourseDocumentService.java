@@ -26,12 +26,12 @@ public class CourseDocumentService extends DocumentService{
         tableCourse.name = "Course";
         tableCourse.rows.add(new String[]{"Name", course.getName()});
         tableCourse.rows.add(new String[]{"Price", course.getPrice().toString()});
-        tableCourse.rows.add(new String[]{"Lection count", String.valueOf(course.getLectionsByIdCourse().size())});
-        tableCourse.rows.add(new String[]{"Test count", String.valueOf(course.getTestsByIdCourse().size())});
+        tableCourse.rows.add(new String[]{"Lection count", String.valueOf(course.getLections().size())});
+        tableCourse.rows.add(new String[]{"Test count", String.valueOf(course.getTests().size())});
         result.add(tableCourse);
 
 
-        UserEntity author = course.getUserByAuthor();
+        UserEntity author = course.getAuthor();
         Table talbeAuthor = new Table();
         talbeAuthor.name = "Author";
         talbeAuthor.rows.add(new String[]{"Name", author.getName()});

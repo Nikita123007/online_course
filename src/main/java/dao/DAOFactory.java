@@ -13,8 +13,10 @@ public class DAOFactory {
     private final TestDAO testDAO = new MysqlTestDAO();
     private final SubscriptionDAO subscriptionDAO = new MysqlSubscriptionDAO();
     private final CompletedTestDAO completedTestDAO = new MysqlCompletedTestDAO();
-    private final TestQuestionDAO testQuestionDAO = new MysqlTestQuestionDAO();
-    private final TestAnswerDAO testAnswerDAO = new MysqlTestAnswerDAO();
+    private final QuestionDAO questionDAO = new MysqlQuestionDAO();
+    private final AnswerDAO answerDAO = new MysqlAnswerDAO();
+    private final MysqlRoleDAO roleDAO = new MysqlRoleDAO();
+    private final MysqlCategoryDAO categoryDAO = new MysqlCategoryDAO();
 
     private DAOFactory() { }
 
@@ -40,7 +42,13 @@ public class DAOFactory {
 
     public CompletedTestDAO getCompletedTestDAO() { return completedTestDAO; }
 
-    public TestQuestionDAO getTestQuestionDAO() { return testQuestionDAO; }
+    public QuestionDAO getQuestionDAO() { return questionDAO; }
 
-    public TestAnswerDAO getTestAnswerDAO() { return testAnswerDAO; }
+    public AnswerDAO getAnswerDAO() { return answerDAO; }
+
+    public RoleDAO getRoleDAO() {
+        return roleDAO;
+    }
+
+    public CategoryDAO getCategoryDAO() {return categoryDAO;}
 }

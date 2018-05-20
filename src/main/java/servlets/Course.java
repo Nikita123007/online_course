@@ -8,8 +8,6 @@ import servlets.core.AbstractViewServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,13 +33,14 @@ public class Course extends AbstractViewServlet<CourseEntity, CourseDAO> {
     @Override
     protected void processGet(ServletHelper<CourseEntity> helper) throws ServletException, IOException {
         List<TestEntityViewModel> tests = new ArrayList<>();
-        for (TestEntity test : helper.getEntity().getTestsByIdCourse()) {
-            CompletedTestEntity completedTest = DAOFactory.getInstance().getCompletedTestDAO().getCompletedTest(helper.getUser().getIdUser(), test.getIdTest());
-            TestEntityViewModel testViewModel = new TestEntityViewModel(test.getIdTest(), test.getCourse(), test.getName(), completedTest == null ? (byte) 0 : (byte) 1);
+        for (TestEntity test : helper.getEntity().getTests()) {
+            CompletedTestEntity completedTest = DAOFactory.getInstance().getCompletedTestDAO().getCompletedTest(helper.getUser().getId(), test.getId());
+            TestEntityViewModel testViewModel = new TestEntityViewModel(test.getId(), test.getCourse().getId(), test.getName(), completedTest == null ? (byte) 0 : (byte) 1);
             tests.add(testViewModel);
         }
 
         helper.getRequest().setAttribute("tests", tests);
+        helper.getRequest().setAttribute("courseCompleted", false);
     }
 
     public class TestEntityViewModel {

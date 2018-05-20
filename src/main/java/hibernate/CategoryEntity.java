@@ -1,31 +1,37 @@
 package hibernate;
 
+import common.ActionType;
+
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "category", schema = "online_course", catalog = "")
-public class CategoryEntity {
-    private int idCategory;
-    private String name;
-    private Collection<CourseEntity> coursesByIdCategory;
-
+public class CategoryEntity implements AbstractEntity {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id_category")
-    public int getIdCategory() {
-        return idCategory;
-    }
-
-    public void setIdCategory(int idCategory) {
-        this.idCategory = idCategory;
-    }
+    private int id;
 
     @Basic
     @Column(name = "name")
+    private String name;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
+    private Set<CourseEntity> courses = new HashSet<>();
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int idCategory) {
+        this.id = idCategory;
+    }
+
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -37,7 +43,7 @@ public class CategoryEntity {
 
         CategoryEntity that = (CategoryEntity) o;
 
-        if (idCategory != that.idCategory) return false;
+        if (id != that.id) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
         return true;
@@ -45,17 +51,22 @@ public class CategoryEntity {
 
     @Override
     public int hashCode() {
-        int result = idCategory;
+        int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
 
-    @OneToMany(mappedBy = "categoryByCategory")
-    public Collection<CourseEntity> getCoursesByIdCategory() {
-        return coursesByIdCategory;
+    public Set<CourseEntity> getCourses() {
+        return courses;
+    }
+    public void addCourse(CourseEntity course) {
+        if(! this.courses.contains(course)){
+            this.courses.add(course);
+            course.setCategory(this);
+        }
     }
 
-    public void setCoursesByIdCategory(Collection<CourseEntity> coursesByIdCategory) {
-        this.coursesByIdCategory = coursesByIdCategory;
+    public boolean checkRights(UserEntity user, ActionType action){
+        return action == ActionType.Read;
     }
 }

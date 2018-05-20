@@ -2,16 +2,12 @@ package servlets;
 
 import com.google.gson.JsonObject;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 import common.ActionType;
 import constants.Pages;
 import dao.CourseDAO;
 import dao.DAOFactory;
 import hibernate.CourseEntity;
-import response.ResponseData;
 import servlets.Utils.ServletHelper;
 import servlets.core.AbstractEditServlet;
 
@@ -37,10 +33,10 @@ public class EditCourse extends AbstractEditServlet<CourseEntity, CourseDAO> {
         entity.setLevel(json.get("level").getAsString());
 
         if(helper.getAction() == ActionType.Create)
-            entity.setAuthor(helper.getUser().getIdUser());
+            entity.setAuthor(helper.getUser());
 
-        if(entity.getCategory() == 0)
-            entity.setCategory(1);
+        if(entity.getCategory() == null || entity.getCategory().getId() == 0)
+            entity.setCategory(DAOFactory.getInstance().getCategoryDAO().get(1));
     }
 
     @Override
