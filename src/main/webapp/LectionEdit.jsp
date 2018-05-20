@@ -12,7 +12,7 @@
     <%@ include file="resources/templates/header.html" %>
     <div class="container main">
         <label for="name">Name</label>
-        <h1><input type="text" placeholder="Lection name" name="name" id="name" value="${entity.name}" autofocus required pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h1>
+        <h1><input type="text" placeholder="Lection name" name="name" id="name" value="${entity.name}" autofocus required pattern=".{2,}"></h1>
         <label for="text">Text</label>
         <h6><textarea placeholder="Lection text" cols="100" rows="20" name="text" id="text" required>${entity.text}</textarea></h6>
         <div class="input-group">

@@ -14,7 +14,7 @@
         <form class="form-horizontal" onsubmit="return false;">
             <label for="name">Name</label>
             <div class="input-group">
-                <h2><input type="text" name="name" id="name" placeholder="Course name" autofocus required value="${entity.name}" pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h2>
+                <h2><input type="text" name="name" id="name" placeholder="Course name" autofocus required value="${entity.name}" pattern=".{2,}"></h2>
             </div>
             <label for="description">Description</label>
             <p><textarea cols="100" rows="20" name="description" id="description" placeholder="Course description" required>${entity.description}</textarea></p>

@@ -12,7 +12,7 @@
 <div class="container main">
     <label for="name">Answer</label>
     <div class="input-group">
-        <h2><input type="text" name="name" id="name" placeholder="Answer" autofocus required value="${entity.text}" pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h2>
+        <h2><input type="text" name="name" id="name" placeholder="Answer" autofocus required value="${entity.text}" pattern=".{2,}"></h2>
     </div><br>
     <div class="input-group">
         <h4><input name="answer" id="correct" value="true" type="radio" <c:if test="${entity.isCorrect == 1}">checked</c:if>><label for="correct">Correct</label></h4>

@@ -31,17 +31,18 @@ header{
     color: #ffc107;
 }
 .header-center{
-    margin-left: 60px;
+    margin-left: 4%;
     font-size: 20px;
 }
 .header-name{
-    margin-left: 500px;
+    margin-left: 40%;
     font-size: 20px;
     color: white;
     text-decoration:none
 }
 .header-logout{
-    margin-left: 100px;
+    position: absolute;
+    right: 20px;
     font-size: 20px;
     color: white;
     text-decoration:none
@@ -96,7 +97,7 @@ header{
     color: #2c539e; /* Цвет текста и ссылки */
     margin-right: 20px;
 }
-#create, #save, #delete, #sendTest {
+#create, #save, #delete, #sendTest, #ok {
     font-size: 24px;
     font-weight: bold;
 }
@@ -116,6 +117,24 @@ header{
     display: block;
     text-align: center;
 }
+.seccussAnswer{
+    color: lawngreen;
+}
+.errorAnswer{
+    color: red;
+}
+.message{
+    font-size: 24px;
+    display: inline-block;
+}
+.courseDiv{
+    border: 2px solid grey;
+    border-radius: 10px;
+    padding: 10px;
+}
+.courseDiv:hover {
+    background: darkgrey;
+}
 lable{
-    font-size: 32px;
+    font-size: 32px !important;
 }

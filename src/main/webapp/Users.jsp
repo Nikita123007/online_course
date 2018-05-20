@@ -13,7 +13,7 @@
         <button type="button" id="email" name="email" onclick="SendEmail()">Send emails</button>
         <c:forEach var="user" items="${entities}">
             <div class="form-group">
-                <h2><input type="checkbox" value="${user.id}"><a href="SendEmail?id=${user.id}">${user.name}</a></h2>
+                <h2><input type="checkbox" value="${user.id}">&nbsp;<a href="SendEmail?id=${user.id}">${user.name}</a></h2>
                 <h4>Email: ${user.email}</h4>
                 <c:if test="${user.admin()}">
                     <h4>Role: Admin</h4>
@@ -39,6 +39,10 @@
                 idStr = idStr.concat(inputs[i].value).concat("_");
             }
         }
-        document.location.href = document.location.protocol + "//" + document.location.host + "/SendEmail?id=" + idStr;
+        if (idStr != "") {
+            document.location.href = document.location.protocol + "//" + document.location.host + "/SendEmail?id=" + idStr;
+        }else{
+            confirm("Select users for send mail.");
+        }
     }
 </script>

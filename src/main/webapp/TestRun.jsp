@@ -13,10 +13,12 @@
     <c:forEach var="question" items="${entity.questions}">
         <h4>${question.question}</h4>
         <c:forEach var="answer" items="${question.testAnswersByIdTestQuestion}">
-            <h6><input type="checkbox" value="${answer.idTestAnswer}">${answer.text}</h6>
+            <h6><input type="checkbox" id="${answer.idTestAnswer}" value="${answer.idTestAnswer}"><span id="label${answer.idTestAnswer}">${answer.text}</span></h6>
         </c:forEach>
     </c:forEach>
+    <span id="message" class="message"></span><br>
     <input class="design" type="button" name="sendTest" id="sendTest" value="Send" onclick="Create()">
+    <a class="design" id="ok" name="ok" href="/Tests?parentId=${entity.course}" style="display: none">Ok</a>
 </div>
 <%@ include file="resources/templates/footer.html" %>
 </body>
@@ -36,5 +38,20 @@
 
     function GetEditUrl(){
         return "/TestRun?id=${entity.id}";
+    }
+
+    function SuccessChange(data) {
+        var parseData = JSON.parse(data);
+        parseData.answers.forEach(function (answer) {
+            if (answer.isCorrect == 1){
+                $("#label" + answer.idAnswer).addClass('seccussAnswer').removeClass('errorAnswer');
+            }else{
+                $("#label" + answer.idAnswer).addClass('errorAnswer').removeClass('seccussAnswer');
+            }
+            $("#" + answer.idAnswer).prop('disabled',true);
+        });
+        $("#ok").css("display", "inline-block");
+        $("#sendTest").css("display", "none");
+        $("#message").text("Correct " + parseData.numberOfCorrectQuestions + " questions form " + parseData.numberOfQuestions);
     }
 </script>

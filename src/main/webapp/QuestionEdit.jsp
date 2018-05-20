@@ -12,7 +12,7 @@
 <div class="container main">
     <label for="name">Question</label>
     <div class="input-group">
-        <h2><input type="text" name="name" id="name" placeholder="Question" autofocus required value="${entity.question}" pattern="[a-zA-ZА-Яа-я_0-9 ]{2,}"></h2>
+        <h2><input type="text" name="name" id="name" placeholder="Question" autofocus required value="${entity.question}" pattern=".{2,}"></h2>
     </div>
     <h2>Answers</h2>
     <table border="solid 1px black" id="answers">
