@@ -96,7 +96,7 @@ header{
     color: #2c539e; /* Цвет текста и ссылки */
     margin-right: 20px;
 }
-#create, #save, #delete, #sendTest {
+#create, #save, #delete, #sendTest, #ok {
     font-size: 24px;
     font-weight: bold;
 }
@@ -118,4 +118,14 @@ header{
 }
 lable{
     font-size: 32px;
+}
+.seccussAnswer{
+    color: lawngreen;
+}
+.errorAnswer{
+    color: red;
+}
+.message{
+    font-size: 24px;
+    display: inline-block;
 }
