@@ -5,7 +5,7 @@
 <% String title = "Test status"; %>
 <%@ include file="resources/templates/headers.html" %>
 <body>
-<%@ include file="resources/templates/header.html" %>
+<%@ include file="resources/templates/header.jsp" %>
 <div class="container main">
     <p><h1>${test.name}</h1></p>
     <p><h2>${test.status}</h2></p>

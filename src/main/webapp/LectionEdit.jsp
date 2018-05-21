@@ -9,7 +9,7 @@
     <%@ include file="resources/templates/headers.html" %>
     <script type="text/javascript" src="resources/js/EditEntity.js"></script>
 <body>
-    <%@ include file="resources/templates/header.html" %>
+    <%@ include file="resources/templates/header.jsp" %>
     <div class="container main">
         <label for="name">Name</label>
         <h1><input type="text" placeholder="Lection name" name="name" id="name" value="${entity.name}" autofocus required pattern=".{2,}"></h1>

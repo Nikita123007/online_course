@@ -7,7 +7,7 @@
 <% String title = "Diploma"; %>
 <%@ include file="resources/templates/headers.html" %>
 <body>
-<%@ include file="resources/templates/header.html" %>
+<%@ include file="resources/templates/header.jsp" %>
 <div class="container main">
     <h1>Diploma</h1>
     <h2>${entity.user.name}</h2>

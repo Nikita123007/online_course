@@ -7,7 +7,7 @@
 <%@ include file="resources/templates/headers.html" %>
 <c:set var="servletName" value = "Users?"/>
 <body>
-<%@ include file="resources/templates/header.html" %>
+<%@ include file="resources/templates/header.jsp" %>
 <div class="container main">
     <div class="courses">
         <button type="button" id="email" name="email" onclick="SendEmail()">Send emails</button>

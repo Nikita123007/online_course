@@ -6,7 +6,7 @@
 <% String title = "Lection"; %>
 <%@ include file="resources/templates/headers.html" %>
 <body>
-<%@ include file="resources/templates/header.html" %>
+<%@ include file="resources/templates/header.jsp" %>
 <div class="container main">
     <h1>${entity.name}</h1>
     <h6>${entity.text}</h6>

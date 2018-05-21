@@ -6,7 +6,7 @@
 <% String title = "User"; %>
 <%@ include file="resources/templates/headers.html" %>
 <body>
-<%@ include file="resources/templates/header.html" %>
+<%@ include file="resources/templates/header.jsp" %>
 <div class="container main">
     <div class="form-group">
         Name: ${entity.name}
