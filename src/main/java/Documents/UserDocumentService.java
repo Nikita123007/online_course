@@ -24,12 +24,12 @@ public class UserDocumentService extends DocumentService{
         List<Table> result = new ArrayList<>();
 
         UserEntity user = getDao().get(key);
-        Table tableCourse = new Table();
-        tableCourse.name = "User";
-        tableCourse.rows.add(new String[]{"Name", user.getName()});
-        tableCourse.rows.add(new String[]{"E-mail", user.getEmail()});
-        tableCourse.rows.add(new String[]{"Role", user.getRole().getName()});
-        result.add(tableCourse);
+        Table tableUser = new Table();
+        tableUser.name = "User";
+        tableUser.rows.add(new String[]{"Name", user.getName()});
+        tableUser.rows.add(new String[]{"E-mail", user.getEmail()});
+        tableUser.rows.add(new String[]{"Role", user.getRole().getName()});
+        result.add(tableUser);
 
         for(SubscriptionEntity subscription : user.getSubscriptions()){
             CourseEntity course = subscription.getCourse();

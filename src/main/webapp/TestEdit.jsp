@@ -41,6 +41,13 @@
         <c:if test="${add}">
             <h2><button type="button" id="create" name="create" onclick="Create()">Create</button></h2>
         </c:if>
+        <c:if test="${user.admin()}">
+            <div class="input-group">
+                <h2><a class="design" href="Document?id=${entity.id}&type=pdf&name=Test">Generate pdf</a></h2>
+                <h2><a class="design" href="Document?id=${entity.id}&type=csv&name=Test">Generate csv</a></h2>
+                <h2><a class="design" href="Document?id=${entity.id}&type=excel&name=Test">Generate excel</a></h2>
+            </div>
+        </c:if>
     </div>
 </div>
 <%@ include file="resources/templates/footer.html" %>
