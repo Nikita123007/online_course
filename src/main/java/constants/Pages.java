@@ -18,5 +18,6 @@ public class Pages {
         public static final String QuestionEdit = "/QuestionEdit";
         public static final String AnswerEdit = "/AnswerEdit";
         public static final String Tests = "/Tests";
+        public static final String Cube = "/Cube";
     }
 }

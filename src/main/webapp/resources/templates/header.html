@@ -12,6 +12,11 @@
         </ul>
     </div>
     </c:if>
+    <div class="header-center" style="margin-left: 1%">
+        <ul>
+            <li><a href="Cube">Cube</a></li>
+        </ul>
+    </div>
     <div class="header-name">
         Hello, ${user.name}.
     </div>
