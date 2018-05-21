@@ -8,7 +8,7 @@
     <%@ include file="resources/templates/headers.html" %>
     <script type="text/javascript" src="resources/js/EditEntity.js"></script>
 <body>
-<%@ include file="resources/templates/header.html" %>
+<%@ include file="resources/templates/header.jsp" %>
 <div class="container main">
     <label for="name">Name</label>
     <div class="input-group">
@@ -40,6 +40,13 @@
         </c:if>
         <c:if test="${add}">
             <h2><button type="button" id="create" name="create" onclick="Create()">Create</button></h2>
+        </c:if>
+        <c:if test="${user.admin()}">
+            <div class="input-group">
+                <h2><a class="design" href="Document?id=${entity.id}&type=pdf&name=Test">Generate pdf</a></h2>
+                <h2><a class="design" href="Document?id=${entity.id}&type=csv&name=Test">Generate csv</a></h2>
+                <h2><a class="design" href="Document?id=${entity.id}&type=excel&name=Test">Generate excel</a></h2>
+            </div>
         </c:if>
     </div>
 </div>

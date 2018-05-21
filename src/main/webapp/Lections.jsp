@@ -8,7 +8,7 @@
 <%@ include file="resources/templates/headers.html" %>
 <c:set var="servletName" value = "Lections?parentId=${parentId}&"/>
 <body>
-<%@ include file="resources/templates/header.html" %>
+<%@ include file="resources/templates/header.jsp" %>
 <div class="container main">
     <div class="courses">
         <c:forEach var="entity" items="${entities}">

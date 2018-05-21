@@ -7,7 +7,7 @@
 <%@ include file="resources/templates/headers.html" %>
 <c:set var="servletName" value = "Users?"/>
 <body>
-<%@ include file="resources/templates/header.html" %>
+<%@ include file="resources/templates/header.jsp" %>
 <div class="container main">
     <div class="courses">
         <button type="button" id="email" name="email" onclick="SendEmail()">Send emails</button>
@@ -21,6 +21,11 @@
                 <c:if test="${!user.admin()}">
                     <h4>Role: User</h4>
                 </c:if>
+            </div>
+            <div class="input-group">
+                <h2><a class="design" href="Document?id=${user.id}&type=pdf&name=User">Generate pdf</a></h2>
+                <h2><a class="design" href="Document?id=${user.id}&type=csv&name=User">Generate csv</a></h2>
+                <h2><a class="design" href="Document?id=${user.id}&type=excel&name=User">Generate excel</a></h2>
             </div>
             <hr>
         </c:forEach>

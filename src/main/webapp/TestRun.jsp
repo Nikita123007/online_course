@@ -7,7 +7,7 @@
     <%@ include file="resources/templates/headers.html" %>
     <script type="text/javascript" src="resources/js/EditEntity.js"></script>
 <body>
-<%@ include file="resources/templates/header.html" %>
+<%@ include file="resources/templates/header.jsp" %>
 <div class="container main">
     <h2>${entity.name}</h2>
     <c:forEach var="question" items="${entity.questions}">

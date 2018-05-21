@@ -8,7 +8,7 @@
 <%@ include file="resources/templates/headers.html" %>
 <script type="text/javascript" src="resources/js/EditEntity.js"></script>
 <body>
-<%@ include file="resources/templates/header.html" %>
+<%@ include file="resources/templates/header.jsp" %>
 <div class="container main">
     <form class="form-horizontal" onsubmit="return false;">
         <label for="emails">Emails</label>
@@ -71,9 +71,9 @@
             var checkValid = this.checkValidity();
             validForm = validForm && checkValid;
             if (checkValid){
-                this.addClass('inputSuccess').removeClass('inputError');
+                $(this).addClass('inputSuccess').removeClass('inputError');
             }else{
-                this.addClass('inputError').removeClass('inputSuccess');
+                $(this).addClass('inputError').removeClass('inputSuccess');
             }
         });
         return validForm;

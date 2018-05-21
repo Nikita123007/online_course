@@ -7,7 +7,7 @@
 <% String title = "Course"; %>
 <%@ include file="resources/templates/headers.html" %>
 <body>
-<%@ include file="resources/templates/header.html" %>
+<%@ include file="resources/templates/header.jsp" %>
 <div class="container main">
     <h2>${entity.name}</h2>
     <p style="margin-bottom: 0px">Duration: ${entity.duration}</p>
