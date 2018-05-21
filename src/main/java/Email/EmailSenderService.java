@@ -13,9 +13,9 @@ import javax.mail.internet.MimeMessage;
 
 
 public class EmailSenderService {
-    final String fromEmail = "online.course.bsuir@mail.ru";
+    final String fromEmail = "online.sourse.bsuir@gmail.com";
     final String password = "ePk6rcfDo4";
-    final String host = "smtp.mail.ru";
+    final String host = "smtp.gmail.com";
     final String port = "465";
 
     Session session;
@@ -46,7 +46,7 @@ public class EmailSenderService {
         }
 
         result = result.replace("<recipient>", recipient.getName());
-        result = result.replace("<recipientRole>", recipient.getName());
+        result = result.replace("<recipientRole>", recipient.getRole().getName());
 
         return result;
     }
@@ -76,6 +76,7 @@ public class EmailSenderService {
             Transport.send(msg);
         }
         catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
