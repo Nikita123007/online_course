@@ -22,6 +22,11 @@
                     <h4>Role: User</h4>
                 </c:if>
             </div>
+            <div class="input-group">
+                <h2><a class="design" href="Document?id=${user.id}&type=pdf&name=User">Generate pdf</a></h2>
+                <h2><a class="design" href="Document?id=${user.id}&type=csv&name=User">Generate csv</a></h2>
+                <h2><a class="design" href="Document?id=${user.id}&type=excel&name=User">Generate excel</a></h2>
+            </div>
             <hr>
         </c:forEach>
         <%@ include file="resources/templates/PrevNext.jsp" %>

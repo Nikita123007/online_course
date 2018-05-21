@@ -2,6 +2,7 @@ package servlets;
 
 import Documents.DocumentService;
 import Documents.CourseDocumentService;
+import Documents.DocumentServiceFactory;
 import hibernate.UserEntity;
 import org.apache.commons.collections4.map.HashedMap;
 import request.AuthHelper;
@@ -20,12 +21,6 @@ import static constants.Constants.Constant.CookieAuthToken;
 @WebServlet("/Document")
 public class DocumentServlet extends HttpServlet{
 
-    private Map<String, DocumentService> documentServiceMap = new HashedMap<>();
-
-    public DocumentServlet(){
-        documentServiceMap.put("Course", new CourseDocumentService());
-    }
-
     public Integer getErrorCode(HttpServletRequest request){
         UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
 
@@ -36,7 +31,7 @@ public class DocumentServlet extends HttpServlet{
         if (nameStr == null || nameStr.isEmpty())
             return HttpServletResponse.SC_BAD_REQUEST;
 
-        if(!documentServiceMap.containsKey(nameStr))
+        if(DocumentServiceFactory.getInstance().getDocumentService(nameStr) == null)
             return HttpServletResponse.SC_NOT_FOUND;
 
         String type = request.getParameter("type");
@@ -60,7 +55,7 @@ public class DocumentServlet extends HttpServlet{
             return;
         }
 
-        DocumentService service = documentServiceMap.get(request.getParameter("name"));
+        DocumentService service = DocumentServiceFactory.getInstance().getDocumentService(request.getParameter("name"));
         String type = request.getParameter("type");
         int id = Integer.parseInt(request.getParameter("id"));
         if(type.equals("pdf")){

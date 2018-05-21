@@ -32,11 +32,11 @@ public class CourseDocumentService extends DocumentService{
 
 
         UserEntity author = course.getAuthor();
-        Table talbeAuthor = new Table();
-        talbeAuthor.name = "Author";
-        talbeAuthor.rows.add(new String[]{"Name", author.getName()});
-        talbeAuthor.rows.add(new String[]{"E-mail", author.getEmail()});
-        result.add(talbeAuthor);
+        Table tableAuthor = new Table();
+        tableAuthor.name = "Author";
+        tableAuthor.rows.add(new String[]{"Name", author.getName()});
+        tableAuthor.rows.add(new String[]{"E-mail", author.getEmail()});
+        result.add(tableAuthor);
 
         return result;
     }
