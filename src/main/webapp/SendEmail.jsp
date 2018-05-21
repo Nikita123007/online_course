@@ -71,9 +71,9 @@
             var checkValid = this.checkValidity();
             validForm = validForm && checkValid;
             if (checkValid){
-                this.addClass('inputSuccess').removeClass('inputError');
+                $(this).addClass('inputSuccess').removeClass('inputError');
             }else{
-                this.addClass('inputError').removeClass('inputSuccess');
+                $(this).addClass('inputError').removeClass('inputSuccess');
             }
         });
         return validForm;
