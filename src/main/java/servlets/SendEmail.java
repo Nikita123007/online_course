@@ -61,7 +61,9 @@ public class SendEmail extends HttpServlet {
 
         EmailEntity entity = new EmailEntity();
 
+        UserEntity user = AuthHelper.GetAuthUser(CookieHelper.GetCookieValue(request, CookieAuthToken));
         entity.setRecipients(getUsers(request.getParameter("id")));
+        entity.setSender(user);
 
         request.setCharacterEncoding("UTF-8");
         JsonObject json = new Gson().fromJson(request.getReader(), JsonElement.class).getAsJsonObject();

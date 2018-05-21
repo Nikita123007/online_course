@@ -9,6 +9,15 @@ public class EmailEntity{
     private String subject;
     private String body;
     private List<UserEntity> recipients;
+    private UserEntity sender;
+
+    public UserEntity getSender() {
+        return sender;
+    }
+
+    public void setSender(UserEntity sender) {
+        this.sender = sender;
+    }
 
     public String getSubject() {
         return subject;

@@ -39,42 +39,43 @@ public class EmailSenderService {
     }
 
 
-    public boolean sendEmail(EmailEntity emailEntity) {
-        //UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
-        //List<UserEntity> users = userDAO.getAll();
-        List<String> mails = new ArrayList<String>();
-        for(UserEntity recipient : emailEntity.getRecipients()){
-            mails.add(recipient.getEmail());
+    String processTemplate(String template, UserEntity sender, UserEntity recipient){
+        String result = template;
+        if(sender != null){
+            result = result.replace("<sender>", sender.getName());
         }
 
-        return sendEmail(mails, emailEntity.getSubject(), emailEntity.getBody());
+        result = result.replace("<recipient>", recipient.getName());
+        result = result.replace("<recipientRole>", recipient.getName());
+
+        return result;
     }
 
-    private boolean sendEmail(List<String> recipients, String subject, String body) {
+    public void sendEmail(EmailEntity emailEntity) {
+        List<String> mails = new ArrayList<>();
+        for(UserEntity recipient : emailEntity.getRecipients()){
+            String body = processTemplate(emailEntity.getBody(), emailEntity.getSender(), recipient);
+            sendEmail(recipient.getEmail(), emailEntity.getSubject(), body);
+        }
+    }
+
+    private void sendEmail(String recipient, String subject, String body) {
         try
         {
-            if(recipients.size() == 0)
-                return true;
             MimeMessage msg = new MimeMessage(session);
             msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
             msg.addHeader("format", "flowed");
             msg.addHeader("Content-Transfer-Encoding", "8bit");
 
             msg.setFrom(new InternetAddress(fromEmail, "Online course"));
-            for (String recipient: recipients
-                    ) {
-                msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
-            }
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+
             msg.setSubject(subject, "UTF-8");
             msg.setText(body, "UTF-8");
             msg.setSentDate(new Date());
             Transport.send(msg);
-
         }
         catch (Exception e) {
-            return false;
         }
-
-        return true;
     }
 }
