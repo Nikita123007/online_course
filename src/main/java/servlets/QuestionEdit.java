@@ -1,10 +1,12 @@
 package servlets;
 
 import com.google.gson.JsonObject;
+import common.ActionType;
 import constants.Pages;
 import dao.DAOFactory;
 import dao.QuestionDAO;
 import hibernate.*;
+import response.ResponseData;
 import servlets.Utils.ServletHelper;
 import servlets.core.AbstractEditServlet;
 import javax.servlet.annotation.WebServlet;
@@ -55,5 +57,22 @@ public class QuestionEdit extends AbstractEditServlet<QuestionEntity, QuestionDA
     @Override
     protected String getJspName(){
         return "QuestionEdit.jsp";
+    }
+
+    @Override
+    protected void BeforeAction(ServletHelper<QuestionEntity> helper, QuestionEntity entity, ResponseData responseData){
+        if (helper.getAction() == ActionType.Create) {
+            AnswerEntity answer = new AnswerEntity();
+            answer.setText("New answer");
+            answer.setIsCorrect((byte) 0);
+            answer.setQuestion(entity);
+            entity.getAnswers().add(answer);
+        }
+
+        /*if (helper.getAction() == ActionType.Delete){
+            if (entity.getTest().getQuestions().size() == 1){
+                responseData.setError("This is the last question.");
+            }
+        }*/
     }
 }

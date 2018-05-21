@@ -14,23 +14,25 @@
     <div class="input-group">
         <h2><input type="text" name="name" id="name" placeholder="Test" autofocus required value="${entity.name}" pattern=".{2,}"></h2>
     </div>
-    <h2>Questions</h2>
-    <table border="solid 1px black" id="questions">
-        <tr>
-            <th class="deletecheckbox"></th>
-            <th>Name</th>
-        </tr>
-        <c:forEach var="question" items="${entity.questions}">
+    <c:if test="${!add}">
+        <h2>Questions</h2>
+        <table border="solid 1px black" id="questions">
             <tr>
-                <td class="deletecheckbox"><input type="checkbox" value="${question.id}"></td>
-                <td><a href="QuestionEdit?id=${question.id}">${question.question}</a></td>
+                <th class="deletecheckbox"></th>
+                <th>Name</th>
             </tr>
-        </c:forEach>
-    </table><br>
-    <div class="input-group">
-        <h2><button type="button" id="deleteQuestions" name="deleteQuestions" onclick="DeleteEntities('/QuestionEdit','questions')">Delete selected questions</button></h2>
-        <h4><a class="design" id="addNewQuestion" name="addNewQuestion" href="QuestionEdit?add=true&parentId=${entity.id}">Add new question</a></h4><br>
-    </div><hr>
+            <c:forEach var="question" items="${entity.questions}">
+                <tr>
+                    <td class="deletecheckbox"><input type="checkbox" value="${question.id}"></td>
+                    <td><a href="QuestionEdit?id=${question.id}">${question.question}</a></td>
+                </tr>
+            </c:forEach>
+        </table><br>
+        <div class="input-group">
+            <h2><button type="button" id="deleteQuestions" name="deleteQuestions" onclick="DeleteEntities('/QuestionEdit','questions')">Delete selected questions</button></h2>
+            <h4><a class="design" id="addNewQuestion" name="addNewQuestion" href="QuestionEdit?add=true&parentId=${entity.id}">Add new question</a></h4><br>
+        </div><hr>
+    </c:if>
     <div class="input-group">
         <c:if test="${!add}">
             <h2><button type="button" id="save" name="save" onclick="Save()">Save</button></h2>
