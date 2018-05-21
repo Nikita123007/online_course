@@ -7,7 +7,9 @@ import hibernate.UserEntity;
 import org.apache.commons.collections4.map.HashedMap;
 import request.AuthHelper;
 import request.CookieHelper;
+import servlets.Utils.Utils;
 
+import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,10 +41,10 @@ public class DocumentServlet extends HttpServlet{
             return HttpServletResponse.SC_BAD_REQUEST;
         }
 
-        String id = request.getParameter("id");
-        if(id == null){
-            return HttpServletResponse.SC_BAD_REQUEST;
-        }
+        //String id = request.getParameter("id");
+        //if(id == null){
+        //    return HttpServletResponse.SC_BAD_REQUEST;
+        //}
 
         return null;
     }
@@ -57,22 +59,22 @@ public class DocumentServlet extends HttpServlet{
 
         DocumentService service = DocumentServiceFactory.getInstance().getDocumentService(request.getParameter("name"));
         String type = request.getParameter("type");
-        int id = Integer.parseInt(request.getParameter("id"));
+        Integer id = Utils.getInteger(request.getParameter("id"));
         if(type.equals("pdf")){
             response.addHeader("Content-Type", "application/pdf");
-            response.addHeader("Content-Disposition", "inline; filename=" + service.getTitle() + ".pdf");
+            response.addHeader("Content-Disposition", "inline; filename=\"" + service.getTitle() + ".pdf\"");
             response.getOutputStream().write(service.generatePdf(id).toByteArray());
             return;
         }
         if(type.equals("csv")){
             response.addHeader("Content-Type", "application/vnd.ms-excel");
-            response.addHeader("Content-Disposition", "inline; filename=" + service.getTitle() + ".csv");
+            response.addHeader("Content-Disposition", "inline; filename=\"" + service.getTitle() + ".csv\"");
             response.getOutputStream().write(service.generateCSV(id).toByteArray());
             return;
         }
         if(type.equals("excel")){
             response.addHeader("Content-Type", "application/vnd.ms-excel");
-            response.addHeader("Content-Disposition", "inline; filename=" + service.getTitle() + ".xlsx");
+            response.addHeader("Content-Disposition", "inline; filename=\"" + service.getTitle() + ".xlsx\"");
             response.getOutputStream().write(service.generateExcel(id).toByteArray());
             //return;
         }

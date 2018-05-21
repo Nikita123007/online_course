@@ -11,6 +11,11 @@
 <div class="container main">
     <div class="courses">
         <button type="button" id="email" name="email" onclick="SendEmail()">Send emails</button>
+        <div class="input-group">
+            <h2><a class="design" href="Document?type=pdf&name=Registration">Generate pdf</a></h2>
+            <h2><a class="design" href="Document?type=csv&name=Registration">Generate csv</a></h2>
+            <h2><a class="design" href="Document?type=excel&name=Registration">Generate excel</a></h2>
+        </div>
         <c:forEach var="user" items="${entities}">
             <div class="form-group">
                 <h2><input type="checkbox" value="${user.id}">&nbsp;<a href="SendEmail?id=${user.id}">${user.name}</a></h2>

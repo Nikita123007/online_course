@@ -74,7 +74,7 @@ public abstract class DocumentService {
             sheet.setColumnWidth(i, columnMaxWidths.get(i) * 50);
     }
 
-    public ByteArrayOutputStream generatePdf(int key){
+    public ByteArrayOutputStream generatePdf(Integer key){
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Document document = new Document();
         try {
@@ -127,7 +127,7 @@ public abstract class DocumentService {
         return outputStream;
     }
 
-    public ByteArrayOutputStream generateCSV(int key){
+    public ByteArrayOutputStream generateCSV(Integer key){
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         try{
@@ -149,7 +149,7 @@ public abstract class DocumentService {
         return outputStream;
     }
 
-    public ByteArrayOutputStream generateExcel(int key){
+    public ByteArrayOutputStream generateExcel(Integer key){
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try{
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -174,5 +174,5 @@ public abstract class DocumentService {
     }
 
     public abstract String getTitle();
-    abstract List<Table> getTables(int key);
+    abstract List<Table> getTables(Integer key);
 }

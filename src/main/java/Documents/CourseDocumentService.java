@@ -18,7 +18,7 @@ public class CourseDocumentService extends DocumentService{
     }
 
     @Override
-    List<Table> getTables(int key){
+    List<Table> getTables(Integer key){
         List<Table> result = new ArrayList<>();
 
         CourseEntity course = getDao().get(key);

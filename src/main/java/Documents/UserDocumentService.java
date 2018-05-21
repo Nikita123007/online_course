@@ -20,7 +20,7 @@ public class UserDocumentService extends DocumentService{
     }
 
     @Override
-    List<Table> getTables(int key){
+    List<Table> getTables(Integer key){
         List<Table> result = new ArrayList<>();
 
         UserEntity user = getDao().get(key);

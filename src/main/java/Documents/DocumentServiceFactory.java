@@ -13,6 +13,7 @@ public class DocumentServiceFactory {
         services.put("Course", new CourseDocumentService());
         services.put("User", new UserDocumentService());
         services.put("Test", new TestDocumentService());
+        services.put("Registration", new RegistrationDocumentService());
     }
 
     public static DocumentServiceFactory getInstance() {
