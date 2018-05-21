@@ -14,25 +14,27 @@
     <div class="input-group">
         <h2><input type="text" name="name" id="name" placeholder="Question" autofocus required value="${entity.question}" pattern=".{2,}"></h2>
     </div>
-    <h2>Answers</h2>
-    <table border="solid 1px black" id="answers">
-        <tr>
-            <th class="deletecheckbox"></th>
-            <th>Correct</th>
-            <th>Name</th>
-        </tr>
-        <c:forEach var="answer" items="${entity.answers}">
+    <c:if test="${!add}">
+        <h2>Answers</h2>
+        <table border="solid 1px black" id="answers">
             <tr>
-                <td class="deletecheckbox"><input type="checkbox" value="${answer.id}" style="margin-left: 20px;"></td>
-                <td><c:if test="${answer.isCorrect == 1}">True</c:if><c:if test="${answer.isCorrect == 0}">False</c:if></td>
-                <td><a href="AnswerEdit?id=${answer.id}">${answer.text}</a></td>
+                <th class="deletecheckbox"></th>
+                <th>Correct</th>
+                <th>Name</th>
             </tr>
-        </c:forEach>
-    </table><br>
-    <div class="input-group">
-        <h2><button type="button" id="deleteAnswers" name="deleteAnswers" onclick="DeleteEntities('/AnswerEdit','answers')">Delete selected questions</button></h2>
-        <h4><a class="design" id="addNewAnswer" name="addNewAnswer" href="AnswerEdit?add=true&parentId=${entity.id}">Add new answer</a></h4><br>
-    </div><hr>
+            <c:forEach var="answer" items="${entity.answers}">
+                <tr>
+                    <td class="deletecheckbox"><input type="checkbox" value="${answer.id}"></td>
+                    <td><c:if test="${answer.isCorrect == 1}">True</c:if><c:if test="${answer.isCorrect == 0}">False</c:if></td>
+                    <td><a href="AnswerEdit?id=${answer.id}">${answer.text}</a></td>
+                </tr>
+            </c:forEach>
+        </table><br>
+        <div class="input-group">
+            <h2><button type="button" id="deleteAnswers" name="deleteAnswers" onclick="DeleteEntities('/AnswerEdit','answers')">Delete selected questions</button></h2>
+            <h4><a class="design" id="addNewAnswer" name="addNewAnswer" href="AnswerEdit?add=true&parentId=${entity.id}">Add new answer</a></h4><br>
+        </div><hr>
+    </c:if>
     <div class="input-group">
         <c:if test="${!add}">
             <h2><button type="button" id="save" name="save" onclick="Save()">Save</button></h2>

@@ -72,6 +72,9 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
             }
         }
 
+        if (!responseData.isError()) {
+            BeforeAction(helper, entity, responseData);
+        }
         if(!responseData.isError()){
             switch (action){
                 case Create:
@@ -123,4 +126,5 @@ public abstract class AbstractEditServlet<EntityType extends AbstractEntity, DAO
     protected void setAddAttributes(ServletHelper<EntityType> helper){
         setUpdateAttributes(helper);
     }
+    protected void BeforeAction(ServletHelper<EntityType> helper, EntityType entity, ResponseData responseData){}
 }

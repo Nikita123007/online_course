@@ -48,32 +48,26 @@ public class TestEdit extends AbstractEditServlet<TestEntity, TestDAO> {
             errorString = errorString + "Input test name.\n";
         }
 
-        /*if (entity.getTestQuestionsByIdTest().size() == 0){
-            errorString = errorString + "Add test question.\n";
-        }
-
-        for (QuestionEntity question : entity.getTestQuestionsByIdTest()) {
-            if(question.getQuestion().isEmpty()){
-                errorString = errorString + "Input question.\n";
-            }
-
-            if(question.getTestAnswersByIdTestQuestion().isEmpty()){
-                errorString = errorString + "Add answers.\n";
-                break;
-            }
-
-            for(AnswerEntity answer : question.getTestAnswersByIdTestQuestion()){
-                if(answer.getText().isEmpty()){
-                    errorString = errorString + "Input answer.\n";
-                    break;
-                }
-            }
-        }*/
         return errorString;
     }
 
     @Override
     protected String getJspName(){
         return "TestEdit.jsp";
+    }
+
+    @Override
+    protected void BeforeAction(ServletHelper<TestEntity> helper, TestEntity entity, ResponseData responseData){
+        if (helper.getAction() == ActionType.Create) {
+            AnswerEntity answer = new AnswerEntity();
+            answer.setText("New answer");
+            answer.setIsCorrect((byte) 0);
+            QuestionEntity question = new QuestionEntity();
+            question.setTest(entity);
+            question.setQuestion("New question");
+            answer.setQuestion(question);
+            question.getAnswers().add(answer);
+            entity.getQuestions().add(question);
+        }
     }
 }

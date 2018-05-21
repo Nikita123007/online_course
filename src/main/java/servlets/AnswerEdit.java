@@ -1,11 +1,13 @@
 package servlets;
 
 import com.google.gson.JsonObject;
+import common.ActionType;
 import constants.Pages;
 import dao.DAOFactory;
 import dao.AnswerDAO;
 import hibernate.AnswerEntity;
 import hibernate.QuestionEntity;
+import response.ResponseData;
 import servlets.Utils.ServletHelper;
 import servlets.core.AbstractEditServlet;
 
@@ -58,5 +60,14 @@ public class AnswerEdit extends AbstractEditServlet<AnswerEntity, AnswerDAO> {
     @Override
     protected String getJspName(){
         return "AnswerEdit.jsp";
+    }
+
+    @Override
+    protected void BeforeAction(ServletHelper<AnswerEntity> helper, AnswerEntity entity, ResponseData responseData){
+        /*if (helper.getAction() == ActionType.Delete){
+            if (entity.getQuestion().getAnswers().size() == 1){
+                responseData.setError("This is the last answer.");
+            }
+        }*/
     }
 }
