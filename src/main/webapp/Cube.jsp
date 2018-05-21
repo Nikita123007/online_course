@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <link rel="stylesheet" href="resources/css/layout.css">
 <body>
-<%@ include file="resources/templates/header.html" %>
+<%@ include file="resources/templates/header.jsp" %>
 <style type="text/css">
     body{
         margin: 0px;
