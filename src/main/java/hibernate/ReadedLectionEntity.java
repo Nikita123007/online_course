@@ -70,6 +70,7 @@ public class ReadedLectionEntity {
     }
     public void setUser(UserEntity userObject) {
         if(! userObject.equals(this.userObject)){
+            this.user = userObject.getId();
             this.userObject = userObject;
             userObject.addReadedLection(this);
         }
@@ -80,6 +81,7 @@ public class ReadedLectionEntity {
     }
     public void setLection(LectionEntity lectionObject) {
         if(! lectionObject.equals(this.lectionObject)){
+            this.lection = lectionObject.getId();
             this.lectionObject = lectionObject;
             lectionObject.addReadedLection(this);
         }
