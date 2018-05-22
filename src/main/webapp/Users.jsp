@@ -11,11 +11,6 @@
 <div class="container main">
     <div class="courses">
         <button type="button" id="email" name="email" onclick="SendEmail()">Send emails</button>
-        <div class="input-group">
-            <h2><a style="font-size: 24px" class="design" href="Document?type=pdf&name=Registration">Generate pdf</a></h2>
-            <h2><a style="font-size: 24px" class="design" href="Document?type=csv&name=Registration">Generate csv</a></h2>
-            <h2><a style="font-size: 24px" class="design" href="Document?type=excel&name=Registration">Generate excel</a></h2>
-        </div>
         <hr>
         <c:forEach var="user" items="${entities}">
             <div class="form-group">
@@ -36,6 +31,11 @@
             <hr>
         </c:forEach>
         <%@ include file="resources/templates/PrevNext.jsp" %>
+    </div>
+    <div class="input-group" style="position: absolute;top: 70px;display: inline-block;left: 75%;border: 1px solid black;width: 220px;padding: 20px;text-align: center;border-radius: 10px;">
+        <a class="design" style="width: 100%;margin: 3px;" href="Document?type=pdf&name=Registration">Generate pdf</a>
+        <a class="design" style="width: 100%;margin: 3px;" href="Document?type=csv&name=Registration">Generate csv</a>
+        <a class="design" style="width: 100%;margin: 3px;" href="Document?type=excel&name=Registration">Generate excel</a>
     </div>
 </div>
 <%@ include file="resources/templates/footer.html" %>
