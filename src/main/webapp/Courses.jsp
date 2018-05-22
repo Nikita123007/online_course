@@ -12,6 +12,7 @@
 <div class="container main">
     <div class="courses">
         <a href="EditCourse?add=true" class="design">Create</a>
+        <hr>
         <c:forEach var="course" items="${entities}">
             <div class="form-group courseDiv">
                 <c:set var="uid" value = "${user.id}"/>
