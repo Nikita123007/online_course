@@ -27,7 +27,6 @@ public class CompletedTestEntity {
     @JoinColumn(name = "user", referencedColumnName = "id_user", insertable = false, updatable = false)
     private UserEntity userObject;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "test", referencedColumnName = "id_test", insertable = false, updatable = false)
     private TestEntity testObject;

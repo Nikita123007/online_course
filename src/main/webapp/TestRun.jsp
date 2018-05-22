@@ -12,13 +12,13 @@
     <h2>${entity.name}</h2>
     <c:forEach var="question" items="${entity.questions}">
         <h4>${question.question}</h4>
-        <c:forEach var="answer" items="${question.testAnswersByIdTestQuestion}">
-            <h6><input type="checkbox" id="${answer.idTestAnswer}" value="${answer.idTestAnswer}"><span id="label${answer.idTestAnswer}">${answer.text}</span></h6>
+        <c:forEach var="answer" items="${question.answers}">
+            <h6><input type="checkbox" id="${answer.id}" value="${answer.id}"><span id="label${answer.id}">${answer.text}</span></h6>
         </c:forEach>
     </c:forEach>
     <span id="message" class="message"></span><br>
     <input class="design" type="button" name="sendTest" id="sendTest" value="Send" onclick="Create()">
-    <a class="design" id="ok" name="ok" href="/Tests?parentId=${entity.course}" style="display: none">Ok</a>
+    <a class="design" id="ok" name="ok" href="Tests?parentId=${entity.course.id}" style="display: none">Ok</a>
 </div>
 <%@ include file="resources/templates/footer.html" %>
 </body>
