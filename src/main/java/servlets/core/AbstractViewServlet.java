@@ -5,6 +5,7 @@ import constants.Constants;
 import dao.AbstractEntityDAO;
 import hibernate.AbstractEntity;
 import servlets.Utils.ServletHelper;
+import servlets.Utils.Utils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,11 +29,6 @@ public abstract class AbstractViewServlet<EntityType extends AbstractEntity, DAO
                 request.setAttribute("entity", helper.getEntity());
 
             if(isCollection()){
-                int offset = 0;
-                String offsetStr = request.getParameter("offset");
-                if(offsetStr != null && !offsetStr.isEmpty())
-                    offset = Integer.parseInt(offsetStr);
-
                 Collection<EntityType> entities;
                 if(helper.getParentId() != null){
                     request.setAttribute("parentId", helper.getParentId());
@@ -41,11 +37,22 @@ public abstract class AbstractViewServlet<EntityType extends AbstractEntity, DAO
                 else{
                     entities = getDao().getAll();
                 }
-                request.setAttribute("entities", new ArrayList<>(entities).subList(offset, Math.min(offset + Constants.Constant.EntitiesPerPage, entities.size())));
+                Integer count = Utils.getInteger(request.getParameter("count"));
+                if(count == null || count < Constants.Constant.EntitiesPerPage)
+                    count = Constants.Constant.EntitiesPerPage;
+
+                Integer offset = Utils.getInteger(request.getParameter("offset"));
+                if(offset == null || offset < 0)
+                    offset = 0;
+                offset = (offset / count) * count;
+
+                request.setAttribute("entities", new ArrayList<>(entities).subList(offset, Math.min(offset + count, entities.size())));
 
                 //Show prev and next buttons
-                request.setAttribute("prev", (offset != 0) ? (offset - Constants.Constant.EntitiesPerPage) : null);
-                request.setAttribute("next", (offset + Constants.Constant.EntitiesPerPage < entities.size()) ? (offset + Constants.Constant.EntitiesPerPage) : null);
+                request.setAttribute("prev", (offset != 0) ? (offset - count) : null);
+                request.setAttribute("next", (offset + count < entities.size()) ? (offset + count) : null);
+                request.setAttribute("offset", offset);
+                request.setAttribute("count", count);
             }
 
             request.setAttribute("user", helper.getUser());

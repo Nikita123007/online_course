@@ -11,7 +11,7 @@
 <%@ include file="resources/templates/header.jsp" %>
 <div class="container main">
     <div class="courses">
-        <h3><a href="EditCourse?add=true" class="design">Create</a></h3>
+        <a href="EditCourse?add=true" class="design">Create</a>
         <c:forEach var="course" items="${entities}">
             <div class="form-group courseDiv">
                 <c:set var="uid" value = "${user.id}"/>
